@@ -1,0 +1,7 @@
+package com.mcdev.spazes.util
+
+const val API_KEY = "jFoYfOJGvoRXhEW2psvODmCdY"
+const val API_SECRET_KEY = "DEN0cpcw4YycAFHWlb5Fw0aFcWmOFKOqiNGcICunjKY2yZXJ2m"
+const val ACCESS_TOKEN = "508658764-LQhk4a94lX9YaJmE6dEO8pUDbGsYjRLLHaCyPhpu"
+const val ACCESS_TOKEN_SECRET = "1H8tOaXb1eBzGth8zaXPjzVTNMlUHtyeP3hKrSSqcXjtZ"
+const val BEARER_TOKEN = "AAAAAAAAAAAAAAAAAAAAAJ9BTgEAAAAA3X86p6qUcjKq34HSUkYLlw3bHDY%3DuJ4RfEclWciQ5l6FrtUvodHj74JyNpsgzgXqOn6I91w9DePIdn"
