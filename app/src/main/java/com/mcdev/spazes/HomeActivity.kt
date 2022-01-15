@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.collect
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     val SPACES_URL = "https://twitter.com/i/spaces/"
     private lateinit var binding: ActivityHomeBinding
-//    private var adapter: SpacesAdapter? = null
     var sQuery: String = "spaces"
     val viewModel: SpacesViewModel by viewModels()
 
@@ -41,7 +40,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         }
 
         changeStatusBarColor(R.color.white)
-//        binding.recyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
 
         makeQuery(sQuery)
 
@@ -80,19 +78,15 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                         stopLoading()
                         adapter.submitSpacesList(it.data.data!!)
                         adapter.submitUsersList(it.data.includes?.users!!)
-                        Log.d("HomeActivity", "onCreate: ${it.data}")
                     }
                     is SpacesEventListener.Failure -> {
                         stopLoading()
-                        Log.d("HomeActivity", "onCreate: ${it.errorMessage}")
                     }
                     is SpacesEventListener.Loading -> {
                         startLoading()
-                        Log.d("HomeActivity", "onCreate: is loading")
                     }
                     is SpacesEventListener.Empty -> {
                         showEmpty()
-                        Log.d("HomeActivity", "onCreate: empty result")
                     }
                     else -> Unit
                 }
@@ -133,7 +127,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
             "invited_user_ids,speaker_ids,creator_id,host_ids"
         )
-//        viewModel.searchSpaces("BEARER $BEARER_TOKEN", query, "host_ids", "creator_id")
     }
 
     override fun onItemClick(position: Int) {

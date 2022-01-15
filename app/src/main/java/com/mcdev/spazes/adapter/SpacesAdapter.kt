@@ -10,16 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.SpaceItemBinding
 import com.mcdev.spazes.dto.Spaces
-import com.mcdev.spazes.dto.SpacesResponse
 import com.mcdev.spazes.dto.User
 import com.mcdev.spazes.formatDateAndTime
-import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.model.SpaceState
-import okhttp3.internal.Util
 
 class SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
-
-//    private lateinit var listener: OnItemClickListenerickListener
 
     inner class SpacesViewHolder(val binding: SpaceItemBinding): RecyclerView.ViewHolder(binding.root) {
 
@@ -54,28 +49,11 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
             }
         }
 
-
-//        val creator : User? = user?.find {
-//            it.id == creatorid
-//        }
-//
-//        if (!title.isNullOrBlank()) {
-//            holder.binding.title.text = title
-//        } else {
-//            holder.binding.title.text = "${creator?.name}'s Space"
-//        }
-
-
-//        val creator : User? = spacesResponse.currentList[position].includes?.users?.find {
-//            it.id == creatorId
-//        }
-
         val creator : User? =  currentUsersList().find {
             it.id == creatorId
         }
 
         holder.binding.speakerAvi.setImageURI(creator?.profile_image_url)
-
 
 
         when (space.state) {
