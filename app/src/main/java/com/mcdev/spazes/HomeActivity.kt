@@ -24,7 +24,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     val SPACES_URL = "https://twitter.com/i/spaces/"
     private lateinit var binding: ActivityHomeBinding
 //    private var adapter: SpacesAdapter? = null
-    var sQuery: String = "space"
+    var sQuery: String = "spaces"
     val viewModel: SpacesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         setContentView(view)
 
         val adapter = SpacesAdapter(this, this)
-//        adapter.currentSpacesList()
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
             this.adapter = adapter
@@ -43,6 +42,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         changeStatusBarColor(R.color.white)
 //        binding.recyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+
+        makeQuery(sQuery)
 
         binding.swipeRefresh.setOnRefreshListener {
             makeQuery(sQuery)
@@ -89,6 +90,10 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                         startLoading()
                         Log.d("HomeActivity", "onCreate: is loading")
                     }
+                    is SpacesEventListener.Empty -> {
+                        showEmpty()
+                        Log.d("HomeActivity", "onCreate: empty result")
+                    }
                     else -> Unit
                 }
             }
@@ -97,6 +102,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
     private fun startLoading() {
         binding.swipeRefresh.isRefreshing = true
+        binding.emptyLottie.visibility = View.GONE
+        binding.recyclerMessage.visibility = View.GONE
         //binding.recyclerView.visibility = View.GONE
         //binding.recyclerMessage.visibility = View.GONE
     }
@@ -104,13 +111,17 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     private fun stopLoading() {
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.VISIBLE
+        binding.emptyLottie.visibility = View.GONE
+        binding.recyclerMessage.visibility = View.GONE
     }
 
 
-    private fun showNotFound() {
+    private fun showEmpty() {
+        binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.GONE
         binding.recyclerMessage.visibility = View.VISIBLE
-        binding.recyclerMessage.text = applicationContext.getString(R.string.no_results_found)
+        binding.emptyLottie.visibility = View.VISIBLE
+        binding.recyclerMessage.text = applicationContext.getString(R.string.no_spaces_found)
     }
 
     private fun makeQuery(query: String) {

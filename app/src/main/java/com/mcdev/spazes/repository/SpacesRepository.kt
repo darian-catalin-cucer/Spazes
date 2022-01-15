@@ -14,11 +14,13 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
             val body = response.body()
             if (response.isSuccessful && body != null) {
                 Resource.Success(body)
+            } else if (response.isSuccessful && body!!.meta!!.result_count == 0) {
+                Resource.Empty(body)
             } else {
                 Resource.Error(response.message())
             }
         } catch (e: Exception) {
-            Resource.Error(e.message ?: "An error occured")
+            Resource.Error(e.message ?: "An error occurred")
         }
     }
 }

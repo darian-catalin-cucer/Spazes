@@ -36,7 +36,24 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
 
     override fun onBindViewHolder(holder: SpacesAdapter.SpacesViewHolder, position: Int) {
         val space = spacesDiffer.currentList[position]
-        val user = usersDiffer.currentList[position]
+
+
+        val creatorId = space.creator_id
+        val title = space?.title
+        val hostIds = space?.host_ids
+
+        val usec = getUserCount().dec()
+
+        for (i in 0..getUserCount().dec()) {
+            val user = usersDiffer.currentList[i]
+            holder.binding.participants.text = user.name
+            if (title.isNullOrBlank().not()) {
+                holder.binding.title.text = title
+            } else {
+                holder.binding.title.text = "${user.name}'s Space"
+            }
+        }
+
 
 //        val creator : User? = user?.find {
 //            it.id == creatorid
@@ -48,9 +65,6 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
 //            holder.binding.title.text = "${creator?.name}'s Space"
 //        }
 
-        val creatorId = space.creator_id
-        val title = space?.title
-        val hostIds = space?.host_ids
 
 //        val creator : User? = spacesResponse.currentList[position].includes?.users?.find {
 //            it.id == creatorId
@@ -60,14 +74,9 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
             it.id == creatorId
         }
 
-        holder.binding.participants.text = user.name
         holder.binding.speakerAvi.setImageURI(creator?.profile_image_url)
 
-        if (title.isNullOrBlank().not()) {
-            holder.binding.title.text = title
-        } else {
-            holder.binding.title.text = "${user.name}'s Space"
-        }
+
 
         when (space.state) {
             SpaceState.LIVE.value -> {

@@ -26,11 +26,6 @@ class SpacesViewModel @Inject constructor(
 
 
     fun searchSpaces(token: String, query: String, spaceFields: String, userFields: String, expansions: String){
-        if (query == null) {
-            mutableStateFlow.value = SpacesEventListener.Failure("Title cannot be null or empty")
-            Log.d("SpacesViewModel", "searchSpaces: ")
-            return
-        }
 
         viewModelScope.launch(dispatchProvider.io) {
             mutableStateFlow.value = SpacesEventListener.Loading
@@ -38,15 +33,18 @@ class SpacesViewModel @Inject constructor(
                 is Resource.Success -> {
                     val spaces = spacesResponse.data
 
-                    if (spaces == null) {
+                    if (spaces!!.meta!!.result_count == 0) {
                         mutableStateFlow.value =
-                            SpacesEventListener.Failure("Unexpected error occurred")
+                            SpacesEventListener.Empty
                     } else {
                         mutableStateFlow.value = SpacesEventListener.Success(spaces)
                     }
                 }
                 is Resource.Error -> {
                     mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.error!!)
+                }
+                else -> {
+                    mutableStateFlow.value = SpacesEventListener.Failure("An error occurred")
                 }
             }
         }
