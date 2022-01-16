@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.collect
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     val SPACES_URL = "https://twitter.com/i/spaces/"
     private lateinit var binding: ActivityHomeBinding
-    var sQuery: String = "spaces"
+    var sQuery: String = "space"
     val viewModel: SpacesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +36,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         val adapter = SpacesAdapter(this, this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
+            itemAnimator = null
             this.adapter = adapter
         }
 

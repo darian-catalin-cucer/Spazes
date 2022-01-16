@@ -37,8 +37,6 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
         val title = space?.title
         val hostIds = space?.host_ids
 
-        val usec = getUserCount().dec()
-
         for (i in 0..getUserCount().dec()) {
             val user = usersDiffer.currentList[i]
             holder.binding.participants.text = user.name
@@ -75,7 +73,8 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
             }
         }
 
-        holder.binding.lotTv.setOnClickListener {
+
+        holder.binding.lotLay.setOnClickListener {
             listener.onGoToClick(space, position)
         }
 
