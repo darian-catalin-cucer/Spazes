@@ -130,8 +130,11 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         )
     }
 
-    override fun onItemClick(position: Int) {
-        //TODO("Not yet implemented")
+    override fun onItemClick(spaces: Spaces, position: Int) {
+        val link = SPACES_URL+spaces.id
+        Log.d("TAG", "onBindViewHolder: link is : $link")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        startActivity(intent)
     }
 
     override fun onGoToClick(spaces: Spaces, position: Int) {

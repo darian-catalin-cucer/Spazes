@@ -1,6 +1,7 @@
 package com.mcdev.spazes.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.SpaceItemBinding
+import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.dto.Spaces
 import com.mcdev.spazes.dto.User
 import com.mcdev.spazes.formatDateAndTime
@@ -16,7 +18,7 @@ import com.mcdev.twitterapikit.model.SpaceState
 
 class SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
-    inner class SpacesViewHolder(val binding: SpaceItemBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class SpacesViewHolder(val binding: SpaceItemV2Binding): RecyclerView.ViewHolder(binding.root) {
 
     }
 
@@ -24,7 +26,7 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
         parent: ViewGroup,
         viewType: Int
     ): SpacesAdapter.SpacesViewHolder {
-        val binding = SpaceItemBinding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item, parent, false))
+        val binding = SpaceItemV2Binding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item_v2, parent, false))
 
         return SpacesViewHolder(binding)
     }
@@ -37,22 +39,36 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
         val title = space?.title
         val hostIds = space?.host_ids
 
-        for (i in 0..getUserCount().dec()) {
-            val user = usersDiffer.currentList[i]
-            holder.binding.participants.text = user.name
-            if (title.isNullOrBlank().not()) {
-                holder.binding.title.text = title
-            } else {
-                holder.binding.title.text = "${user.name}'s Space"
+        val hostList : MutableList<User> = ArrayList<User>()
+        hostList.clear()
+
+        if (hostIds != null) {
+            for (i in hostIds) {
+                val hosts : List<User> = currentUsersList().filter {
+                    it.id == i
+                }
+                hostList.addAll(hosts)
             }
+        }
+
+        if (hostList.size == 2) {
+            holder.binding.speakerOneAvi.setImageURI(hostList[1].profile_image_url)
+        }else if (hostList.size >= 2) {
+            holder.binding.speakerOneAvi.setImageURI(hostList[1].profile_image_url)
+            holder.binding.speakerTwoAvi.setImageURI(hostList[2].profile_image_url)
         }
 
         val creator : User? =  currentUsersList().find {
             it.id == creatorId
         }
 
+        holder.binding.participants.text = creator?.name
         holder.binding.speakerAvi.setImageURI(creator?.profile_image_url)
-
+        if (title.isNullOrBlank().not()) {
+                holder.binding.title.text = title
+            } else {
+                holder.binding.title.text = "${creator?.name}'s Space"
+            }
 
         when (space.state) {
             SpaceState.LIVE.value -> {
@@ -60,26 +76,26 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
                     liveViews.visibility = View.VISIBLE
                     stateScheduledView.visibility = View.GONE
                     participantCount.text = space.participant_count.toString()
-                    lotTv.text = context.resources.getString(R.string.listen_on_twitter)
+//                    lotTv.text = context.resources.getString(R.string.listen_on_twitter)
                 }
             }
             SpaceState.SCHEDULED.value -> {
                 holder.binding.apply {
                     stateScheduledView.visibility = View.VISIBLE
                     liveViews.visibility = View.GONE
-                    lotTv.text = context.resources.getString(R.string.set_reminder)
+//                    lotTv.text = context.resources.getString(R.string.set_reminder)
                     stateScheduledView.text = space.scheduled_start?.formatDateAndTime()
                 }
             }
         }
 
 
-        holder.binding.lotLay.setOnClickListener {
-            listener.onGoToClick(space, position)
-        }
-
+//        holder.binding.lotLay.setOnClickListener {
+//            listener.onGoToClick(space, position)
+//        }
+//
         holder.itemView.setOnClickListener {
-            listener.onItemClick(position)
+            listener.onItemClick(space, position)
         }
     }
 
@@ -132,7 +148,7 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(spaces: Spaces, position: Int)
         fun onGoToClick(spaces: Spaces, position: Int)
     }
 }
