@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toTopOf="@id/title"
             app:roundAsCircle="true"
             app:roundingBorderColor="@color/white"
-            app:roundingBorderWidth="2.5dp"
+            app:roundingBorderWidth="1dp"
             android:layout_marginBottom="10dp"/>
 
         <TextView

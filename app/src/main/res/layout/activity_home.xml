@@ -59,15 +59,21 @@
             android:layout_gravity="top">
 
             <RelativeLayout
+                android:id="@+id/content_lay"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-<!--                <com.airbnb.lottie.LottieAnimationView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:layout_alignParentTop="true"-->
-<!--                    android:paddingTop="1dp"-->
-<!--                    app:lottie_rawRes="@raw/not_found"/>-->
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:descendantFocusability="blocksDescendants">
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/empty_lottie"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="1dp"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/astronaut"/>
                 <TextView
                     android:id="@+id/recycler_message"
                     android:layout_width="wrap_content"
@@ -83,7 +89,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent" />
 
             </RelativeLayout>
 

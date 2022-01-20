@@ -4,6 +4,13 @@
     <corners
         android:radius="10dp"/>
 
-    <solid
-        android:color="#D75E20CF" />
+<!--    <solid-->
+<!--        android:color="#D75E20CF" />-->
+
+    <gradient
+        android:gradientRadius="300dp"
+        android:useLevel="false"
+        android:endColor="#D75E20CF"
+        android:startColor="#4e54c8"
+        android:type="radial"/>
 </shape>
