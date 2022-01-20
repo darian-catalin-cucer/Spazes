@@ -1,7 +1,6 @@
 package com.mcdev.spazes.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +8,16 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mcdev.spazes.R
-import com.mcdev.spazes.databinding.SpaceItemBinding
+import com.mcdev.spazes.SpaceState
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.dto.Spaces
+import com.mcdev.spazes.dto.SpacesResponse
 import com.mcdev.spazes.dto.User
 import com.mcdev.spazes.formatDateAndTime
-import com.mcdev.twitterapikit.model.SpaceState
 
-class SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
+class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
     inner class SpacesViewHolder(val binding: SpaceItemV2Binding): RecyclerView.ViewHolder(binding.root) {
-
     }
 
     override fun onCreateViewHolder(
@@ -32,43 +30,56 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
     }
 
     override fun onBindViewHolder(holder: SpacesAdapter.SpacesViewHolder, position: Int) {
+        val users = usersDiffer.currentList
         val space = spacesDiffer.currentList[position]
-
 
         val creatorId = space.creator_id
         val title = space?.title
         val hostIds = space?.host_ids
 
-        val hostList : MutableList<User> = ArrayList<User>()
-        hostList.clear()
+        val hostList : MutableList<String> = mutableListOf()
+        val creator: User? = users.find { it.id == creatorId }//find creator in the list of returned users
 
         if (hostIds != null) {
             for (i in hostIds) {
-                val hosts : List<User> = currentUsersList().filter {
+                val hosts : String? = users.find {
                     it.id == i
+                }?.profile_image_url
+
+                if (hosts != null) {
+                    hostList.add(hosts)
                 }
-                hostList.addAll(hosts)
             }
         }
 
-        if (hostList.size == 2) {
-            holder.binding.speakerOneAvi.setImageURI(hostList[1].profile_image_url)
-        }else if (hostList.size >= 2) {
-            holder.binding.speakerOneAvi.setImageURI(hostList[1].profile_image_url)
-            holder.binding.speakerTwoAvi.setImageURI(hostList[2].profile_image_url)
+        if (hostList.isEmpty().not()) {
+            when {
+                hostList.size == 2 -> {
+                    val hostNum1 = hostList[1]
+                    holder.binding.speakerOneAvi.setImageURI(hostNum1)
+                }
+                hostList.size >= 2 -> {
+                    val hostNum1 = hostList[1]
+                    val hostNum2 = hostList[2]
+                    holder.binding.speakerOneAvi.setImageURI(hostNum1)
+                    holder.binding.speakerTwoAvi.setImageURI(hostNum2)
+                }
+                else -> {
+                    //set these null values to prevent duplicates
+                    holder.binding.speakerOneAvi.setImageURI("null")
+                    holder.binding.speakerTwoAvi.setImageURI("null")
+                }
+            }
         }
 
-        val creator : User? =  currentUsersList().find {
-            it.id == creatorId
-        }
 
-        holder.binding.participants.text = creator?.name
+        holder.binding.participants.text = creator?.name //creator's name
         holder.binding.speakerAvi.setImageURI(creator?.profile_image_url)
         if (title.isNullOrBlank().not()) {
-                holder.binding.title.text = title
-            } else {
-                holder.binding.title.text = "${creator?.name}'s Space"
-            }
+            holder.binding.title.text = title
+        } else {
+            holder.binding.title.text = "${creator?.name}'s Space"
+        }
 
         when (space.state) {
             SpaceState.LIVE.value -> {
@@ -88,6 +99,7 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
                 }
             }
         }
+
 
 
 //        holder.binding.lotLay.setOnClickListener {
@@ -131,21 +143,11 @@ class SpacesAdapter(val context: Context, val listener: OnItemClickListener): Re
     val spacesDiffer = AsyncListDiffer(this, spacesDifferCallback)
     val usersDiffer = AsyncListDiffer(this, usersDifferCallback)
 
-    fun submitSpacesList(list: List<Spaces>) {
-        spacesDiffer.submitList(list)
+    fun submitResponse(res: SpacesResponse) {
+        usersDiffer.submitList(res.includes?.users)
+        spacesDiffer.submitList(res.data)
     }
 
-    fun currentSpacesList(): List<Spaces> {
-        return spacesDiffer.currentList
-    }
-
-    fun submitUsersList(list: List<User>) {
-        usersDiffer.submitList(list)
-    }
-
-    fun currentUsersList(): List<User> {
-        return usersDiffer.currentList
-    }
 
     interface OnItemClickListener {
         fun onItemClick(spaces: Spaces, position: Int)

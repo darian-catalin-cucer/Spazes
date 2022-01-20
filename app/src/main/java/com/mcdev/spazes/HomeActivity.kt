@@ -77,8 +77,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 when (it) {
                     is SpacesEventListener.Success -> {
                         stopLoading()
-                        adapter.submitSpacesList(it.data.data!!)
-                        adapter.submitUsersList(it.data.includes?.users!!)
+                        adapter.submitResponse(it.data)
                     }
                     is SpacesEventListener.Failure -> {
                         stopLoading()
