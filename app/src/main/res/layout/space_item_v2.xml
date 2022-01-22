@@ -11,17 +11,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:background="@drawable/twitter_spaces_bg">
 
 
         <TextView
             android:id="@+id/state_scheduled_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_time"
             android:visibility="gone"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/white"/>
 
         <LinearLayout
             android:id="@+id/live_views"
@@ -63,7 +64,7 @@
             android:textSize="20sp"
             android:maxLines="4"
             android:ellipsize="end"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:id="@+id/participants"
@@ -72,50 +73,52 @@
             android:layout_above="@+id/speaker_avi"
             android:maxLines="1"
             android:ellipsize="end"
+            android:textColor="@color/white"
             android:layout_marginBottom="5dp"/>
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/speaker_avi"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:elevation="20dp"
-            android:scaleType="centerCrop"
-            app:actualImageScaleType="centerCrop"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            app:roundedCornerRadius="10dp"
-            app:roundingBorderColor="@android:color/darker_gray"
-            app:roundingBorderWidth="1dp"
-            android:layout_marginBottom="10dp"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/speaker_avi"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:elevation="20dp"
+        android:scaleType="centerCrop"
+        app:actualImageScaleType="centerCrop"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        app:roundedCornerRadius="10dp"
+        app:roundingBorderColor="@android:color/darker_gray"
+        app:roundingBorderWidth="1dp"
+        android:layout_marginBottom="10dp"/>
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/speaker_one_avi"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:elevation="20dp"
-            android:scaleType="centerCrop"
-            app:actualImageScaleType="centerCrop"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/speaker_avi"
-            app:roundedCornerRadius="10dp"
-            app:roundingBorderColor="@android:color/darker_gray"
-            app:roundingBorderWidth="1dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="5dp"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/speaker_one_avi"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:elevation="20dp"
+        android:scaleType="centerCrop"
+        app:actualImageScaleType="centerCrop"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/speaker_avi"
+        app:roundedCornerRadius="10dp"
+        app:roundingBorderColor="@android:color/darker_gray"
+        app:roundingBorderWidth="1dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"/>
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/speaker_two_avi"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:elevation="20dp"
-            android:scaleType="centerCrop"
-            app:actualImageScaleType="centerCrop"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/speaker_one_avi"
-            app:roundedCornerRadius="10dp"
-            app:roundingBorderColor="@android:color/darker_gray"
-            app:roundingBorderWidth="1dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="5dp"/>
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/speaker_two_avi"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:elevation="20dp"
+        android:scaleType="centerCrop"
+        app:actualImageScaleType="centerCrop"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/speaker_one_avi"
+        app:roundedCornerRadius="10dp"
+        app:roundingBorderColor="@android:color/darker_gray"
+        app:roundingBorderWidth="1dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="5dp"/>
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

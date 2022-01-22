@@ -36,7 +36,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         val adapter = SpacesAdapter(this, this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
-//            itemAnimator = null
+            itemAnimator = null
             this.adapter = adapter
         }
 
