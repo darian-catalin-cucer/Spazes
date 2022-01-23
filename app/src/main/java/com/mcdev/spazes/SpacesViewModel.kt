@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
-import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +20,6 @@ class SpacesViewModel @Inject constructor(
     /*using state flow*/
     private val mutableStateFlow = MutableStateFlow<SpacesEventListener>(SpacesEventListener.Empty)
     val search: StateFlow<SpacesEventListener> = mutableStateFlow
-    val fetchedSpaces = mutableListOf<List<Space>>()
 
 
     fun searchSpaces(token: String, query: String, spaceFields: String, userFields: String, expansions: String){
@@ -32,7 +30,7 @@ class SpacesViewModel @Inject constructor(
                 is Resource.Success -> {
                     val spaces = spacesResponse.data
 
-                    if (spaces!!.meta!!.result_count == 0) {
+                    if (spaces?.meta?.resultCount == 0) {
                         mutableStateFlow.value =
                             SpacesEventListener.Empty
                     } else {
@@ -40,10 +38,10 @@ class SpacesViewModel @Inject constructor(
                     }
                 }
                 is Resource.Error -> {
-                    mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.error!!)
+                    mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.data?.detail)
                 }
                 else -> {
-                    mutableStateFlow.value = SpacesEventListener.Failure("An error occurred")
+                    mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.error)
                 }
             }
         }

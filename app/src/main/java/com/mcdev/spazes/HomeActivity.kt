@@ -14,8 +14,8 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityHomeBinding
-import com.mcdev.spazes.dto.Spaces
 import com.mcdev.spazes.util.BEARER_TOKEN
+import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -77,7 +77,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 when (it) {
                     is SpacesEventListener.Success -> {
                         stopLoading()
-                        adapter.submitResponse(it.data)
+                        it.data?.let { it1 -> adapter.submitResponse(it1) }
                     }
                     is SpacesEventListener.Failure -> {
                         stopLoading()
@@ -129,14 +129,14 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         )
     }
 
-    override fun onItemClick(spaces: Spaces, position: Int) {
+    override fun onItemClick(spaces: Space, position: Int) {
         val link = SPACES_URL+spaces.id
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)
     }
 
-    override fun onGoToClick(spaces: Spaces, position: Int) {
+    override fun onGoToClick(spaces: Space, position: Int) {
         val link = SPACES_URL+spaces.id
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

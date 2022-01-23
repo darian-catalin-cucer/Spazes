@@ -1,6 +1,6 @@
 package com.mcdev.spazes.service
 
-import com.mcdev.spazes.dto.SpacesResponse
+import com.mcdev.twitterapikit.response.SpaceResponseList
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,6 +15,6 @@ interface SpacesApiService {
         @Query(value = "space.fields") spaceFields: String,
         @Query(value = "user.fields") userFields: String,
         @Query(value = "expansions") expansions: String
-    ): Response<SpacesResponse>
+    ): Response<SpaceResponseList>
 
 }

@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mcdev.spazes.R
-import com.mcdev.spazes.SpaceState
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
-import com.mcdev.spazes.dto.Spaces
-import com.mcdev.spazes.dto.SpacesResponse
-import com.mcdev.spazes.dto.User
 import com.mcdev.spazes.formatDateAndTime
+import com.mcdev.twitterapikit.`object`.Space
+import com.mcdev.twitterapikit.`object`.User
+import com.mcdev.twitterapikit.model.SpaceState
+import com.mcdev.twitterapikit.response.SpaceResponseList
 
 class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
@@ -33,9 +33,9 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
         val users = usersDiffer.currentList
         val space = spacesDiffer.currentList[position]
 
-        val creatorId = space.creator_id
+        val creatorId = space.creatorId
         val title = space?.title
-        val hostIds = space?.host_ids
+        val hostIds = space?.hostIds
 
         val hostList : MutableList<String> = mutableListOf()
         val creator: User? = users.find { it.id == creatorId }//find creator in the list of returned users
@@ -44,7 +44,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
             for (i in hostIds) {
                 val hosts : String? = users.find {
                     it.id == i
-                }?.profile_image_url
+                }?.profileImageUrl
 
                 if (hosts != null) {
                     hostList.add(hosts)
@@ -74,7 +74,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
 
 
         holder.binding.participants.text = creator?.name //creator's name
-        holder.binding.speakerAvi.setImageURI(creator?.profile_image_url)
+        holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
         if (title.isNullOrBlank().not()) {
             holder.binding.title.text = title
         } else {
@@ -86,7 +86,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
                 holder.binding.apply {
                     liveViews.visibility = View.VISIBLE
                     stateScheduledView.visibility = View.GONE
-                    participantCount.text = space.participant_count.toString()
+                    participantCount.text = space.participantCount.toString()
 //                    lotTv.text = context.resources.getString(R.string.listen_on_twitter)
                 }
             }
@@ -95,7 +95,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
                     stateScheduledView.visibility = View.VISIBLE
                     liveViews.visibility = View.GONE
 //                    lotTv.text = context.resources.getString(R.string.set_reminder)
-                    stateScheduledView.text = space.scheduled_start?.formatDateAndTime()
+                    stateScheduledView.text = space.scheduledStart?.formatDateAndTime()
                 }
             }
         }
@@ -119,12 +119,12 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
         return usersDiffer.currentList.size
     }
 
-    private val spacesDifferCallback = object : DiffUtil.ItemCallback<Spaces>() {
-        override fun areItemsTheSame(oldItem: Spaces, newItem: Spaces): Boolean {
+    private val spacesDifferCallback = object : DiffUtil.ItemCallback<Space>() {
+        override fun areItemsTheSame(oldItem: Space, newItem: Space): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Spaces, newItem: Spaces): Boolean {
+        override fun areContentsTheSame(oldItem: Space, newItem: Space): Boolean {
             return oldItem == newItem
         }
     }
@@ -143,14 +143,14 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
     val spacesDiffer = AsyncListDiffer(this, spacesDifferCallback)
     val usersDiffer = AsyncListDiffer(this, usersDifferCallback)
 
-    fun submitResponse(res: SpacesResponse) {
+    fun submitResponse(res: SpaceResponseList) {
         usersDiffer.submitList(res.includes?.users)
         spacesDiffer.submitList(res.data)
     }
 
 
     interface OnItemClickListener {
-        fun onItemClick(spaces: Spaces, position: Int)
-        fun onGoToClick(spaces: Spaces, position: Int)
+        fun onItemClick(spaces: Space, position: Int)
+        fun onGoToClick(spaces: Space, position: Int)
     }
 }
