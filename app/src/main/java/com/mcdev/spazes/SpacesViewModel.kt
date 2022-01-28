@@ -18,32 +18,131 @@ class SpacesViewModel @Inject constructor(
 ) : ViewModel() {
 
     /*using state flow*/
-    private val mutableStateFlow = MutableStateFlow<SpacesEventListener>(SpacesEventListener.Empty)
-    val search: StateFlow<SpacesEventListener> = mutableStateFlow
+    private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Empty)
+    private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Empty)
+
+    val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
 
 
-    fun searchSpaces(token: String, query: String, spaceFields: String, userFields: String, expansions: String){
+    /*search spaces by query*/
+    fun searchSpaces(
+        token: String,
+        query: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ) {
 
         viewModelScope.launch(dispatchProvider.io) {
-            mutableStateFlow.value = SpacesEventListener.Loading
-            when(val spacesResponse = mainRepository.getSpacesByTitle(token, query, spaceFields, userFields, expansions)) {
+            mutableListStateFlow.value = SpacesListEventListener.Loading
+            when (val spacesListResponse = mainRepository.getSpacesByTitle(
+                token,
+                query,
+                spaceFields,
+                userFields,
+                expansions,
+                topicFields
+            )) {
                 is Resource.Success -> {
-                    val spaces = spacesResponse.data
+                    val spaces = spacesListResponse.data
 
                     if (spaces?.meta?.resultCount == 0) {
-                        mutableStateFlow.value =
-                            SpacesEventListener.Empty
+                        mutableListStateFlow.value =
+                            SpacesListEventListener.Empty
                     } else {
-                        mutableStateFlow.value = SpacesEventListener.Success(spaces)
+                        mutableListStateFlow.value = SpacesListEventListener.Success(spaces)
                     }
                 }
                 is Resource.Error -> {
-                    mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.data?.detail)
+                    mutableListStateFlow.value =
+                        SpacesListEventListener.Failure(spacesListResponse.data?.detail)
                 }
                 else -> {
-                    mutableStateFlow.value = SpacesEventListener.Failure(spacesResponse.error)
+                    mutableListStateFlow.value = SpacesListEventListener.Failure(spacesListResponse.error)
                 }
             }
         }
     }
+
+
+    /*search spaces by list of ids*/
+    fun searchSpacesByIds(
+        token: String,
+        ids: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ) {
+
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableListStateFlow.value = SpacesListEventListener.Loading
+
+            when (val spacesListResponse = mainRepository.getSpacesByIds(
+                token,
+                ids,
+                spaceFields,
+                userFields,
+                expansions,
+                topicFields
+            )) {
+                is Resource.Success -> {
+                    val spaces = spacesListResponse.data
+
+                    if (spaces?.meta?.resultCount == 0) {
+                        mutableListStateFlow.value =
+                            SpacesListEventListener.Empty
+                    } else {
+                        mutableListStateFlow.value = SpacesListEventListener.Success(spaces)
+                    }
+                }
+                is Resource.Error -> {
+                    mutableListStateFlow.value =
+                        SpacesListEventListener.Failure(spacesListResponse.data?.detail)
+                }
+                else -> {
+                    mutableListStateFlow.value = SpacesListEventListener.Failure(spacesListResponse.error)
+                }
+            }
+        }
+    }
+
+    /*search spaces by id*/
+    fun searchSpacesById(
+        token: String,
+        id: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ) {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableSingleStateFlow.value = SpacesSingleEventListener.Loading
+            when (val spacesSingleResponse = mainRepository.getSpacesById(
+                token, id, spaceFields, userFields, expansions, topicFields
+            )) {
+                is Resource.Success -> {
+                    val space = spacesSingleResponse.data
+
+                    if (space?.meta?.resultCount == 0) {
+                        mutableSingleStateFlow.value = SpacesSingleEventListener.Empty
+                    } else {
+                        mutableSingleStateFlow.value = SpacesSingleEventListener.Success(space)
+                    }
+                }
+
+                is Resource.Error -> {
+                    mutableSingleStateFlow.value =
+                        SpacesSingleEventListener.Failure(spacesSingleResponse.data?.detail)
+                }
+                else -> {
+                    mutableSingleStateFlow.value = SpacesSingleEventListener.Failure(spacesSingleResponse.error)
+                }
+
+            }
+        }
+    }
+
+
 }

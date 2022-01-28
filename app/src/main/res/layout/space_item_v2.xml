@@ -78,8 +78,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"
@@ -92,8 +92,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_one_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"
@@ -107,8 +107,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_two_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"

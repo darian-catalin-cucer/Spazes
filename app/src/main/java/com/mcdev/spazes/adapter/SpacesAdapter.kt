@@ -24,7 +24,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
         parent: ViewGroup,
         viewType: Int
     ): SpacesAdapter.SpacesViewHolder {
-        val binding = SpaceItemV2Binding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item_light_v2, parent, false))
+        val binding = SpaceItemV2Binding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item_v2, parent, false))
 
         return SpacesViewHolder(binding)
     }
