@@ -18,8 +18,8 @@ class SpacesViewModel @Inject constructor(
 ) : ViewModel() {
 
     /*using state flow*/
-    private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Empty)
-    private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Empty)
+    private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
+    private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
 

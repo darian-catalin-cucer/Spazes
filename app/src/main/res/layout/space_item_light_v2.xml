@@ -4,9 +4,9 @@
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="200dp"
-    android:layout_margin="15dp"
-    app:cardCornerRadius="13dp"
-    app:cardElevation="5dp">
+    android:layout_margin="@dimen/card_margin_dimen"
+    app:cardCornerRadius="@dimen/card_radius_dimen"
+    app:cardElevation="@dimen/card_elevation_dimen">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             app:roundedCornerRadius="10dp"
             app:roundingBorderColor="@android:color/darker_gray"
             app:roundingBorderWidth="1dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/avi_margin_bottom"
             android:layout_marginStart="5dp"/>
 
         <com.facebook.drawee.view.SimpleDraweeView
@@ -116,7 +116,7 @@
             app:roundedCornerRadius="10dp"
             app:roundingBorderColor="@android:color/darker_gray"
             app:roundingBorderWidth="1dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/avi_margin_bottom"
             android:layout_marginStart="5dp"/>
 
     </RelativeLayout>
