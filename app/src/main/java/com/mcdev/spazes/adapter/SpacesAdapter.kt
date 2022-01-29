@@ -1,6 +1,11 @@
 package com.mcdev.spazes.adapter
 
 import android.content.Context
+import android.icu.number.Notation
+import android.icu.number.NumberFormatter
+import android.icu.number.Precision
+import android.icu.text.CompactDecimalFormat
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +19,7 @@ import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
 import com.mcdev.twitterapikit.model.SpaceState
 import com.mcdev.twitterapikit.response.SpaceResponseList
+import java.util.*
 
 class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
@@ -86,7 +92,29 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
                 holder.binding.apply {
                     liveViews.visibility = View.VISIBLE
                     stateScheduledView.visibility = View.GONE
-                    participantCount.text = space.participantCount.toString()
+                    /*truncate participant count*/
+                    val compactCount = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        NumberFormatter.with()
+                            .notation(Notation.compactShort())
+                            .precision(Precision.maxFraction(1))
+                            .locale(Locale.US)
+                            .format(space.participantCount)
+                            .toString()
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            val fmt: CompactDecimalFormat = CompactDecimalFormat.getInstance(
+                                Locale.US,
+                                CompactDecimalFormat.CompactStyle.SHORT
+                            )
+                            fmt.maximumFractionDigits = 1
+                            fmt.format(space.participantCount)
+                        } else {
+                            //"VERSION.SDK_INT < N"
+                                //does not truncate participant count for android 6 and lower
+                            space.participantCount.toString()
+                        }
+                    }
+                    participantCount.text = compactCount
 //                    lotTv.text = context.resources.getString(R.string.listen_on_twitter)
                 }
             }
