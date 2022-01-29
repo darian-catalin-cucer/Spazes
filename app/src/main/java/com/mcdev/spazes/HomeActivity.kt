@@ -54,7 +54,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             makeQuery(sQuery)
         }
 
-        binding.searchView.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener{
+        binding.searchView.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
             override fun onItemSelected(index: Int, s: CharSequence) {
                 startLoading()
                 makeQuery(s.toString())
@@ -79,7 +79,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         //collect
         lifecycleScope.launchWhenStarted {
-            viewModel.search.collect{
+            viewModel.search.collect {
                 when (it) {
                     is SpacesListEventListener.Success -> {
                         stopLoading()
@@ -92,7 +92,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                         startLoading()
                     }
                     is SpacesListEventListener.Empty -> {
-                        showEmpty()
+                        showEmpty(applicationContext.getString(R.string.no_spaces_found))
                     }
                     else -> Unit
                 }
@@ -116,12 +116,12 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
 
-    private fun showEmpty() {
+    private fun showEmpty(message: String) {
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.GONE
         binding.recyclerMessage.visibility = View.VISIBLE
         binding.emptyLottie.visibility = View.VISIBLE
-        binding.recyclerMessage.text = applicationContext.getString(R.string.no_spaces_found)
+        binding.recyclerMessage.text = message
     }
 
     private fun makeQuery(query: String) {
@@ -149,7 +149,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         )
     }
 
-    private fun getFeaturedSpaces(){
+    private fun getFeaturedSpaces() {
 
         db.collection(DBCollections.Featured.toString())
             .get()
@@ -161,7 +161,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                     spacesIds.add(document.data["space_id"].toString())
                 }
 
-                val theIDS = spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
+                val theIDS =
+                    spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
                 viewModel.searchSpacesByIds(
                     "BEARER $BEARER_TOKEN",
                     theIDS,
@@ -177,14 +178,14 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(spaces: Space, position: Int) {
-        val link = SPACES_URL+spaces.id
+        val link = SPACES_URL + spaces.id
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)
     }
 
     override fun onGoToClick(spaces: Space, position: Int) {
-        val link = SPACES_URL+spaces.id
+        val link = SPACES_URL + spaces.id
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)

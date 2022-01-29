@@ -1,10 +1,13 @@
 package com.mcdev.spazes
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
+import com.mcdev.twitterapikit.`object`.Space
+import com.mcdev.twitterapikit.response.SpaceResponseList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -94,7 +97,7 @@ class SpacesViewModel @Inject constructor(
                         mutableListStateFlow.value =
                             SpacesListEventListener.Empty
                     } else {
-                        mutableListStateFlow.value = SpacesListEventListener.Success(spaces)
+                        mutableListStateFlow.value = SpacesListEventListener.Success(isSpaceExpired(spaceResponseList = spaces))
                     }
                 }
                 is Resource.Error -> {
@@ -144,5 +147,18 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
+    private fun isSpaceExpired(spaceResponseList: SpaceResponseList?): SpaceResponseList {
+        val validSpaces = ArrayList<Space>()
+        if (spaceResponseList?.data != null) {
+            for (space in spaceResponseList.data!!) {
+                if (space.state.equals("ended").not()) {
+                    validSpaces.add(space)
+                }
+                Log.d("TAG", "valid spaces are : $validSpaces")
+            }
+        }
 
+        spaceResponseList?.data = validSpaces
+        return spaceResponseList!!
+    }
 }
