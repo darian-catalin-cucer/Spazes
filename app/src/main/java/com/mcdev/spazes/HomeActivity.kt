@@ -30,6 +30,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     private val viewModel: SpacesViewModel by viewModels()
 
     private val db = Firebase.firestore
+    private var refreshType: RefreshType = RefreshType.featured_refresh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,18 +52,24 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         getFeaturedSpaces()
 
         binding.swipeRefresh.setOnRefreshListener {
-            makeQuery(sQuery)
+            when (this.refreshType) {
+                RefreshType.featured_refresh -> getFeaturedSpaces()
+                RefreshType.search_refresh -> makeQuery(sQuery)
+            }
         }
 
         binding.searchView.setSearchViewListener(object : MultiSearchView.MultiSearchViewListener {
             override fun onItemSelected(index: Int, s: CharSequence) {
                 startLoading()
+                this@HomeActivity.refreshType = RefreshType.search_refresh
                 makeQuery(s.toString())
                 sQuery = s.toString()
+
             }
 
             override fun onSearchComplete(index: Int, s: CharSequence) {
                 startLoading()
+                this@HomeActivity.refreshType = RefreshType.search_refresh
                 makeQuery(s.toString())
                 sQuery = s.toString()
             }
@@ -72,6 +79,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             }
 
             override fun onTextChanged(index: Int, s: CharSequence) {
+                this@HomeActivity.refreshType = RefreshType.search_refresh
                 sQuery = s.toString()
             }
 
@@ -155,7 +163,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     private fun getFeaturedSpaces() {
-
+        this@HomeActivity.refreshType = RefreshType.featured_refresh
         db.collection(DBCollections.Featured.toString())
             .get()
             .addOnSuccessListener {
