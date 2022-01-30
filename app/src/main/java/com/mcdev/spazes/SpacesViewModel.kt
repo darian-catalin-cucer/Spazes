@@ -3,7 +3,10 @@ package com.mcdev.spazes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.repository.MainRepository
+import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
@@ -23,6 +26,7 @@ class SpacesViewModel @Inject constructor(
     /*using state flow*/
     private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
     private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
+    private val db = Firebase.firestore
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
 
@@ -52,7 +56,7 @@ class SpacesViewModel @Inject constructor(
 
                     if (spaces?.meta?.resultCount == 0) {
                         mutableListStateFlow.value =
-                            SpacesListEventListener.Empty
+                            SpacesListEventListener.Empty(R.string.no_spaces_found)
                     } else {
                         mutableListStateFlow.value = SpacesListEventListener.Success(spaces)
                     }
@@ -95,9 +99,14 @@ class SpacesViewModel @Inject constructor(
 
                     if (spaces?.meta?.resultCount == 0) {
                         mutableListStateFlow.value =
-                            SpacesListEventListener.Empty
+                            SpacesListEventListener.Empty(R.string.no_featured_spaces)
                     } else {
-                        mutableListStateFlow.value = SpacesListEventListener.Success(isSpaceExpired(spaceResponseList = spaces))
+                        val validFeatured = isSpaceExpired(spaceResponseList = spaces)
+                        if (validFeatured.data.isNullOrEmpty()) {
+                            mutableListStateFlow.value = SpacesListEventListener.Empty(R.string.no_featured_spaces)
+                        } else {
+                            mutableListStateFlow.value = SpacesListEventListener.Success(validFeatured)
+                        }
                     }
                 }
                 is Resource.Error -> {
@@ -153,9 +162,21 @@ class SpacesViewModel @Inject constructor(
             for (space in spaceResponseList.data!!) {
                 if (space.state.equals("ended").not()) {
                     validSpaces.add(space)
+                } else {
+                    //delete ended featured spaces. The delete option was chosen so that there will not be multiple reads to the database
+                    db.collection(DBCollections.Featured.toString())
+                        .document(space.id!!)
+                        .delete()
+//                        .update("is_ended", true)
+                        .addOnSuccessListener {
+                            Log.d("TAG", "isSpaceExpired: delete success for ${space.id}")
+                        }
+                        .addOnFailureListener {
+                            Log.d("TAG", "isSpaceExpired: delete failure")
+                        }
                 }
-                Log.d("TAG", "valid spaces are : $validSpaces")
             }
+            Log.d("TAG", "valid spaces are : $validSpaces")
         }
 
         spaceResponseList?.data = validSpaces

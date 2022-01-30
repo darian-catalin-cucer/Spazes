@@ -92,11 +92,16 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                         startLoading()
                     }
                     is SpacesListEventListener.Empty -> {
-                        showEmpty(applicationContext.getString(R.string.no_spaces_found))
+                        showEmpty(applicationContext.getString(it.message!!))
                     }
                     else -> Unit
                 }
             }
+        }
+
+        binding.featuredBtn.setOnClickListener {
+            binding.fireLottie.playAnimation()
+            getFeaturedSpaces()
         }
     }
 
@@ -163,14 +168,20 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
                 val theIDS =
                     spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
-                viewModel.searchSpacesByIds(
-                    "BEARER $BEARER_TOKEN",
-                    theIDS,
-                    "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
-                    "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-                    "invited_user_ids,speaker_ids,creator_id,host_ids",
-                    "description,id,name"
-                )
+
+                //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
+                if (theIDS.isEmpty()) {
+                    showEmpty(applicationContext.getString(R.string.no_featured_spaces))
+                } else {
+                    viewModel.searchSpacesByIds(
+                        "BEARER $BEARER_TOKEN",
+                        theIDS,
+                        "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
+                        "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
+                        "invited_user_ids,speaker_ids,creator_id,host_ids",
+                        "description,id,name"
+                    )
+                }
             }
             .addOnFailureListener {
                 Log.d("TAG", "getFeaturedSpaces: Error $it")

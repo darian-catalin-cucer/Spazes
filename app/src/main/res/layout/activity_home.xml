@@ -49,6 +49,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/swipe_refresh"/>
 
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp">
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/fire_lottie"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                app:lottie_rawRes="@raw/trend_fire_purple"
+                app:lottie_autoPlay="true"
+                android:scaleType="centerCrop"
+                android:layout_marginStart="10dp"/>
+            <TextView
+                android:id="@+id/featured_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/featured_text"
+                android:textColor="@color/black"
+                android:background="@android:color/transparent"
+                android:gravity="start"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="wrap_content"
@@ -92,8 +115,6 @@
                     android:layout_height="match_parent" />
 
             </RelativeLayout>
-
-
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 

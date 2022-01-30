@@ -80,6 +80,14 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
 
 
         holder.binding.participants.text = creator?.name //creator's name
+        when (creator?.verified) {
+            true -> {
+                holder.binding.hostVerifiedBadge.visibility = View.VISIBLE
+            }
+            else -> {
+                holder.binding.hostVerifiedBadge.visibility = View.GONE
+            }
+        }
         holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
         if (title.isNullOrBlank().not()) {
             holder.binding.title.text = title

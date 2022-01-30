@@ -7,5 +7,5 @@ sealed class SpacesListEventListener {
     class Success(val data: SpaceResponseList?): SpacesListEventListener()
     class Failure(val error: String?): SpacesListEventListener()
     object Loading: SpacesListEventListener()
-    object Empty: SpacesListEventListener()
+    class Empty(val message: Int?): SpacesListEventListener()
 }
