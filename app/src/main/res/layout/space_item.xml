@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="250dp"
     android:minHeight="250dp"
-    android:layout_margin="15dp"
-    app:cardCornerRadius="13dp"
+    android:layout_margin="@dimen/card_margin_dimen"
+    app:cardCornerRadius="@dimen/card_radius_dimen"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout

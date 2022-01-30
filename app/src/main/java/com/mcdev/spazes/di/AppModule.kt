@@ -20,6 +20,7 @@ import javax.inject.Singleton
 object AppModule {
     private const val TWITTER_API_BASE_URL = "https://api.twitter.com"
 
+    /*Retrofit Spaces API*/
     @Singleton
     @Provides
     fun provideSpacesApi(): SpacesApiService = Retrofit.Builder()
@@ -29,6 +30,7 @@ object AppModule {
         .create(SpacesApiService::class.java)
 
 
+    /*@Single*/
     @Singleton
     @Provides
     fun provideDispatchers(): DispatchProvider = object : DispatchProvider {

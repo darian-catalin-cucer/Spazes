@@ -2,5 +2,8 @@
     <string name="app_name">Spazes</string>
     <string name="set_reminder">Set Reminder</string>
     <string name="listen_on_twitter">Listen on Twitter</string>
-    <string name="no_spaces_found">No spaces found</string>
+    <string name="no_spaces_found">No space found</string>
+    <string name="no_featured_spaces">No featured space</string>
+    <string name="featured_text">Featured</string>
+    <string name="trending_text">Trending</string>
 </resources>

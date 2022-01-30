@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--avis-->
+    <dimen name="avi_dimen">30.5dp</dimen>
+    <dimen name="avi_margin_bottom">0dp</dimen>
+
+    <!--cards-->
+    <dimen name="card_margin_dimen">10dp</dimen>
+    <dimen name="card_radius_dimen">20dp</dimen>
+    <dimen name="card_elevation_dimen">20dp</dimen>
+
+    <!--search bar-->
+    <dimen name="search_margin_dimen">10dp</dimen>
+
+</resources>

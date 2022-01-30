@@ -4,9 +4,9 @@
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="200dp"
-    android:layout_margin="15dp"
-    app:cardCornerRadius="13dp"
-    app:cardElevation="5dp">
+    android:layout_margin="@dimen/search_margin_dimen"
+    app:cardCornerRadius="@dimen/card_radius_dimen"
+    app:cardElevation="@dimen/card_elevation_dimen">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -66,20 +66,39 @@
             android:ellipsize="end"
             android:textColor="@android:color/white"/>
 
-        <TextView
-            android:id="@+id/participants"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_above="@+id/speaker_avi"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:textColor="@color/white"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/participants"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="@color/white"
+                android:layout_gravity="center"/>
+
+            <ImageView
+                android:id="@+id/host_verified_badge"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_twitter_verified_badge_white"
+                android:layout_toEndOf="@id/participants"
+                android:layout_alignEnd="@id/participants"
+                android:layout_margin="5dp"
+                android:layout_gravity="bottom"
+                android:visibility="gone"
+                android:contentDescription="verified badge" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"
@@ -88,12 +107,12 @@
         app:roundedCornerRadius="10dp"
         app:roundingBorderColor="@android:color/darker_gray"
         app:roundingBorderWidth="1dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/avi_margin_bottom"/>
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_one_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"
@@ -102,13 +121,13 @@
         app:roundedCornerRadius="10dp"
         app:roundingBorderColor="@android:color/darker_gray"
         app:roundingBorderWidth="1dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/avi_margin_bottom"
         android:layout_marginStart="5dp"/>
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/speaker_two_avi"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/avi_dimen"
+        android:layout_height="@dimen/avi_dimen"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         app:actualImageScaleType="centerCrop"
@@ -117,7 +136,7 @@
         app:roundedCornerRadius="10dp"
         app:roundingBorderColor="@android:color/darker_gray"
         app:roundingBorderWidth="1dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/avi_margin_bottom"
         android:layout_marginStart="5dp"/>
 
     </RelativeLayout>
