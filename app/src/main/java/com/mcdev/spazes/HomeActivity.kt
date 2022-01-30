@@ -39,6 +39,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         val view = binding.root
         setContentView(view)
 
+        binding.lineChartLottie.frame = 130
+
         val adapter = SpacesAdapter(this, this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
@@ -100,22 +102,28 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                         startLoading()
                     }
                     is SpacesListEventListener.Empty -> {
-                        showEmpty(applicationContext.getString(it.message!!))
+                        showEmpty(it.message!!)
                     }
                     else -> Unit
                 }
             }
         }
 
-        binding.featuredBtn.setOnClickListener {
+        binding.featuredLay.setOnClickListener {
             binding.fireLottie.playAnimation()
             getFeaturedSpaces()
+        }
+
+        binding.trendingLay.setOnClickListener {
+            binding.lineChartLottie.playAnimation()
+            getTrendingSpaces()
         }
     }
 
     private fun startLoading() {
         binding.swipeRefresh.isRefreshing = true
         binding.emptyLottie.visibility = View.GONE
+        binding.emptyFeatureLottie.visibility = View.GONE
         binding.recyclerMessage.visibility = View.GONE
         //binding.recyclerView.visibility = View.GONE
         //binding.recyclerMessage.visibility = View.GONE
@@ -125,16 +133,30 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.VISIBLE
         binding.emptyLottie.visibility = View.GONE
+        binding.emptyFeatureLottie.visibility = View.GONE
         binding.recyclerMessage.visibility = View.GONE
     }
 
 
-    private fun showEmpty(message: String) {
+    private fun showEmpty(message: Int) {
+        when (message) {
+            R.string.no_featured_spaces -> {
+                binding.emptyLottie.visibility = View.GONE
+                binding.emptyFeatureLottie.visibility = View.VISIBLE
+            }
+            R.string.no_spaces_found -> {
+                binding.emptyFeatureLottie.visibility = View.GONE
+                binding.emptyLottie.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.emptyLottie.visibility = View.GONE
+                binding.emptyFeatureLottie.visibility = View.GONE
+            }
+        }
+        binding.recyclerMessage.text = applicationContext.getString(message)
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.GONE
         binding.recyclerMessage.visibility = View.VISIBLE
-        binding.emptyLottie.visibility = View.VISIBLE
-        binding.recyclerMessage.text = message
     }
 
     private fun makeQuery(query: String) {
@@ -179,7 +201,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
                 //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
                 if (theIDS.isEmpty()) {
-                    showEmpty(applicationContext.getString(R.string.no_featured_spaces))
+                    showEmpty(R.string.no_featured_spaces)
                 } else {
                     viewModel.searchSpacesByIds(
                         "BEARER $BEARER_TOKEN",
@@ -194,6 +216,11 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             .addOnFailureListener {
                 Log.d("TAG", "getFeaturedSpaces: Error $it")
             }
+    }
+
+    private fun getTrendingSpaces() {
+        Log.d("TAG", "getTrendingSpaces: coming soon")
+        showEmpty(R.string.coming_soon)
     }
 
     override fun onItemClick(spaces: Space, position: Int) {

@@ -54,22 +54,52 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/fire_lottie"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                app:lottie_rawRes="@raw/trend_fire_purple"
-                app:lottie_autoPlay="true"
-                android:scaleType="centerCrop"
-                android:layout_marginStart="10dp"/>
-            <TextView
-                android:id="@+id/featured_btn"
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/featured_lay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/featured_text"
-                android:textColor="@color/black"
-                android:background="@android:color/transparent"
-                android:gravity="start"/>
+                android:orientation="horizontal">
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/fire_lottie"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    app:lottie_rawRes="@raw/trend_fire_purple"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="10dp"/>
+                <TextView
+                    android:id="@+id/featured_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/featured_text"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/trending_lay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/line_chart_lottie"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    app:lottie_rawRes="@raw/line_chart"
+                    android:scaleType="centerCrop"
+                    android:layout_marginStart="40dp"/>
+                <TextView
+                    android:id="@+id/trending_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trending_text"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:background="@android:color/transparent"
+                    android:gravity="start"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -87,27 +117,45 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:descendantFocusability="blocksDescendants">
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/empty_lottie"
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/empty_lottie_lay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true"
-                    android:paddingTop="1dp"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/astronaut"/>
+                    android:layout_alignParentTop="true">
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/empty_lottie"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:paddingTop="1dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        android:visibility="gone"
+                        app:lottie_rawRes="@raw/no_results"/>
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/empty_feature_lottie"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="1dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        android:visibility="gone"
+                        app:lottie_rawRes="@raw/astronaut"
+                        android:layout_marginBottom="80dp"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
                 <TextView
                     android:id="@+id/recycler_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:layout_centerHorizontal="true"
-                    android:paddingTop="200dp"
+                    android:paddingTop="10dp"
                     android:textSize="30sp"
                     android:textStyle="bold"
                     android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"/>
+                    android:layout_marginEnd="20dp"
+                    android:layout_below="@id/empty_lottie_lay"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
