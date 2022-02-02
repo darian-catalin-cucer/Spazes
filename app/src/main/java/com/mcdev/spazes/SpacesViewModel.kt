@@ -80,7 +80,8 @@ class SpacesViewModel @Inject constructor(
         spaceFields: String,
         userFields: String,
         expansions: String,
-        topicFields: String
+        topicFields: String,
+        firestoreCollection: String
     ) {
 
         viewModelScope.launch(dispatchProvider.io) {
@@ -101,7 +102,7 @@ class SpacesViewModel @Inject constructor(
                         mutableListStateFlow.value =
                             SpacesListEventListener.Empty(R.string.no_featured_spaces)
                     } else {
-                        val validFeatured = isSpaceExpired(spaceResponseList = spaces)
+                        val validFeatured = isSpaceExpired(spaceResponseList = spaces, firestoreCollection = firestoreCollection)
                         if (validFeatured.data.isNullOrEmpty()) {
                             mutableListStateFlow.value = SpacesListEventListener.Empty(R.string.no_featured_spaces)
                         } else {
@@ -156,7 +157,7 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
-    private fun isSpaceExpired(spaceResponseList: SpaceResponseList?): SpaceResponseList {
+    private fun isSpaceExpired(spaceResponseList: SpaceResponseList?, firestoreCollection: String): SpaceResponseList {
         val validSpaces = ArrayList<Space>()
         if (spaceResponseList?.data != null) {
             for (space in spaceResponseList.data!!) {
@@ -164,7 +165,7 @@ class SpacesViewModel @Inject constructor(
                     validSpaces.add(space)
                 } else {
                     //delete ended featured spaces. The delete option was chosen so that there will not be multiple reads to the database
-                    db.collection(DBCollections.Featured.toString())
+                    db.collection(firestoreCollection)
                         .document(space.id!!)
                         .delete()
 //                        .update("is_ended", true)

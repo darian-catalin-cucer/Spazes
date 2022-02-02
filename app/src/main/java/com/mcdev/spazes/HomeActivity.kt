@@ -171,7 +171,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         )
     }
 
-    private fun querySpacesByListOfIds(ids: String) {
+    private fun querySpacesByListOfIds(ids: String, firestoreCollection: String) {
 
 
         viewModel.searchSpacesByIds(
@@ -180,7 +180,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
             "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
             "invited_user_ids,speaker_ids,creator_id,host_ids",
-            "description,id,name"
+            "description,id,name",
+            firestoreCollection
         )
     }
 
@@ -203,7 +204,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 if (theIDS.isEmpty()) {
                     showEmpty(R.string.no_featured_spaces)
                 } else {
-                    querySpacesByListOfIds(theIDS)
+                    querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
                 }
             }
             .addOnFailureListener {
@@ -230,7 +231,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 if (theIDS.isEmpty()) {
                     showEmpty(R.string.no_trending_space)
                 } else {
-                    querySpacesByListOfIds(theIDS)
+                    querySpacesByListOfIds(theIDS, DBCollections.Trending.toString())
                 }
             }
             .addOnFailureListener {
