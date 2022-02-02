@@ -203,14 +203,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 if (theIDS.isEmpty()) {
                     showEmpty(R.string.no_featured_spaces)
                 } else {
-                    viewModel.searchSpacesByIds(
-                        "BEARER $BEARER_TOKEN",
-                        theIDS,
-                        "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
-                        "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-                        "invited_user_ids,speaker_ids,creator_id,host_ids",
-                        "description,id,name"
-                    )
+                    querySpacesByListOfIds(theIDS)
                 }
             }
             .addOnFailureListener {
@@ -219,8 +212,30 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     private fun getTrendingSpaces() {
-        Log.d("TAG", "getTrendingSpaces: coming soon")
-        showEmpty(R.string.coming_soon)
+        this@HomeActivity.refreshType = RefreshType.trending_refresh
+        db.collection(DBCollections.Trending.toString())
+            .get()
+            .addOnSuccessListener {
+
+                val spacesIds = mutableListOf<String>()
+                for (document in it) {
+
+                    spacesIds.add(document.data["space_id"].toString())
+                }
+
+                val theIDS =
+                    spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
+
+                //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
+                if (theIDS.isEmpty()) {
+                    showEmpty(R.string.no_trending_space)
+                } else {
+                    querySpacesByListOfIds(theIDS)
+                }
+            }
+            .addOnFailureListener {
+                Log.d("TAG", "getTrendingSpaces: Error $it")
+            }
     }
 
     override fun onItemClick(spaces: Space, position: Int) {
