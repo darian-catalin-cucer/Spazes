@@ -14,5 +14,5 @@
 .cxx
 local.properties
 .idea
-app/debug
-app/release
+**/debug
+**/release
