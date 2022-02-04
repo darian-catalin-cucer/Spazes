@@ -132,7 +132,7 @@
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         android:visibility="gone"
-                        app:lottie_rawRes="@raw/no_results"/>
+                        app:lottie_rawRes="@raw/astronaut"/>
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/empty_feature_lottie"
                         android:layout_width="wrap_content"
@@ -141,7 +141,7 @@
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         android:visibility="gone"
-                        app:lottie_rawRes="@raw/astronaut"
+                        app:lottie_rawRes="@raw/not_found"
                         android:layout_marginBottom="80dp"/>
                 </androidx.appcompat.widget.LinearLayoutCompat>
                 <TextView

@@ -140,10 +140,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
     private fun showEmpty(message: Int) {
         when (message) {
-            R.string.no_featured_spaces -> {
-                binding.emptyLottie.visibility = View.GONE
-                binding.emptyFeatureLottie.visibility = View.VISIBLE
-            }
             R.string.no_spaces_found -> {
                 binding.emptyFeatureLottie.visibility = View.GONE
                 binding.emptyLottie.visibility = View.VISIBLE
@@ -172,8 +168,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     private fun querySpacesByListOfIds(ids: String, firestoreCollection: String) {
-
-
         viewModel.searchSpacesByIds(
             "BEARER $BEARER_TOKEN",
             ids,
@@ -186,6 +180,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     private fun getFeaturedSpaces() {
+        startLoading()
         this@HomeActivity.refreshType = RefreshType.featured_refresh
         db.collection(DBCollections.Featured.toString())
             .get()
@@ -213,6 +208,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     private fun getTrendingSpaces() {
+        startLoading()
         this@HomeActivity.refreshType = RefreshType.trending_refresh
         db.collection(DBCollections.Trending.toString())
             .get()
