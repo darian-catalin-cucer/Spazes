@@ -2,8 +2,8 @@ package com.mcdev.spazes.repository
 
 import com.mcdev.spazes.service.SpacesApiService
 import com.mcdev.spazes.util.Resource
-import com.mcdev.twitterapikit.response.SpaceResponseList
-import com.mcdev.twitterapikit.response.SpaceResponseSingle
+import com.mcdev.twitterapikit.response.SpaceListResponse
+import com.mcdev.twitterapikit.response.SpaceSingleResponse
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseList> {
+    ): Resource<SpaceListResponse> {
 
         return try {
             val response = spacesApiService.getSpacesByTitle(token, query, spaceFields, userFields ,expansions, topicFields)
@@ -41,7 +41,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseList> {
+    ): Resource<SpaceListResponse> {
 
         return try {
             val response = spacesApiService.getSpacesByIds(token, ids, spaceFields, userFields ,expansions, topicFields)
@@ -66,7 +66,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseSingle> {
+    ): Resource<SpaceSingleResponse> {
         return try {
             val response = spacesApiService.getSpacesById(
                 token,

@@ -1,8 +1,8 @@
 package com.mcdev.spazes.repository
 
 import com.mcdev.spazes.util.Resource
-import com.mcdev.twitterapikit.response.SpaceResponseList
-import com.mcdev.twitterapikit.response.SpaceResponseSingle
+import com.mcdev.twitterapikit.response.SpaceListResponse
+import com.mcdev.twitterapikit.response.SpaceSingleResponse
 
 interface MainRepository {
 
@@ -13,7 +13,7 @@ interface MainRepository {
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseList>
+    ): Resource<SpaceListResponse>
 
     suspend fun getSpacesByIds(
         token: String,
@@ -22,7 +22,7 @@ interface MainRepository {
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseList>
+    ): Resource<SpaceListResponse>
 
     suspend fun getSpacesById(
         token: String,
@@ -31,6 +31,6 @@ interface MainRepository {
         userFields: String,
         expansions: String,
         topicFields: String
-    ): Resource<SpaceResponseSingle>
+    ): Resource<SpaceSingleResponse>
 
 }

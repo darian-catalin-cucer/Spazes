@@ -10,7 +10,7 @@ import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
-import com.mcdev.twitterapikit.response.SpaceResponseList
+import com.mcdev.twitterapikit.response.SpaceListResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -157,7 +157,7 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
-    private fun isSpaceExpired(spaceResponseList: SpaceResponseList?, firestoreCollection: String): SpaceResponseList {
+    private fun isSpaceExpired(spaceResponseList: SpaceListResponse?, firestoreCollection: String): SpaceListResponse {
         val validSpaces = ArrayList<Space>()
         if (spaceResponseList?.data != null) {
             for (space in spaceResponseList.data!!) {
