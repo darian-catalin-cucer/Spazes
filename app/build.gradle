@@ -80,6 +80,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    /*Leak Canary*/
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+
     /*Kojofosu's TwitterApiV2*/
     implementation 'com.github.kojofosu:TwitterApiKit:1.1.2'
 

@@ -25,7 +25,8 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     val SPACES_URL = "https://twitter.com/i/spaces/"
-    private lateinit var binding: ActivityHomeBinding
+    private var _binding: ActivityHomeBinding? = null
+    private val binding get() = _binding!!
     var sQuery: String = "space"
     private val viewModel: SpacesViewModel by viewModels()
 
@@ -35,7 +36,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Fresco.initialize(this)//initializing fresco to prevent SimpleDrawee from throwing initialization exception
-        binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
+        _binding = ActivityHomeBinding.inflate(LayoutInflater.from(this))
         val view = binding.root
         setContentView(view)
 
@@ -250,7 +251,8 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         binding.recyclerView.adapter = null
+        _binding = null
+        super.onDestroy()
     }
 }
