@@ -1,9 +1,14 @@
 package com.mcdev.spazes
 
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.remote.Datastore
 import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.util.DBCollections
@@ -14,13 +19,16 @@ import com.mcdev.twitterapikit.response.SpaceResponseList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
-    private val dispatchProvider: DispatchProvider
+    private val dispatchProvider: DispatchProvider,
+    private val datastore: DataStore<Preferences>
 ) : ViewModel() {
 
     /*using state flow*/
@@ -183,4 +191,29 @@ class SpacesViewModel @Inject constructor(
         spaceResponseList?.data = validSpaces
         return spaceResponseList!!
     }
+
+
+    fun saveOrUpdateDatastore(key: String, value: String) {
+        viewModelScope.launch {
+            val dataStoreKey = stringPreferencesKey(key)
+            datastore.edit {
+                it[dataStoreKey] = value
+            }
+        }
+    }
+
+    suspend fun readDatastore(key: String): String? {
+        var value: String? = null
+//        viewModelScope.launch(dispatchProvider.io) {
+            val dataStoreKey = stringPreferencesKey(key)
+            value = datastore.data.first()[dataStoreKey]
+            Log.d("TAG", "readDatastore: reading from datastore. Value : $value")
+
+//        }
+        Log.d("TAG", "readDatastore: reading from datastore. Value2 : $value")
+
+        return value
+    }
+
+//    class UserPreferenceRepository @Inject constructor(private val datastore: DataStore<Preferences>)
 }
