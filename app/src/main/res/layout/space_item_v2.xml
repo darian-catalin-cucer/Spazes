@@ -8,11 +8,17 @@
     app:cardCornerRadius="@dimen/card_radius_dimen"
     app:cardElevation="@dimen/card_elevation_dimen">
 
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/bg_speaker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/transparent_gradient"
+        android:scaleType="fitStart"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:background="@drawable/twitter_spaces_bg">
+        android:padding="20dp">
 
 
         <TextView
