@@ -1,6 +1,5 @@
 package com.mcdev.spazes
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -9,11 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.drawee.backends.pipeline.Fresco
@@ -78,7 +72,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 this@HomeActivity.refreshType = RefreshType.search_refresh
                 makeQuery(s.toString())
                 sQuery = s.toString()
-                viewModel.saveOrUpdateDatastore("url", s.toString())
             }
 
             override fun onSearchItemRemoved(index: Int) {

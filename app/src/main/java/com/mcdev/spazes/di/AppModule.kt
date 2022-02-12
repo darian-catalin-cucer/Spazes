@@ -68,7 +68,7 @@ object AppModule {
     fun providePreferencesDatastore(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler( produceNewData = { emptyPreferences() }),//is invoked if a corruption exception is thrown by the serializer when the data cannot be deserialized which instructs datastore how to replace the corrupted data
-//            migrations = listOf(SharedPreferencesMigration(applicationContext, URL_PREFERENCE_NAME)),//migrations is a list of data migrations for moving previous data into datastore
+            migrations = listOf(SharedPreferencesMigration(applicationContext, URL_PREFERENCE_NAME)),//migrations is a list of data migrations for moving previous data into datastore
             scope = CoroutineScope(provideDispatchers().io + SupervisorJob()),//defines the scope in which IO operations and data editing functions will execute
             produceFile = { applicationContext.preferencesDataStoreFile(URL_PREFERENCE_NAME) }//generates the file object for datastore based on the provided context name
 
