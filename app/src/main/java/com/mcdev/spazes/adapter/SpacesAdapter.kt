@@ -89,11 +89,12 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
             }
         }
         holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
-        if (title.isNullOrBlank().not()) {
-            holder.binding.title.text = title
-        } else {
-            holder.binding.title.text = "${creator?.name}'s Space"
-        }
+        holder.binding.title.text = title ?: "${creator?.name}'s Space"
+//        if (title.isNullOrBlank().not()) {
+//            holder.binding.title.text = title
+//        } else {
+//            holder.binding.title.text = "${creator?.name}'s Space"
+//        }
 
         when (space.state) {
             SpaceState.LIVE.value -> {
