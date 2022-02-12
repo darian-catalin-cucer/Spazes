@@ -50,7 +50,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         }
 
         changeStatusBarColor(R.color.white)
-
         /*get featured spaces*/
         getFeaturedSpaces()
 
@@ -67,7 +66,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                 this@HomeActivity.refreshType = RefreshType.search_refresh
                 makeQuery(s.toString())
                 sQuery = s.toString()
-
             }
 
             override fun onSearchComplete(index: Int, s: CharSequence) {
@@ -90,6 +88,9 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         //collect
         lifecycleScope.launchWhenStarted {
+            viewModel.readDatastore("url")
+
+
             viewModel.search.collect {
                 when (it) {
                     is SpacesListEventListener.Success -> {
