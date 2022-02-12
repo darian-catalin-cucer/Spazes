@@ -18,7 +18,7 @@ import com.mcdev.spazes.formatDateAndTime
 import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
 import com.mcdev.twitterapikit.model.SpaceState
-import com.mcdev.twitterapikit.response.SpaceResponseList
+import com.mcdev.twitterapikit.response.SpaceListResponse
 import java.util.*
 
 class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
@@ -180,7 +180,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
     val spacesDiffer = AsyncListDiffer(this, spacesDifferCallback)
     val usersDiffer = AsyncListDiffer(this, usersDifferCallback)
 
-    fun submitResponse(res: SpaceResponseList) {
+    fun submitResponse(res: SpaceListResponse) {
         usersDiffer.submitList(res.includes?.users)
         spacesDiffer.submitList(res.data)
     }

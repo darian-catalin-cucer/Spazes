@@ -1,7 +1,7 @@
 package com.mcdev.spazes.service
 
-import com.mcdev.twitterapikit.response.SpaceResponseList
-import com.mcdev.twitterapikit.response.SpaceResponseSingle
+import com.mcdev.twitterapikit.response.SpaceListResponse
+import com.mcdev.twitterapikit.response.SpaceSingleResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -19,7 +19,7 @@ interface SpacesApiService {
         @Query(value = "user.fields") userFields: String,
         @Query(value = "expansions") expansions: String,
         @Query(value = "topic.fields") topicFields: String
-    ): Response<SpaceResponseList>
+    ): Response<SpaceListResponse>
 
     /*Get spaces by list of IDS*/
     @GET("/2/spaces")
@@ -30,7 +30,7 @@ interface SpacesApiService {
         @Query(value = "user.fields") userFields: String,
         @Query(value = "expansions") expansions: String,
         @Query(value = "topic.fields") topicFields: String
-    ): Response<SpaceResponseList>
+    ): Response<SpaceListResponse>
 
     /*Get spaces by ID*/
     @GET("/2/spaces/{id}")
@@ -41,5 +41,5 @@ interface SpacesApiService {
         @Query(value = "user.fields") userFields: String,
         @Query(value = "expansions") expansions: String,
         @Query(value = "topic.fields") topicFields: String
-    ): Response<SpaceResponseSingle>
+    ): Response<SpaceSingleResponse>
 }
