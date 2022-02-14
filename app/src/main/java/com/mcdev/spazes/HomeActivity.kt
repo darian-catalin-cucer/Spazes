@@ -7,20 +7,27 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.drawee.backends.pipeline.Fresco
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityHomeBinding
+import com.mcdev.spazes.di.AppModule
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
@@ -86,7 +93,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         })
 
-        //collect
+        //collect search
         lifecycleScope.launchWhenStarted {
             viewModel.readDatastore("url")
 
@@ -111,6 +118,30 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             }
         }
 
+        //collect login
+        lifecycleScope.launchWhenCreated {
+
+            viewModel.signIn.collect {
+                when (it) {
+                    is LoginEventListener.SignedIn -> {
+                        Log.d("TAG", "onCreate: signed in oh")
+                    }
+                    is LoginEventListener.SignedOut -> {
+                        Log.d("TAG", "onCreate: user is signed out oh")
+                    }
+                    is LoginEventListener.Failure -> {
+                        Log.d("TAG", "onCreate: it failed oh")
+                    }
+                    is LoginEventListener.PreLoad -> {
+                        Log.d("TAG", "onCreate: preload oh")
+                    }
+                    is LoginEventListener.Loading -> {
+                        Log.d("TAG", "onCreate: it os loading oh")
+                    }
+                }
+            }
+        }
+
         binding.featuredLay.setOnClickListener {
             binding.fireLottie.playAnimation()
             getFeaturedSpaces()
@@ -120,6 +151,15 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             binding.lineChartLottie.playAnimation()
             getTrendingSpaces()
         }
+
+        binding.profileBtn.setOnClickListener {
+            doLogin()
+        }
+
+        binding.settingsBtn.setOnClickListener {
+            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun startLoading() {
@@ -249,6 +289,10 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)
+    }
+
+    private fun doLogin() {
+        viewModel.login(this)
     }
 
     override fun onDestroy() {

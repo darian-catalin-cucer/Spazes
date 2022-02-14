@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.google.firebase.auth.OAuthProvider
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.repository.SpacesRepository
 import com.mcdev.spazes.service.SpacesApiService
@@ -30,6 +31,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    private const val FIREBASE_TWITTER_OATH_PROVIDER = "twitter.com"
     private const val TWITTER_API_BASE_URL = "https://api.twitter.com"
     private const val URL_PREFERENCE_NAME = "url_preferences"
 
@@ -67,11 +69,24 @@ object AppModule {
     @Provides
     fun providePreferencesDatastore(@ApplicationContext applicationContext: Context): DataStore<Preferences> {
         return PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler( produceNewData = { emptyPreferences() }),//is invoked if a corruption exception is thrown by the serializer when the data cannot be deserialized which instructs datastore how to replace the corrupted data
-            migrations = listOf(SharedPreferencesMigration(applicationContext, URL_PREFERENCE_NAME)),//migrations is a list of data migrations for moving previous data into datastore
+            corruptionHandler = ReplaceFileCorruptionHandler(produceNewData = { emptyPreferences() }),//is invoked if a corruption exception is thrown by the serializer when the data cannot be deserialized which instructs datastore how to replace the corrupted data
+            migrations = listOf(
+                SharedPreferencesMigration(
+                    applicationContext,
+                    URL_PREFERENCE_NAME
+                )
+            ),//migrations is a list of data migrations for moving previous data into datastore
             scope = CoroutineScope(provideDispatchers().io + SupervisorJob()),//defines the scope in which IO operations and data editing functions will execute
             produceFile = { applicationContext.preferencesDataStoreFile(URL_PREFERENCE_NAME) }//generates the file object for datastore based on the provided context name
 
         )
+    }
+
+    /*firebase twitter login*/
+    @Singleton
+    @Provides
+    fun provideFirebaseTwitterOath(): OAuthProvider {
+        return OAuthProvider.newBuilder(FIREBASE_TWITTER_OATH_PROVIDER)
+            .build()
     }
 }

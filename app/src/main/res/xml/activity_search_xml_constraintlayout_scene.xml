@@ -12,6 +12,14 @@
                 motion:motionTarget="@+id/tv"
                 motion:framePosition="75"
                 android:alpha="0" />
+            <KeyAttribute
+                motion:motionTarget="@+id/profile_btn"
+                motion:framePosition="50"
+                android:alpha="0.5" />
+            <KeyAttribute
+                motion:motionTarget="@+id/settings_btn"
+                motion:framePosition="50"
+                android:alpha="0.5" />
         </KeyFrameSet>
         <OnSwipe
             motion:touchAnchorId="@+id/after_effect_lay"
@@ -65,5 +73,21 @@
             android:layout_width="wrap_content"
             motion:layout_constraintTop_toBottomOf="@id/search_view"
             android:id="@+id/swipe_refresh" />
+        <Constraint
+            android:id="@+id/profile_btn"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            android:visibility="invisible"
+            android:layout_marginEnd="20dp" />
+        <Constraint
+            android:id="@+id/settings_btn"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:visibility="invisible"
+            android:layout_marginStart="20dp" />
     </ConstraintSet>
 </MotionScene>

@@ -8,4 +8,7 @@
     <string name="featured_text">Featured</string>
     <string name="trending_text">Trending</string>
     <string name="coming_soon">coming soon...</string>
+    <string name="login">Login</string>
+    <string name="profile">profile</string>
+    <string name="settings">settings</string>
 </resources>

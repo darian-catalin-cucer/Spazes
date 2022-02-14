@@ -8,6 +8,28 @@
     android:id="@+id/rootlayout"
     app:layoutDescription="@xml/activity_search_xml_constraintlayout_scene">
 
+    <ImageView
+        android:id="@+id/profile_btn"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:layout_margin="20dp"
+        android:contentDescription="@string/profile"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hipster"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/settings_btn"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:src="@drawable/cogwheel"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"/>
+
     <TextView
         android:id="@+id/tv"
         android:layout_width="wrap_content"
