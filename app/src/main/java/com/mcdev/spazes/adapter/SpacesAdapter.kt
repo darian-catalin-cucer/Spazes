@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.formatDateAndTime
+import com.mcdev.spazes.getOriginalTwitterAvi
 import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
 import com.mcdev.twitterapikit.model.SpaceState
@@ -88,7 +89,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
                 holder.binding.hostVerifiedBadge.visibility = View.GONE
             }
         }
-        holder.binding.bgSpeaker.setImageURI(creator?.profileImageUrl?.replace("_normal", ""))
+        holder.binding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
         holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
         holder.binding.title.text = title ?: "${creator?.name}'s Space"
 //        if (title.isNullOrBlank().not()) {

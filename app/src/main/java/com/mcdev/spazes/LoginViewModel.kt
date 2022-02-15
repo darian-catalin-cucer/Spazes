@@ -116,4 +116,8 @@ class LoginViewModel @Inject constructor(
         val currUser = twitterAuth.currentUser
         return currUser != null
     }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return twitterAuth.currentUser
+    }
 }

@@ -1,11 +1,13 @@
 package com.mcdev.spazes
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseUser
 import com.mcdev.spazes.databinding.ActivityLoginBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -21,10 +23,10 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val root = binding.root
         setContentView(root)
-
         //is user already logged in
         if (isUserLoggedIn()) {
-            startActivity(Intent(applicationContext, ProfileActivity::class.java))
+            val currUser = viewModel.getCurrentUser()
+            startActivity(goToProfileActivity(this, currUser))
             finish()
         }
 
@@ -44,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
             viewModel.signIn.collect {
                 when (it) {
                     is LoginEventListener.SignedIn -> {
-                        startActivity(Intent(this@LoginActivity, ProfileActivity::class.java))
+                        startActivity(goToProfileActivity(this@LoginActivity, it.data))
                         finish()
                         loadingDialog.dismiss()
                         Log.d("TAG", "onCreate: signed in oh")
@@ -67,6 +69,11 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+
+        binding.loginBackBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun doLogin() {
@@ -76,4 +83,20 @@ class LoginActivity : AppCompatActivity() {
     private fun isUserLoggedIn(): Boolean {
         return viewModel.isUserSignedIn()
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?): Intent {
+        return Intent(applicationContext, ProfileActivity::class.java)
+            .putExtra("profile_url", currUser?.photoUrl)
+            .putExtra("username", currUser?.displayName)
+    }
+
 }
