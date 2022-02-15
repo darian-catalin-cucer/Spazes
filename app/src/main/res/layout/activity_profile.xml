@@ -6,9 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".ProfileActivity">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <TextView
         android:id="@+id/profile_avi"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:text="@string/profile"
+        android:textSize="30sp"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

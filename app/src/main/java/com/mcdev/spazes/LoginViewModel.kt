@@ -111,4 +111,9 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun isUserSignedIn(): Boolean {
+        val currUser = twitterAuth.currentUser
+        return currUser != null
+    }
 }

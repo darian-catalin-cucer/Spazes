@@ -22,6 +22,12 @@ class LoginActivity : AppCompatActivity() {
         val root = binding.root
         setContentView(root)
 
+        //is user already logged in
+        if (isUserLoggedIn()) {
+            startActivity(Intent(applicationContext, ProfileActivity::class.java))
+            finish()
+        }
+
         binding.loginClicker.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("message", "Logging in...")
@@ -65,5 +71,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun doLogin() {
         viewModel.login(this)
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        return viewModel.isUserSignedIn()
     }
 }
