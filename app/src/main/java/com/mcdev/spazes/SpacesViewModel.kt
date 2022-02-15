@@ -31,18 +31,14 @@ class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val dispatchProvider: DispatchProvider,
     private val datastore: DataStore<Preferences>,
-    private val oathProvider: OAuthProvider
 ) : ViewModel() {
 
     /*using state flow*/
     private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
     private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
-    private val mutableLoginStateFlow = MutableStateFlow<LoginEventListener>(LoginEventListener.Loading)
     private val db = Firebase.firestore
-    private val twitterAuth = FirebaseAuth.getInstance()
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
-    val signIn: StateFlow<LoginEventListener> = mutableLoginStateFlow
 
     /*search spaces by query*/
     fun searchSpaces(
@@ -216,88 +212,4 @@ class SpacesViewModel @Inject constructor(
         return value
     }
 
-     fun login(activity: Activity){
-         viewModelScope.launch(dispatchProvider.unconfined) {
-             mutableLoginStateFlow.value = LoginEventListener.Loading
-
-             val pendingResultTask = twitterAuth.pendingAuthResult
-             var firebaseUser : FirebaseUser? = null
-
-             if (pendingResultTask != null) {
-                 pendingResultTask
-                     .addOnSuccessListener {
-                         // User is signed in.
-                         // IdP data available in
-                         // authResult.getAdditionalUserInfo().getProfile().
-                         // The OAuth access token can also be retrieved:
-                         // authResult.getCredential().getAccessToken().
-                         // The OAuth secret can be retrieved by calling:
-                         // authResult.getCredential().getSecret().
-
-                         it.apply {
-                             additionalUserInfo?.isNewUser
-                             additionalUserInfo?.providerId
-                             additionalUserInfo?.username
-
-                             user?.displayName
-                             user?.email
-                             user?.isAnonymous
-                             user?.metadata?.creationTimestamp
-                             user?.providerData?.get(0)?.displayName
-                             user?.providerId
-                             user?.tenantId
-                             user?.photoUrl
-                             user?.uid
-                             user?.isEmailVerified
-                         }
-
-                         if (it.user != null) {
-                             mutableLoginStateFlow.value = LoginEventListener.SignedIn(it.user!!)
-                         } else {
-                             mutableLoginStateFlow.value = LoginEventListener.Failure("User is null")
-                         }
-                     }
-                     .addOnFailureListener {
-                        mutableLoginStateFlow.value = LoginEventListener.Failure("Failed logging user in")
-                     }
-             } else {
-                 Log.d("TAG", "Starting the login flow")
-                 twitterAuth.startActivityForSignInWithProvider(activity, oathProvider)
-                     .addOnSuccessListener {
-                         // User is signed in.
-                         // IdP data available in
-                         // authResult.getAdditionalUserInfo().getProfile().
-                         // The OAuth access token can also be retrieved:
-                         // authResult.getCredential().getAccessToken().
-                         // The OAuth secret can be retrieved by calling:
-                         // authResult.getCredential().getSecret().
-
-                         it.apply {
-                             additionalUserInfo?.isNewUser
-                             additionalUserInfo?.providerId
-                             additionalUserInfo?.username
-
-                             user?.displayName
-                             user?.email
-                             user?.isAnonymous
-                             user?.metadata?.creationTimestamp
-                             user?.providerData?.get(0)?.displayName
-                             user?.providerId
-                             user?.tenantId
-                             user?.photoUrl
-                             user?.uid
-                             user?.isEmailVerified
-                         }
-                         if (it.user != null) {
-                             mutableLoginStateFlow.value = LoginEventListener.SignedIn(it.user!!)
-                         } else {
-                             mutableLoginStateFlow.value = LoginEventListener.Failure("User is null")
-                         }                     }
-                     .addOnFailureListener {
-                         mutableLoginStateFlow.value = LoginEventListener.Failure("Failed logging user in")
-                         Log.d("TAG", "doLogin: failed oh")
-                     }
-             }
-         }
-     }
 }

@@ -118,29 +118,29 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             }
         }
 
-        //collect login
-        lifecycleScope.launchWhenCreated {
-
-            viewModel.signIn.collect {
-                when (it) {
-                    is LoginEventListener.SignedIn -> {
-                        Log.d("TAG", "onCreate: signed in oh")
-                    }
-                    is LoginEventListener.SignedOut -> {
-                        Log.d("TAG", "onCreate: user is signed out oh")
-                    }
-                    is LoginEventListener.Failure -> {
-                        Log.d("TAG", "onCreate: it failed oh")
-                    }
-                    is LoginEventListener.PreLoad -> {
-                        Log.d("TAG", "onCreate: preload oh")
-                    }
-                    is LoginEventListener.Loading -> {
-                        Log.d("TAG", "onCreate: it os loading oh")
-                    }
-                }
-            }
-        }
+//        //collect login
+//        lifecycleScope.launchWhenCreated {
+//
+//            viewModel.signIn.collect {
+//                when (it) {
+//                    is LoginEventListener.SignedIn -> {
+//                        Log.d("TAG", "onCreate: signed in oh")
+//                    }
+//                    is LoginEventListener.SignedOut -> {
+//                        Log.d("TAG", "onCreate: user is signed out oh")
+//                    }
+//                    is LoginEventListener.Failure -> {
+//                        Log.d("TAG", "onCreate: it failed oh")
+//                    }
+//                    is LoginEventListener.PreLoad -> {
+//                        Log.d("TAG", "onCreate: preload oh")
+//                    }
+//                    is LoginEventListener.Loading -> {
+//                        Log.d("TAG", "onCreate: it os loading oh")
+//                    }
+//                }
+//            }
+//        }
 
         binding.featuredLay.setOnClickListener {
             binding.fireLottie.playAnimation()
@@ -153,7 +153,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         }
 
         binding.profileBtn.setOnClickListener {
-            doLogin()
+            startActivity(Intent(this, LoginActivity::class.java))
         }
 
         binding.settingsBtn.setOnClickListener {
@@ -291,9 +291,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         startActivity(intent)
     }
 
-    private fun doLogin() {
-        viewModel.login(this)
-    }
 
     override fun onDestroy() {
         binding.recyclerView.adapter = null
