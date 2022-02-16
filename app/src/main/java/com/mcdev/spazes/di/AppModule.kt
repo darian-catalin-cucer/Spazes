@@ -10,6 +10,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.repository.SpacesRepository
 import com.mcdev.spazes.service.SpacesApiService
@@ -43,6 +46,12 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(SpacesApiService::class.java)
+
+
+    /*Firebase*/
+    @Singleton
+    @Provides
+    fun provideFireStoreApi(): FirebaseFirestore = Firebase.firestore
 
 
     /*@Single*/

@@ -16,12 +16,14 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityHomeBinding
 import com.mcdev.spazes.di.AppModule
+import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
 import com.mcdev.twitterapikit.`object`.Space
@@ -37,7 +39,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
     var sQuery: String = "space"
     private val viewModel: SpacesViewModel by viewModels()
 
-    private val db = Firebase.firestore
     private var refreshType: RefreshType = RefreshType.featured_refresh
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,11 +59,12 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         changeStatusBarColor(R.color.white)
         /*get featured spaces*/
-        getFeaturedSpaces()
+        viewModel.getFeaturedSpaces()
 
         binding.swipeRefresh.setOnRefreshListener {
             when (this.refreshType) {
-                RefreshType.featured_refresh -> getFeaturedSpaces()
+                RefreshType.featured_refresh -> viewModel.getFeaturedSpaces()
+                RefreshType.trending_refresh -> viewModel.getTrendingSpaces()
                 RefreshType.search_refresh -> makeQuery(sQuery)
             }
         }
@@ -118,38 +120,43 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             }
         }
 
-//        //collect login
-//        lifecycleScope.launchWhenCreated {
-//
-//            viewModel.signIn.collect {
-//                when (it) {
-//                    is LoginEventListener.SignedIn -> {
-//                        Log.d("TAG", "onCreate: signed in oh")
-//                    }
-//                    is LoginEventListener.SignedOut -> {
-//                        Log.d("TAG", "onCreate: user is signed out oh")
-//                    }
-//                    is LoginEventListener.Failure -> {
-//                        Log.d("TAG", "onCreate: it failed oh")
-//                    }
-//                    is LoginEventListener.PreLoad -> {
-//                        Log.d("TAG", "onCreate: preload oh")
-//                    }
-//                    is LoginEventListener.Loading -> {
-//                        Log.d("TAG", "onCreate: it os loading oh")
-//                    }
-//                }
-//            }
-//        }
+        lifecycleScope.launchWhenCreated {
+            viewModel.fireStoreListener.collect{
+                when (it) {
+                    is FirebaseEventListener.Success -> {
+                        val theIDS = getTheIDs(it.data)
+                        //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
+                        if (theIDS.isEmpty()) {
+                            showEmpty(R.string.no_featured_spaces)
+                        } else {
+                            querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
+                        }
+                    }
+                    is FirebaseEventListener.Failure -> {
+                        stopLoading()
+                        Toast.makeText(this@HomeActivity, "Failed.", Toast.LENGTH_SHORT).show()
+                    }
+                    is FirebaseEventListener.Empty -> {
+                        stopLoading()
+                        showEmpty(R.string.no_featured_spaces)
+                    }
+                    is FirebaseEventListener.Loading -> {
+                        startLoading()
+                    }
+                }
+            }
+        }
 
         binding.featuredLay.setOnClickListener {
             binding.fireLottie.playAnimation()
-            getFeaturedSpaces()
+            viewModel.getFeaturedSpaces()
+            refreshType = RefreshType.featured_refresh
         }
 
         binding.trendingLay.setOnClickListener {
             binding.lineChartLottie.playAnimation()
-            getTrendingSpaces()
+            viewModel.getTrendingSpaces()
+            refreshType = RefreshType.trending_refresh
         }
 
         binding.profileBtn.setOnClickListener {
@@ -221,60 +228,13 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         )
     }
 
-    private fun getFeaturedSpaces() {
-        startLoading()
-        this@HomeActivity.refreshType = RefreshType.featured_refresh
-        db.collection(DBCollections.Featured.toString())
-            .get()
-            .addOnSuccessListener {
-
-                val spacesIds = mutableListOf<String>()
-                for (document in it) {
-
-                    spacesIds.add(document.data["space_id"].toString())
-                }
-
-                val theIDS =
-                    spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
-
-                //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
-                if (theIDS.isEmpty()) {
-                    showEmpty(R.string.no_featured_spaces)
-                } else {
-                    querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
-                }
-            }
-            .addOnFailureListener {
-                Log.d("TAG", "getFeaturedSpaces: Error $it")
-            }
-    }
-
-    private fun getTrendingSpaces() {
-        startLoading()
-        this@HomeActivity.refreshType = RefreshType.trending_refresh
-        db.collection(DBCollections.Trending.toString())
-            .get()
-            .addOnSuccessListener {
-
-                val spacesIds = mutableListOf<String>()
-                for (document in it) {
-
-                    spacesIds.add(document.data["space_id"].toString())
-                }
-
-                val theIDS =
-                    spacesIds.joinToString(separator = ",")//joinToString method will put them in a string and separator will separate without whitespaces
-
-                //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
-                if (theIDS.isEmpty()) {
-                    showEmpty(R.string.no_trending_space)
-                } else {
-                    querySpacesByListOfIds(theIDS, DBCollections.Trending.toString())
-                }
-            }
-            .addOnFailureListener {
-                Log.d("TAG", "getTrendingSpaces: Error $it")
-            }
+    private fun getTheIDs(result: QuerySnapshot): String{
+        val spacesIds = mutableListOf<String>()
+        for (document in result) {
+            spacesIds.add(document.data["space_id"].toString())
+        }
+        //joinToString method will put them in a string and separator will separate without whitespaces
+        return  spacesIds.joinToString(separator = ",")
     }
 
     override fun onItemClick(spaces: Space, position: Int) {

@@ -1,6 +1,5 @@
 package com.mcdev.spazes
 
-import android.app.Activity
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -8,13 +7,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.OAuthProvider
-import com.google.firebase.firestore.auth.User
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.repository.MainRepository
+import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
@@ -31,14 +27,16 @@ class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val dispatchProvider: DispatchProvider,
     private val datastore: DataStore<Preferences>,
+    private val fireStore: FirebaseFirestore
 ) : ViewModel() {
 
     /*using state flow*/
     private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
     private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
-    private val db = Firebase.firestore
+    private val mutableFirebaseStateFlow = MutableStateFlow<FirebaseEventListener>(FirebaseEventListener.Loading)
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
+    val fireStoreListener: StateFlow<FirebaseEventListener> = mutableFirebaseStateFlow
 
     /*search spaces by query*/
     fun searchSpaces(
@@ -174,10 +172,10 @@ class SpacesViewModel @Inject constructor(
                     validSpaces.add(space)
                 } else {
                     //delete ended featured spaces. The delete option was chosen so that there will not be multiple reads to the database
-                    db.collection(firestoreCollection)
+                    fireStore.collection(firestoreCollection)
                         .document(space.id!!)
                         .delete()
-//                        .update("is_ended", true)
+                        //.update("is_ended", true)
                         .addOnSuccessListener {
                             Log.d("TAG", "isSpaceExpired: delete success for ${space.id}")
                         }
@@ -211,5 +209,38 @@ class SpacesViewModel @Inject constructor(
 //        }
         return value
     }
+
+    fun getFeaturedSpaces() {
+        viewModelScope.launch(dispatchProvider.io){
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            getSpacesIds(DBCollections.Featured)
+        }
+    }
+
+    fun getTrendingSpaces() {
+        viewModelScope.launch(dispatchProvider.io){
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            getSpacesIds(DBCollections.Trending)
+        }
+
+    }
+
+    private fun getSpacesIds(dbCollections: DBCollections) {
+        fireStore.collection(dbCollections.toString())
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+                    mutableFirebaseStateFlow.value =
+                        FirebaseEventListener.Empty("Response data is empty")
+                } else {
+                    mutableFirebaseStateFlow.value = FirebaseEventListener.Success(it)
+                }
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An error occurred getting featured spaces")
+            }
+    }
+
 
 }
