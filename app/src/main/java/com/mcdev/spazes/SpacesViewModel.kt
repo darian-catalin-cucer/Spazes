@@ -222,7 +222,13 @@ class SpacesViewModel @Inject constructor(
             mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
             getSpacesIds(DBCollections.Trending)
         }
+    }
 
+    fun addUser(documentName: String, data: HashMap<String, String>) {
+        viewModelScope.launch {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            addData(DBCollections.Users, documentName, data)
+        }
     }
 
     private fun getSpacesIds(dbCollections: DBCollections) {
@@ -242,5 +248,16 @@ class SpacesViewModel @Inject constructor(
             }
     }
 
+    private fun addData(dbCollections: DBCollections, documentName: String, data: HashMap<String, String>) {
+        fireStore.collection(dbCollections.toString())
+            .document(documentName)
+            .set(data)
+            .addOnSuccessListener {
+                mutableFirebaseStateFlow.value = FirebaseEventListener.Success()
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value = FirebaseEventListener.Failure("An Error occurred adding user")
+            }
+    }
 
 }

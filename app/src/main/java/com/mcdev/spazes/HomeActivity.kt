@@ -124,7 +124,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
             viewModel.fireStoreListener.collect{
                 when (it) {
                     is FirebaseEventListener.Success -> {
-                        val theIDS = getTheIDs(it.data)
+                        val theIDS = getTheIDs(it.data!!)
                         //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
                         if (theIDS.isEmpty()) {
                             showEmpty(R.string.no_featured_spaces)

@@ -5,17 +5,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseUser
 import com.mcdev.spazes.databinding.ActivityLoginBinding
+import com.mcdev.spazes.repository.FirebaseEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import java.util.*
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private val viewModel: LoginViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val viewModel: SpacesViewModel by viewModels()
     private val loadingDialog = LottieLoadingDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +29,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(root)
         //is user already logged in
         if (isUserLoggedIn()) {
-            val currUser = viewModel.getCurrentUser()
+            val currUser = loginViewModel.getCurrentUser()
             startActivity(goToProfileActivity(this, currUser))
             finish()
         }
@@ -43,13 +47,16 @@ class LoginActivity : AppCompatActivity() {
 
         //collect login
         lifecycleScope.launchWhenStarted {
-            viewModel.signIn.collect {
+            loginViewModel.signIn.collect {
                 when (it) {
                     is LoginEventListener.SignedIn -> {
-                        startActivity(goToProfileActivity(this@LoginActivity, it.data))
-                        finish()
-                        loadingDialog.dismiss()
-                        Log.d("TAG", "onCreate: signed in oh")
+                        val userHashMap = hashMapOf(
+                            "user_id" to it.data.uid,
+                            "photo_url" to it.data.photoUrl.toString(),
+                            "added_at" to Date().toString(),
+                            "updated_at" to Date().toString()
+                        )
+                        viewModel.addUser(it.data.uid, userHashMap)
                     }
                     is LoginEventListener.SignedOut -> {
                         loadingDialog.dismiss()
@@ -70,6 +77,30 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            viewModel.fireStoreListener.collect{
+                when (it) {
+                    is FirebaseEventListener.Success -> {
+                        Log.d("TAG", "onCreate: successsss")
+                        val curr = loginViewModel.getCurrentUser()
+                        startActivity(goToProfileActivity(this@LoginActivity, curr))
+                        finish()
+                        loadingDialog.dismiss()
+                    }
+                    is FirebaseEventListener.Failure -> {
+                        loadingDialog.dismiss()
+                        Toast.makeText(this@LoginActivity, "Failed. Try again!", Toast.LENGTH_SHORT).show()
+                    }
+                    is FirebaseEventListener.Empty -> {
+                        loadingDialog.dismiss()
+                        Toast.makeText(this@LoginActivity, "Error occurred", Toast.LENGTH_SHORT).show()
+                    }
+                    is FirebaseEventListener.Loading -> {
+//                        loadingDialog.show(supportFragmentManager, "")
+                    }
+                }
+            }
+        }
 
         binding.loginBackBtn.setOnClickListener {
             finish()
@@ -77,11 +108,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun doLogin() {
-        viewModel.login(this)
+        loginViewModel.login(this)
     }
 
     private fun isUserLoggedIn(): Boolean {
-        return viewModel.isUserSignedIn()
+        return loginViewModel.isUserSignedIn()
     }
 
     override fun onBackPressed() {
