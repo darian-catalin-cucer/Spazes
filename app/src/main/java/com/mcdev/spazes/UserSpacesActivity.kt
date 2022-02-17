@@ -44,6 +44,10 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
             }
         }
 
+        binding.userSpacesBackBtn.setOnClickListener {
+            finish()
+        }
+
 
         //collect my spaces
         lifecycleScope.launchWhenStarted {
@@ -123,5 +127,10 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         val link = SPACES_URL + spaces.id
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }

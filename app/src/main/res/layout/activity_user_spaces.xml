@@ -8,14 +8,27 @@
     android:layout_gravity="center"
     android:gravity="center">
 
+
+    <ImageView
+        android:id="@+id/user_spaces_back_btn"
+        android:layout_width="43dp"
+        android:layout_height="43dp"
+        android:src="@drawable/back"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="20dp"
+        android:elevation="20dp"/>
+
     <TextView
         android:id="@+id/title_text"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="My Spaces"
-        android:textSize="20sp"
+        android:layout_height="70dp"
         android:layout_alignParentTop="true"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="My Spaces"
+        android:textSize="20sp" />
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
