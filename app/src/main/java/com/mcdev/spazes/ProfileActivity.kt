@@ -3,10 +3,18 @@ package com.mcdev.spazes
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.databinding.ActivityProfileBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
+    private val loginViewModel: LoginViewModel by viewModels()
+    private val viewModel: SpacesViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,12 +24,21 @@ class ProfileActivity : AppCompatActivity() {
 
         val profileUrl = intent.extras?.get("profile_url")
         val displayName = intent.extras?.get("username")
-        Log.d("TAG", "onCreate: profile url is $displayName")
+        val userTwitterId = intent.extras?.get("userTwitterId")
+        val userTwitterHandle = intent.extras?.get("userTwitterHandle")
+
+        Log.d("TAG", "onCreate: profile id is $userTwitterId")
+        Log.d("TAG", "onCreate: profile handle is $userTwitterHandle")
         binding.profileAvi.setImageURI(profileUrl.toString().getOriginalTwitterAvi())
         binding.displayName.text = displayName.toString()
 
 
         binding.profileBackBtn.setOnClickListener {
+            finish()
+        }
+
+        binding.profileAvi.setOnClickListener {
+            loginViewModel.logout()
             finish()
         }
     }

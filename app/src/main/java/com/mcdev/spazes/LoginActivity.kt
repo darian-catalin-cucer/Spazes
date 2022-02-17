@@ -13,6 +13,7 @@ import com.mcdev.spazes.databinding.ActivityLoginBinding
 import com.mcdev.spazes.repository.FirebaseEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -21,16 +22,27 @@ class LoginActivity : AppCompatActivity() {
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: SpacesViewModel by viewModels()
     private val loadingDialog = LottieLoadingDialogFragment()
+    private var userTwitterId: String? = null
+    private var userTwitterHandle: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         val root = binding.root
         setContentView(root)
+
+
+
+        lifecycleScope.launch {
+            userTwitterId = viewModel.readDatastore("user_twitter_id")
+            userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
+        }
+
+
         //is user already logged in
         if (isUserLoggedIn()) {
             val currUser = loginViewModel.getCurrentUser()
-            startActivity(goToProfileActivity(this, currUser))
+            startActivity(goToProfileActivity(this, currUser, userTwitterId, userTwitterHandle))
             finish()
         }
 
@@ -44,22 +56,36 @@ class LoginActivity : AppCompatActivity() {
             doLogin()
         }
 
-
         //collect login
         lifecycleScope.launchWhenStarted {
             loginViewModel.signIn.collect {
                 when (it) {
                     is LoginEventListener.SignedIn -> {
+                        val id = it.data.additionalUserInfo?.profile?.get("id").toString()
+                        val handle = it.data.additionalUserInfo?.username.toString()
+
                         val userHashMap = hashMapOf(
-                            "user_id" to it.data.uid,
-                            "photo_url" to it.data.photoUrl.toString(),
+                            "user_id" to it.data.user?.uid,
+                            "photo_url" to it.data.user?.photoUrl.toString(),
                             "added_at" to Date().toString(),
-                            "updated_at" to Date().toString()
+                            "updated_at" to Date().toString(),
+                            "user_handle" to handle,
+                            "user_twitter_id" to id
                         )
-                        viewModel.addUser(it.data.uid, userHashMap)
+
+                        //save to datastore to store the user's twitter id coz it cannot be
+                        // accessed when user is already signed in..unless a request is made to firebase which i do not want to do
+                        viewModel.saveOrUpdateDatastore("user_twitter_id", id)
+                        viewModel.saveOrUpdateDatastore("user_twitter_handle", handle)
+
+                        //save user to firebase fireStore
+                        viewModel.addUser(it.data.user?.uid!!, userHashMap)
                     }
                     is LoginEventListener.SignedOut -> {
                         loadingDialog.dismiss()
+                        //update datastore to remove signed in user twitter id
+                        viewModel.saveOrUpdateDatastore("user_twitter_id", "")
+                        viewModel.saveOrUpdateDatastore("user_twitter_handle", "")
                         Log.d("TAG", "onCreate: user is signed out oh")
                     }
                     is LoginEventListener.Failure -> {
@@ -78,12 +104,15 @@ class LoginActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launchWhenCreated {
+
             viewModel.fireStoreListener.collect{
                 when (it) {
                     is FirebaseEventListener.Success -> {
-                        Log.d("TAG", "onCreate: successsss")
                         val curr = loginViewModel.getCurrentUser()
-                        startActivity(goToProfileActivity(this@LoginActivity, curr))
+
+                        userTwitterId = viewModel.readDatastore("user_twitter_id")
+                        userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
+                        startActivity(goToProfileActivity(this@LoginActivity, curr, userTwitterId, userTwitterHandle))
                         finish()
                         loadingDialog.dismiss()
                     }
@@ -124,9 +153,11 @@ class LoginActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?): Intent {
+    private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?, userTwitterId: String?, userTwitterHandle: String?): Intent {
         return Intent(applicationContext, ProfileActivity::class.java)
             .putExtra("profile_url", currUser?.photoUrl)
+            .putExtra("userTwitterId", userTwitterId)
+            .putExtra("userTwitterHandle", userTwitterHandle)
             .putExtra("username", currUser?.displayName)
     }
 

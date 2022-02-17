@@ -192,21 +192,22 @@ class SpacesViewModel @Inject constructor(
     }
 
 
-    fun saveOrUpdateDatastore(key: String, value: String) {
-        viewModelScope.launch {
+    suspend fun saveOrUpdateDatastore(key: String, value: String) {
+//        viewModelScope.launch {
             val dataStoreKey = stringPreferencesKey(key)
             datastore.edit {
                 it[dataStoreKey] = value
             }
-        }
+//        }
     }
 
     suspend fun readDatastore(key: String): String? {
         var value: String? = null
-//        viewModelScope.launch(dispatchProvider.io) {
+//        viewModelScope.launch(dispatchProvider.main) {
             val dataStoreKey = stringPreferencesKey(key)
             value = datastore.data.first()[dataStoreKey]
 //        }
+        val s = value
         return value
     }
 
@@ -224,7 +225,7 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
-    fun addUser(documentName: String, data: HashMap<String, String>) {
+    fun addUser(documentName: String, data: HashMap<String, String?>) {
         viewModelScope.launch {
             mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
             addData(DBCollections.Users, documentName, data)
@@ -248,7 +249,7 @@ class SpacesViewModel @Inject constructor(
             }
     }
 
-    private fun addData(dbCollections: DBCollections, documentName: String, data: HashMap<String, String>) {
+    private fun addData(dbCollections: DBCollections, documentName: String, data: HashMap<String, String?>) {
         fireStore.collection(dbCollections.toString())
             .document(documentName)
             .set(data)

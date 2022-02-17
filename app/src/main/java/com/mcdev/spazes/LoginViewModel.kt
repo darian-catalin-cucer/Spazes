@@ -46,6 +46,7 @@ class LoginViewModel @Inject constructor(
                         // authResult.getCredential().getSecret().
 
                         it.apply {
+                            additionalUserInfo?.profile
                             additionalUserInfo?.isNewUser
                             additionalUserInfo?.providerId
                             additionalUserInfo?.username
@@ -63,7 +64,7 @@ class LoginViewModel @Inject constructor(
                         }
 
                         if (it.user != null) {
-                            mutableLoginStateFlow.value = LoginEventListener.SignedIn(it.user!!)
+                            mutableLoginStateFlow.value = LoginEventListener.SignedIn(it)
                         } else {
                             mutableLoginStateFlow.value = LoginEventListener.Failure("User is null")
                         }
@@ -84,6 +85,7 @@ class LoginViewModel @Inject constructor(
                         // authResult.getCredential().getSecret().
 
                         it.apply {
+                            additionalUserInfo?.profile
                             additionalUserInfo?.isNewUser
                             additionalUserInfo?.providerId
                             additionalUserInfo?.username
@@ -100,7 +102,7 @@ class LoginViewModel @Inject constructor(
                             user?.isEmailVerified
                         }
                         if (it.user != null) {
-                            mutableLoginStateFlow.value = LoginEventListener.SignedIn(it.user!!)
+                            mutableLoginStateFlow.value = LoginEventListener.SignedIn(it)
                         } else {
                             mutableLoginStateFlow.value = LoginEventListener.Failure("User is null")
                         }                     }
@@ -119,5 +121,10 @@ class LoginViewModel @Inject constructor(
 
     fun getCurrentUser(): FirebaseUser? {
         return twitterAuth.currentUser
+    }
+
+    fun logout() {
+        twitterAuth.signOut()
+        mutableLoginStateFlow.value = LoginEventListener.SignedOut
     }
 }
