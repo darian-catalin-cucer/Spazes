@@ -14,7 +14,9 @@ import com.mcdev.spazes.repository.FirebaseEventListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -31,9 +33,7 @@ class LoginActivity : AppCompatActivity() {
         val root = binding.root
         setContentView(root)
 
-
-
-        lifecycleScope.launch {
+        runBlocking {
             userTwitterId = viewModel.readDatastore("user_twitter_id")
             userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
         }

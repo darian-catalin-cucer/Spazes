@@ -1,5 +1,6 @@
 package com.mcdev.spazes
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -40,6 +41,12 @@ class ProfileActivity : AppCompatActivity() {
         binding.profileAvi.setOnClickListener {
             loginViewModel.logout()
             finish()
+        }
+
+        binding.mySpacesBtn.setOnClickListener {
+            startActivity(Intent(this, UserSpacesActivity::class.java)
+                .putExtra("loadAction", LoadAction.MY_SPACES)
+                .putExtra("user_twitter_id", userTwitterId.toString()))
         }
     }
 

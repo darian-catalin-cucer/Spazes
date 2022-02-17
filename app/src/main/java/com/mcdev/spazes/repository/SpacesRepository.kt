@@ -89,4 +89,27 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
             Resource.Error(e.message ?: "An error occurred")
         }
     }
+
+    override suspend fun getSpacesByCreatorIds(
+        token: String,
+        userIds: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ): Resource<SpaceListResponse> {
+        return try {
+            val response =  spacesApiService.getSpacesByCreatorIds(token, userIds, spaceFields, userFields, expansions, topicFields)
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                Resource.Success(body)
+            } else if (response.isSuccessful && body?.meta?.resultCount == 0) {
+                Resource.Empty(body)
+            } else {
+                Resource.Error(response.body()?.detail!!)
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
 }

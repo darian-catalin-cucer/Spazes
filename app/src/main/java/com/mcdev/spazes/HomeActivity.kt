@@ -33,7 +33,6 @@ import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
-    val SPACES_URL = "https://twitter.com/i/spaces/"
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
     var sQuery: String = "space"
@@ -97,9 +96,6 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
 
         //collect search
         lifecycleScope.launchWhenStarted {
-            viewModel.readDatastore("url")
-
-
             viewModel.search.collect {
                 when (it) {
                     is SpacesListEventListener.Success -> {
