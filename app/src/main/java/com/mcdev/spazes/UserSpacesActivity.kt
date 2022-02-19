@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,11 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
                 loadMySpaces(userid)
             }
         }
+        binding.swipeRefresh.setOnRefreshListener {
+            when (loadAction) {
+                LoadAction.MY_SPACES -> loadMySpaces(userid)
+            }
+        }
 
         binding.userSpacesBackBtn.setOnClickListener {
             finish()
@@ -59,6 +65,7 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
                     }
                     is SpacesListEventListener.Failure -> {
                         stopLoading()
+                        Toast.makeText(this@UserSpacesActivity, "Failed.", Toast.LENGTH_SHORT).show()
                     }
                     is SpacesListEventListener.Loading -> {
                         startLoading()
@@ -85,8 +92,8 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
 
     private fun startLoading() {
         binding.swipeRefresh.isRefreshing = true
-        binding.emptyLottie.visibility = View.GONE
-        binding.emptyFeatureLottie.visibility = View.GONE
+//        binding.emptyLottie.visibility = View.GONE
+//        binding.emptyFeatureLottie.visibility = View.GONE
         binding.recyclerMessage.visibility = View.GONE
         //binding.recyclerView.visibility = View.GONE
         //binding.recyclerMessage.visibility = View.GONE
@@ -95,22 +102,22 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
     private fun stopLoading() {
         binding.swipeRefresh.isRefreshing = false
         binding.userSpacesRecyclerView.visibility = View.VISIBLE
-        binding.emptyLottie.visibility = View.GONE
-        binding.emptyFeatureLottie.visibility = View.GONE
+//        binding.emptyLottie.visibility = View.GONE
+//        binding.emptyFeatureLottie.visibility = View.GONE
         binding.recyclerMessage.visibility = View.GONE
     }
 
     private fun showEmpty(message: Int) {
-        when (message) {
-            R.string.no_spaces_found -> {
-                binding.emptyFeatureLottie.visibility = View.GONE
-                binding.emptyLottie.visibility = View.VISIBLE
-            }
-            else -> {
-                binding.emptyLottie.visibility = View.GONE
-                binding.emptyFeatureLottie.visibility = View.GONE
-            }
-        }
+//        when (message) {
+//            R.string.no_spaces_found -> {
+//                binding.emptyFeatureLottie.visibility = View.GONE
+//                binding.emptyLottie.visibility = View.VISIBLE
+//            }
+//            else -> {
+//                binding.emptyLottie.visibility = View.GONE
+//                binding.emptyFeatureLottie.visibility = View.GONE
+//            }
+//        }
         binding.recyclerMessage.text = applicationContext.getString(message)
         binding.swipeRefresh.isRefreshing = false
         binding.userSpacesRecyclerView.visibility = View.GONE

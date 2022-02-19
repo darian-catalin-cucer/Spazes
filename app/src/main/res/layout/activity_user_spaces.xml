@@ -27,64 +27,69 @@
         android:layout_height="70dp"
         android:layout_alignParentTop="true"
         android:gravity="center"
-        android:text="My Spaces"
+        android:text="@string/my_spaces"
         android:textSize="20sp" />
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_gravity="top"
         android:layout_below="@+id/title_text">
 
-        <TextView
-            android:id="@+id/recycler_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:paddingTop="10dp"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_below="@id/empty_lottie_lay"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/empty_lottie_lay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center">
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/empty_lottie"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:paddingTop="1dp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                android:visibility="gone"
-                app:lottie_rawRes="@raw/astronaut"/>
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/empty_feature_lottie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="1dp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                android:visibility="gone"
-                app:lottie_rawRes="@raw/not_found"
-                android:layout_marginBottom="80dp"/>
-
+            <TextView
+                android:id="@+id/recycler_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingTop="10dp"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_gravity="center"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/user_spaces_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
+
+
+
+        <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--            android:id="@+id/empty_lottie_lay"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center">-->
+<!--            <com.airbnb.lottie.LottieAnimationView-->
+<!--                android:id="@+id/empty_lottie"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="200dp"-->
+<!--                android:paddingTop="1dp"-->
+<!--                app:lottie_autoPlay="true"-->
+<!--                app:lottie_loop="true"-->
+<!--                android:visibility="gone"-->
+<!--                app:lottie_rawRes="@raw/astronaut"/>-->
+<!--            <com.airbnb.lottie.LottieAnimationView-->
+<!--                android:id="@+id/empty_feature_lottie"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingTop="1dp"-->
+<!--                app:lottie_autoPlay="true"-->
+<!--                app:lottie_loop="true"-->
+<!--                android:visibility="gone"-->
+<!--                app:lottie_rawRes="@raw/not_found"-->
+<!--                android:layout_marginBottom="80dp"/>-->
+
+<!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
 </RelativeLayout>
