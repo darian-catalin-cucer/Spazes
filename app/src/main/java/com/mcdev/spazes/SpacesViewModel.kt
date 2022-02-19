@@ -7,9 +7,10 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.repository.MainRepository
+import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
@@ -25,16 +26,20 @@ import javax.inject.Inject
 class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val dispatchProvider: DispatchProvider,
-    private val datastore: DataStore<Preferences>
+    private val datastore: DataStore<Preferences>,
+    private val fireStore: FirebaseFirestore
 ) : ViewModel() {
 
     /*using state flow*/
-    private val mutableListStateFlow = MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
-    private val mutableSingleStateFlow = MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
-    private val db = Firebase.firestore
+    private val mutableListStateFlow =
+        MutableStateFlow<SpacesListEventListener>(SpacesListEventListener.Loading)
+    private val mutableSingleStateFlow =
+        MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
+    private val mutableFirebaseStateFlow =
+        MutableStateFlow<FirebaseEventListener>(FirebaseEventListener.Loading)
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
-
+    val fireStoreListener: StateFlow<FirebaseEventListener> = mutableFirebaseStateFlow
 
     /*search spaces by query*/
     fun searchSpaces(
@@ -71,7 +76,8 @@ class SpacesViewModel @Inject constructor(
                         SpacesListEventListener.Failure(spacesListResponse.data?.detail)
                 }
                 else -> {
-                    mutableListStateFlow.value = SpacesListEventListener.Failure(spacesListResponse.error)
+                    mutableListStateFlow.value =
+                        SpacesListEventListener.Failure(spacesListResponse.error)
                 }
             }
         }
@@ -107,11 +113,16 @@ class SpacesViewModel @Inject constructor(
                         mutableListStateFlow.value =
                             SpacesListEventListener.Empty(R.string.no_featured_spaces)
                     } else {
-                        val validFeatured = isSpaceExpired(spaceResponseList = spaces, firestoreCollection = firestoreCollection)
+                        val validFeatured = isSpaceExpired(
+                            spaceResponseList = spaces,
+                            firestoreCollection = firestoreCollection
+                        )
                         if (validFeatured.data.isNullOrEmpty()) {
-                            mutableListStateFlow.value = SpacesListEventListener.Empty(R.string.no_featured_spaces)
+                            mutableListStateFlow.value =
+                                SpacesListEventListener.Empty(R.string.no_featured_spaces)
                         } else {
-                            mutableListStateFlow.value = SpacesListEventListener.Success(validFeatured)
+                            mutableListStateFlow.value =
+                                SpacesListEventListener.Success(validFeatured)
                         }
                     }
                 }
@@ -120,7 +131,8 @@ class SpacesViewModel @Inject constructor(
                         SpacesListEventListener.Failure(spacesListResponse.data?.detail)
                 }
                 else -> {
-                    mutableListStateFlow.value = SpacesListEventListener.Failure(spacesListResponse.error)
+                    mutableListStateFlow.value =
+                        SpacesListEventListener.Failure(spacesListResponse.error)
                 }
             }
         }
@@ -155,14 +167,59 @@ class SpacesViewModel @Inject constructor(
                         SpacesSingleEventListener.Failure(spacesSingleResponse.data?.detail)
                 }
                 else -> {
-                    mutableSingleStateFlow.value = SpacesSingleEventListener.Failure(spacesSingleResponse.error)
+                    mutableSingleStateFlow.value =
+                        SpacesSingleEventListener.Failure(spacesSingleResponse.error)
                 }
 
             }
         }
     }
 
-    private fun isSpaceExpired(spaceResponseList: SpaceListResponse?, firestoreCollection: String): SpaceListResponse {
+    /*get spaces by creator ids*/
+    fun searchSpacesByCreatorIds(
+        token: String,
+        ids: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ) {
+       viewModelScope.launch(dispatchProvider.io) {
+           mutableListStateFlow.value = SpacesListEventListener.Loading
+           when (val spacesListResponse = mainRepository.getSpacesByCreatorIds(
+               token,
+               ids,
+               spaceFields,
+               userFields,
+               expansions,
+               topicFields
+           )) {
+               is Resource.Success -> {
+                   val spaces = spacesListResponse.data
+
+                   if (spaces?.meta?.resultCount == 0) {
+                       mutableListStateFlow.value =
+                           SpacesListEventListener.Empty(R.string.no_spaces_found)
+                   } else {
+                       mutableListStateFlow.value = SpacesListEventListener.Success(spaces)
+                   }
+               }
+               is Resource.Error -> {
+                   mutableListStateFlow.value =
+                       SpacesListEventListener.Failure(spacesListResponse.data?.detail)
+               }
+               else -> {
+                   mutableListStateFlow.value =
+                       SpacesListEventListener.Failure(spacesListResponse.error)
+               }
+           }
+       }
+    }
+
+    private fun isSpaceExpired(
+        spaceResponseList: SpaceListResponse?,
+        firestoreCollection: String
+    ): SpaceListResponse {
         val validSpaces = ArrayList<Space>()
         if (spaceResponseList?.data != null) {
             for (space in spaceResponseList.data!!) {
@@ -170,10 +227,10 @@ class SpacesViewModel @Inject constructor(
                     validSpaces.add(space)
                 } else {
                     //delete ended featured spaces. The delete option was chosen so that there will not be multiple reads to the database
-                    db.collection(firestoreCollection)
+                    fireStore.collection(firestoreCollection)
                         .document(space.id!!)
                         .delete()
-//                        .update("is_ended", true)
+                        //.update("is_ended", true)
                         .addOnSuccessListener {
                             Log.d("TAG", "isSpaceExpired: delete success for ${space.id}")
                         }
@@ -190,21 +247,78 @@ class SpacesViewModel @Inject constructor(
     }
 
 
-    fun saveOrUpdateDatastore(key: String, value: String) {
-        viewModelScope.launch {
-            val dataStoreKey = stringPreferencesKey(key)
-            datastore.edit {
-                it[dataStoreKey] = value
-            }
+    suspend fun saveOrUpdateDatastore(key: String, value: String) {
+//        viewModelScope.launch {
+        val dataStoreKey = stringPreferencesKey(key)
+        datastore.edit {
+            it[dataStoreKey] = value
         }
+//        }
     }
 
     suspend fun readDatastore(key: String): String? {
         var value: String? = null
-//        viewModelScope.launch(dispatchProvider.io) {
-            val dataStoreKey = stringPreferencesKey(key)
-            value = datastore.data.first()[dataStoreKey]
+//        viewModelScope.launch(dispatchProvider.main) {
+        val dataStoreKey = stringPreferencesKey(key)
+        value = datastore.data.first()[dataStoreKey]
 //        }
+        val s = value
         return value
     }
+
+    fun getFeaturedSpaces() {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            getSpacesIds(DBCollections.Featured)
+        }
+    }
+
+    fun getTrendingSpaces() {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            getSpacesIds(DBCollections.Trending)
+        }
+    }
+
+    fun addUser(documentName: String, data: HashMap<String, String?>) {
+        viewModelScope.launch {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            addData(DBCollections.Users, documentName, data)
+        }
+    }
+
+    private fun getSpacesIds(dbCollections: DBCollections) {
+        fireStore.collection(dbCollections.toString())
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+                    mutableFirebaseStateFlow.value =
+                        FirebaseEventListener.Empty("Response data is empty")
+                } else {
+                    mutableFirebaseStateFlow.value = FirebaseEventListener.Success(it)
+                }
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An error occurred getting featured spaces")
+            }
+    }
+
+    private fun addData(
+        dbCollections: DBCollections,
+        documentName: String,
+        data: HashMap<String, String?>
+    ) {
+        fireStore.collection(dbCollections.toString())
+            .document(documentName)
+            .set(data)
+            .addOnSuccessListener {
+                mutableFirebaseStateFlow.value = FirebaseEventListener.Success()
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An Error occurred adding user")
+            }
+    }
+
 }

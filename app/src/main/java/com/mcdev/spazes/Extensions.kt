@@ -2,10 +2,12 @@ package com.mcdev.spazes
 
 import android.app.Activity
 import android.graphics.Color
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.core.net.toUri
 import java.text.SimpleDateFormat
 
 fun String.formatDateAndTime(): String {
@@ -35,4 +37,8 @@ fun Activity.changeStatusBarColor(color: Int) {
     window.statusBarColor = resources.getColor(color, this.theme)
     window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
 
+}
+
+fun String.getOriginalTwitterAvi(): String {
+    return this.replace("_normal", "")
 }

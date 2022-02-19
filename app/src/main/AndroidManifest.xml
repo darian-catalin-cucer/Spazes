@@ -13,6 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spazes">
         <activity
+            android:name=".UserSpacesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>

@@ -8,4 +8,12 @@
     <string name="featured_text">Featured</string>
     <string name="trending_text">Trending</string>
     <string name="coming_soon">coming soon...</string>
+    <string name="login">Login</string>
+    <string name="profile">profile</string>
+    <string name="settings">settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_with_twitter">Login with Twitter</string>
+    <string name="my_spaces">My Spaces</string>
+    <string name="logout">LOGOUT</string>
 </resources>

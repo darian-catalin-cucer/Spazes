@@ -42,4 +42,15 @@ interface SpacesApiService {
         @Query(value = "expansions") expansions: String,
         @Query(value = "topic.fields") topicFields: String
     ): Response<SpaceSingleResponse>
+
+    /*Get spaces created by signed in user*/
+    @GET("/2/spaces/by/creator_ids")
+    suspend fun getSpacesByCreatorIds(
+        @Header(value = "Authorization") token: String,
+        @Query(value = "user_ids") user_ids: String,
+        @Query(value = "space.fields") spaceFields: String,
+        @Query(value = "user.fields") userFields: String,
+        @Query(value = "expansions") expansions: String,
+        @Query(value = "topic.fields") topicFields: String
+    ): Response<SpaceListResponse>
 }

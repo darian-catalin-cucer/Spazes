@@ -33,4 +33,12 @@ interface MainRepository {
         topicFields: String
     ): Resource<SpaceSingleResponse>
 
+    suspend fun getSpacesByCreatorIds(
+        token: String,
+        userIds: String,
+        spaceFields: String,
+        userFields: String,
+        expansions: String,
+        topicFields: String
+    ): Resource<SpaceListResponse>
 }
