@@ -7,10 +7,16 @@
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
-        <Constraint android:id="@id/profile_avi" />
+        <Constraint android:id="@id/profile_avi"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp" />
     </ConstraintSet>
 
     <Transition
         app:constraintSetEnd="@id/end"
-        app:constraintSetStart="@+id/start" />
+        app:constraintSetStart="@+id/start" >
+        <OnClick app:targetId="@+id/profile_avi" />
+    </Transition>
 </MotionScene>
