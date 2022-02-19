@@ -47,24 +47,79 @@
         android:gravity="center_horizontal" />
 
     <LinearLayout
-        android:id="@+id/my_spaces_btn"
+        android:id="@+id/profile_menu_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="20dp"
-        android:gravity="center_vertical"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/display_name">
+        <LinearLayout
+            android:id="@+id/my_spaces_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/my_space"
-            android:layout_marginEnd="20dp"/>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/my_space"
+                android:layout_marginEnd="20dp"/>
 
-        <TextView
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Upcoming Spaces"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/favourite_hosts_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/favourite_hosts"
+                android:layout_marginEnd="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorite Hosts"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/sign_out_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Upcoming Spaces"
-            android:textSize="20sp"/>
+            android:orientation="horizontal"
+            android:layout_margin="70dp"
+            android:padding="7dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/bg_logout">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/logout"
+                android:layout_marginEnd="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/logout"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="15sp"
+                android:paddingEnd="10dp"/>
+        </LinearLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.motion.widget.MotionLayout>

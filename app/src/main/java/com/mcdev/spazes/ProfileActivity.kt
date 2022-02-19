@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,9 +39,13 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.profileAvi.setOnClickListener {
+        binding.signOutBtn.setOnClickListener {
             loginViewModel.logout()
             finish()
+        }
+
+        binding.favouriteHostsBtn.setOnClickListener {
+            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
         }
 
         binding.mySpacesBtn.setOnClickListener {

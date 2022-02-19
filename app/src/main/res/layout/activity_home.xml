@@ -15,7 +15,7 @@
         android:layout_margin="20dp"
         android:contentDescription="@string/profile"
         android:scaleType="centerCrop"
-        android:src="@drawable/hipster"
+        android:src="@drawable/profile"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -23,7 +23,7 @@
         android:id="@+id/settings_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:src="@drawable/cogwheel"
+        android:src="@drawable/settings"
         android:scaleType="centerCrop"
         android:contentDescription="@string/settings"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
         android:text="Search Spaces"
-        android:textColor="#000"
+        android:textColor="#5A5A5A"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
