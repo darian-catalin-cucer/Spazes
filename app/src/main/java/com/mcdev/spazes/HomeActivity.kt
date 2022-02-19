@@ -134,7 +134,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
                     }
                     is FirebaseEventListener.Empty -> {
                         stopLoading()
-                        showEmpty(R.string.no_featured_spaces)
+                        showEmpty(it.message!!)
                     }
                     is FirebaseEventListener.Loading -> {
                         startLoading()

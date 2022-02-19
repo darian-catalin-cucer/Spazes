@@ -16,3 +16,4 @@ local.properties
 .idea
 **/debug
 **/release
+app/src/main/java/com/mcdev/spazes/util/ApiCredentials.kt
