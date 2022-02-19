@@ -33,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
         val root = binding.root
         setContentView(root)
 
+        changeStatusBarColor(R.color.white)
+
         runBlocking {
             userTwitterId = viewModel.readDatastore("user_twitter_id")
             userTwitterHandle = viewModel.readDatastore("user_twitter_handle")

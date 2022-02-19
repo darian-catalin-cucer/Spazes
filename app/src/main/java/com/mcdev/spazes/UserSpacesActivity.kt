@@ -28,6 +28,8 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         val root = binding.root
         setContentView(root)
 
+        changeStatusBarColor(R.color.white)
+
         val loadAction = intent.extras?.get("loadAction") as LoadAction
         val userid = intent.extras?.get("user_twitter_id").toString()
 

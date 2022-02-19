@@ -24,6 +24,8 @@ class ProfileActivity : AppCompatActivity() {
         val root = binding.root
         setContentView(root)
 
+        changeStatusBarColor(R.color.white)
+
         val profileUrl = intent.extras?.get("profile_url")
         val displayName = intent.extras?.get("username")
         val userTwitterId = intent.extras?.get("userTwitterId")
