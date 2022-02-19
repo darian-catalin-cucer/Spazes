@@ -293,7 +293,7 @@ class SpacesViewModel @Inject constructor(
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     mutableFirebaseStateFlow.value =
-                        FirebaseEventListener.Empty("Response data is empty")
+                        FirebaseEventListener.Empty(R.string.no_spaces_found)
                 } else {
                     mutableFirebaseStateFlow.value = FirebaseEventListener.Success(it)
                 }
