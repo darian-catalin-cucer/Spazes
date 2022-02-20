@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.loginClicker.setOnClickListener {
+        binding.loginWithTwitterTV.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("message", "Logging in...")
             loadingDialog.isCancelable = false
