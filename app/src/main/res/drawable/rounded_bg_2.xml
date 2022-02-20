@@ -5,7 +5,7 @@
         android:radius="10dp"/>
 
     <solid
-        android:color="#166E6868" />
+        android:color="#164E4E4E" />
 
 <!--    <gradient-->
 <!--        android:gradientRadius="300dp"-->
