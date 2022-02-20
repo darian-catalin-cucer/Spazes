@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileActivity"
-    app:layoutDescription="@xml/activity_profile_scene">
+    app:layoutDescription="@xml/activity_profile_scene"
+    tools:context=".ProfileActivity">
 
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -13,38 +13,38 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="100dp"
-        android:text="@string/profile"
-        android:textSize="30sp"
         android:gravity="center"
         android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/profile"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:roundedCornerRadius="10dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:roundedCornerRadius="10dp" />
 
     <ImageView
         android:id="@+id/profile_back_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:src="@drawable/back"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="20dp"
-        android:elevation="20dp"/>
+        android:contentDescription="@string/settings"
+        android:elevation="20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
+        android:gravity="center_horizontal"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/profile_avi"
         app:layout_constraintStart_toStartOf="parent"
-        android:gravity="center_horizontal" />
+        app:layout_constraintTop_toBottomOf="@id/profile_avi" />
 
     <LinearLayout
         android:id="@+id/profile_menu_view"
@@ -52,46 +52,47 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/display_name">
+
         <LinearLayout
             android:id="@+id/my_spaces_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="20dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/my_space"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/my_space" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Upcoming Spaces"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/favourite_hosts_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_margin="20dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/favourite_hosts"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/favourite_hosts" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Favorite Hosts"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
         </LinearLayout>
 
 
@@ -99,26 +100,26 @@
             android:id="@+id/sign_out_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="70dp"
-            android:padding="7dp"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="70dp"
+            android:background="@drawable/bg_logout"
             android:gravity="center_vertical"
-            android:background="@drawable/bg_logout">
+            android:orientation="horizontal"
+            android:padding="7dp">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/logout"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/logout" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
                 android:text="@string/logout"
                 android:textColor="@android:color/holo_red_light"
-                android:textSize="15sp"
-                android:paddingEnd="10dp"/>
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
