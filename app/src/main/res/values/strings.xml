@@ -17,4 +17,8 @@
     <string name="my_spaces">My Spaces</string>
     <string name="logout">LOGOUT</string>
     <string name="response_data_empty">Response data is empty</string>
+    <string name="logout_dialog_title">Logout?</string>
+    <string name="logout_confirmation_message">Are you sure you want to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

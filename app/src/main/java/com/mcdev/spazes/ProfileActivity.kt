@@ -1,15 +1,19 @@
 package com.mcdev.spazes
 
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.databinding.ActivityProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
@@ -42,8 +46,14 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.signOutBtn.setOnClickListener {
-            loginViewModel.logout()
-            finish()
+            AlertDialog.Builder(this@ProfileActivity)
+                .setTitle(getString(R.string.logout_dialog_title))
+                .setMessage(getString(R.string.logout_confirmation_message))
+                .setPositiveButton(getString(R.string.yes)
+                ) { _, _ -> lifecycleScope.launch { doSignOut() } }//signOut
+                .setNegativeButton(getString(R.string.no)
+                ) { p0, _ -> p0.dismiss() }// dismiss dialog
+                .show()
         }
 
         binding.favouriteHostsBtn.setOnClickListener {
@@ -57,6 +67,18 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun doSignOut() {
+        val loadingDialog = LottieLoadingDialogFragment()
+        val bundle = Bundle()
+        bundle.putString("message", "Logging out...")
+        loadingDialog.isCancelable = false
+        loadingDialog.arguments = bundle
+        loadingDialog.show(supportFragmentManager, "")
+
+        delay(3000)
+        loginViewModel.logout()
+        finish()
+    }
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
