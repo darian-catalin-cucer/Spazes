@@ -11,13 +11,21 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mcdev.spazes.R
 import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.events.SpacesSingleEventListener
+import com.mcdev.spazes.events.UserListEventListener
+import com.mcdev.spazes.events.UserSingleEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.repository.MainRepository
+import com.mcdev.spazes.repository.UsersMainRepository
+import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
+import com.mcdev.twitterapikit.expansion.UsersExpansion
+import com.mcdev.twitterapikit.field.TweetField
+import com.mcdev.twitterapikit.field.UserField
 import com.mcdev.twitterapikit.response.SpaceListResponse
+import com.mcdev.twitterapikit.response.UserSingleResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,6 +36,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
+    private val usersMainRepository: UsersMainRepository,
     private val dispatchProvider: DispatchProvider,
     private val datastore: DataStore<Preferences>,
     private val fireStore: FirebaseFirestore
@@ -40,9 +49,15 @@ class SpacesViewModel @Inject constructor(
         MutableStateFlow<SpacesSingleEventListener>(SpacesSingleEventListener.Loading)
     private val mutableFirebaseStateFlow =
         MutableStateFlow<FirebaseEventListener>(FirebaseEventListener.Loading)
+    private val mutableListUserStateFlow =
+        MutableStateFlow<UserListEventListener>(UserListEventListener.Loading)
+    private val mutableSingleUserStateFlow =
+        MutableStateFlow<UserSingleEventListener>(UserSingleEventListener.Loading)
 
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
     val fireStoreListener: StateFlow<FirebaseEventListener> = mutableFirebaseStateFlow
+    val findUserByUsername : StateFlow<UserSingleEventListener> = mutableSingleUserStateFlow
+    val findUsersByUserNames: StateFlow<UserListEventListener> = mutableListUserStateFlow
 
     /*search spaces by query*/
     fun searchSpaces(
@@ -217,6 +232,81 @@ class SpacesViewModel @Inject constructor(
                }
            }
        }
+    }
+
+    fun getUsersByUsername(
+        token: String = "BEARER $BEARER_TOKEN",
+        username: String,
+        expansions: String = UsersExpansion.PINNED_TWEET_ID.value,
+        tweetFields: String = TweetField.ALL_DEFAULT.value,
+        userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
+        ) {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableListUserStateFlow.value = UserListEventListener.Loading
+            when (val userSingleResponse = usersMainRepository.getUsersByUsername(
+                token,
+                username,
+                expansions,
+                tweetFields,
+                userFields
+            )) {
+                is Resource.Success -> {
+                    val user = userSingleResponse.data
+
+                    if (user?.data != null) {
+                        mutableSingleUserStateFlow.value = UserSingleEventListener.Success(user)
+                    } else {
+                        mutableSingleUserStateFlow.value = UserSingleEventListener.Empty(R.string.no_hosts_found)
+                    }
+                }
+                is Resource.Error -> {
+                    mutableSingleUserStateFlow.value =
+                        UserSingleEventListener.Failure(userSingleResponse.data?.detail)
+                }
+                else -> {
+                    mutableSingleUserStateFlow.value =
+                        UserSingleEventListener.Failure(userSingleResponse.error)
+                }
+            }
+        }
+
+    }
+
+    fun getUsersByUsernames(
+        token: String,
+        usernames: String,
+        expansions: String,
+        tweetFields: String,
+        userFields: String
+    ) {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableListUserStateFlow.value = UserListEventListener.Loading
+            when (val userListResponse = usersMainRepository.getUsersByUsernames(
+                token,
+                usernames,
+                expansions,
+                tweetFields,
+                userFields
+            )) {
+                is Resource.Success -> {
+                    val users = userListResponse.data
+
+                    if (users?.data != null) {
+                        mutableListUserStateFlow.value = UserListEventListener.Success(users)
+                    } else {
+                        mutableListUserStateFlow.value = UserListEventListener.Empty(R.string.no_hosts_found)
+                    }
+                }
+                is Resource.Error -> {
+                    mutableListUserStateFlow.value =
+                        UserListEventListener.Failure(userListResponse.data?.detail)
+                }
+                else -> {
+                    mutableListUserStateFlow.value =
+                        UserListEventListener.Failure(userListResponse.error)
+                }
+            }
+        }
     }
 
     private fun isSpaceExpired(

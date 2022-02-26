@@ -58,7 +58,7 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.favouriteHostsBtn.setOnClickListener {
-            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, UsersActivity::class.java))
         }
 
         binding.mySpacesBtn.setOnClickListener {

@@ -21,4 +21,5 @@
     <string name="logout_confirmation_message">Are you sure you want to logout?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_hosts_found">No hosts found</string>
 </resources>

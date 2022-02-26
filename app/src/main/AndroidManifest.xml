@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spazes">
         <activity
+            android:name=".ui.UsersActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.UserSpacesActivity"
             android:exported="false" />
         <activity

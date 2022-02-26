@@ -3,7 +3,6 @@ package com.mcdev.spazes.di
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
-import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -15,7 +14,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.repository.SpacesRepository
-import com.mcdev.spazes.service.SpacesApiService
+import com.mcdev.spazes.repository.UserRepoImpl
+import com.mcdev.spazes.repository.UsersMainRepository
+import com.mcdev.spazes.service.TwitterApiService
 import com.mcdev.spazes.util.DispatchProvider
 import dagger.Module
 import dagger.Provides
@@ -28,7 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -41,11 +41,11 @@ object AppModule {
     /*Retrofit Spaces API*/
     @Singleton
     @Provides
-    fun provideSpacesApi(): SpacesApiService = Retrofit.Builder()
+    fun provideTwitterApi(): TwitterApiService = Retrofit.Builder()
         .baseUrl(TWITTER_API_BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(SpacesApiService::class.java)
+        .create(TwitterApiService::class.java)
 
 
     /*Firebase*/
@@ -70,8 +70,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(spacesApiService: SpacesApiService): MainRepository =
-        SpacesRepository(spacesApiService)
+    fun provideMainRepository(twitterApiService: TwitterApiService): MainRepository =
+        SpacesRepository(twitterApiService)
+
+    @Singleton
+    @Provides
+    fun provideUsersMainRepository(twitterApiService: TwitterApiService): UsersMainRepository =
+        UserRepoImpl(twitterApiService)
 
     /*Datastore preference*/
     @Singleton
