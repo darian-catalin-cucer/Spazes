@@ -1,18 +1,21 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.ui
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityUserSpacesBinding
+import com.mcdev.spazes.enums.LoadAction
+import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.util.BEARER_TOKEN
+import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -42,7 +45,7 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
 
         when (loadAction) {
             LoadAction.MY_SPACES ->{
-                binding.titleText.text = "My Spaces"
+                binding.titleText.text = getString(R.string.my_spaces)
                 loadMySpaces(userid)
             }
         }

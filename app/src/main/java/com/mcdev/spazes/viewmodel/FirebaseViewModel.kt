@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore

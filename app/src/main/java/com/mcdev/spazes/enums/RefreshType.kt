@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.enums
 
 enum class RefreshType {
     featured_refresh,

@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.model
 
 data class CurrUser(
     var user_id: String?,

@@ -1,13 +1,13 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.viewmodel
 
 import android.app.Activity
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.OAuthProvider
+import com.mcdev.spazes.events.LoginEventListener
 import com.mcdev.spazes.util.DispatchProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

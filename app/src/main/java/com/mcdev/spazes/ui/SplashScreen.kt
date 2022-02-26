@@ -1,10 +1,11 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import com.mcdev.spazes.databinding.ActivitySplashScreenBinding
+import com.mcdev.spazes.makeStatusBarTransparent
 import java.util.*
 
 class SplashScreen : AppCompatActivity() {

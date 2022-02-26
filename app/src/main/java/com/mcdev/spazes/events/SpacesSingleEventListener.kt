@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.events
 
 import com.mcdev.twitterapikit.response.SpaceSingleResponse
 

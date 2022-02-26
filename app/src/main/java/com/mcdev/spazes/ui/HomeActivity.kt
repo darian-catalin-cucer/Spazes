@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -9,27 +9,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.facebook.drawee.backends.pipeline.Fresco
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
+import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityHomeBinding
-import com.mcdev.spazes.di.AppModule
+import com.mcdev.spazes.enums.RefreshType
+import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
+import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {

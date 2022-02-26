@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -9,14 +9,16 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseUser
+import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityLoginBinding
+import com.mcdev.spazes.events.LoginEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.viewmodel.LoginViewModel
+import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.*
-import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {

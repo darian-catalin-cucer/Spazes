@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.viewmodel
 
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -8,6 +8,9 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mcdev.spazes.R
+import com.mcdev.spazes.events.SpacesListEventListener
+import com.mcdev.spazes.events.SpacesSingleEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.util.DBCollections

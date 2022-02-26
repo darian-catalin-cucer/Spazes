@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".HomeActivity"
+    tools:context=".ui.HomeActivity"
     android:id="@+id/rootlayout"
     app:layoutDescription="@xml/activity_search_xml_constraintlayout_scene">
 

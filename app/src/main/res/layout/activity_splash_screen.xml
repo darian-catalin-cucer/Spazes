@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#8C52FF"
-    tools:context=".SplashScreen">
+    tools:context=".ui.SplashScreen">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="wrap_content"

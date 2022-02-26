@@ -1,4 +1,4 @@
-package com.mcdev.spazes
+package com.mcdev.spazes.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityProfileBinding
+import com.mcdev.spazes.enums.LoadAction
+import com.mcdev.spazes.viewmodel.LoginViewModel
+import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 
