@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
+class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private lateinit var binding: ActivityUserSpacesBinding
     private val viewModel: SpacesViewModel by viewModels()
 
@@ -129,7 +129,7 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         binding.recyclerMessage.visibility = View.VISIBLE
     }
 
-    override fun onItemClick(spaces: Space, position: Int) {
+    override fun onSpacesItemClick(spaces: Space, position: Int) {
         val link = SPACES_URL + spaces.id
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)

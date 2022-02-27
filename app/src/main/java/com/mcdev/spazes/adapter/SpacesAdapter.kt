@@ -22,7 +22,7 @@ import com.mcdev.twitterapikit.model.SpaceState
 import com.mcdev.twitterapikit.response.SpaceListResponse
 import java.util.*
 
-class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
+class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
     inner class SpacesViewHolder(val binding: SpaceItemV2Binding): RecyclerView.ViewHolder(binding.root) {
     }
@@ -146,7 +146,7 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
 //        }
 //
         holder.itemView.setOnClickListener {
-            listener.onItemClick(space, position)
+            listener.onSpacesItemClick(space, position)
         }
     }
 
@@ -188,8 +188,8 @@ class  SpacesAdapter(val context: Context, val listener: OnItemClickListener): R
     }
 
 
-    interface OnItemClickListener {
-        fun onItemClick(spaces: Space, position: Int)
+    interface OnSpacesItemClickListener {
+        fun onSpacesItemClick(spaces: Space, position: Int)
         fun onGoToClick(spaces: Space, position: Int)
     }
 }

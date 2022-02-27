@@ -273,11 +273,11 @@ class SpacesViewModel @Inject constructor(
     }
 
     fun getUsersByUsernames(
-        token: String,
+        token: String = "BEARER $BEARER_TOKEN",
         usernames: String,
-        expansions: String,
-        tweetFields: String,
-        userFields: String
+        expansions: String = UsersExpansion.PINNED_TWEET_ID.value,
+        tweetFields: String = TweetField.ALL_DEFAULT.value,
+        userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
     ) {
         viewModelScope.launch(dispatchProvider.io) {
             mutableListUserStateFlow.value = UserListEventListener.Loading
