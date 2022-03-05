@@ -207,7 +207,7 @@ class SpacesViewModel @Inject constructor(
         ids: String,
         spaceFields: String = SpaceField.ALL.value,
         userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-        expansions: String = "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
+        expansions: String = "invited_user_ids,speaker_ids,creator_id,host_ids",
         topicFields: String = "description,id,name"
     ) {
        viewModelScope.launch(dispatchProvider.io) {

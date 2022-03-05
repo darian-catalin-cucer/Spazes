@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
         changeStatusBarColor(R.color.white)
 
         runBlocking {
-            userTwitterId = viewModel.readDatastore("user_id")
+            userTwitterId = viewModel.readDatastore("user_twitter_id")
             userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
             userId = viewModel.readDatastore("user_firebase_id")
         }
@@ -84,7 +84,7 @@ class LoginActivity : AppCompatActivity() {
                         // accessed when user is already signed in..unless a request is made to firebase which i do not want to do
                         viewModel.saveOrUpdateDatastore("user_twitter_id", id)
                         viewModel.saveOrUpdateDatastore("user_twitter_handle", handle)
-                        viewModel.saveOrUpdateDatastore("user_id", userFirebaseId)
+                        viewModel.saveOrUpdateDatastore("user_firebase_id", userFirebaseId)
 
 
                         //save user to firebase fireStore
@@ -95,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                         //update datastore to remove signed in user twitter id
                         viewModel.saveOrUpdateDatastore("user_twitter_id", "")
                         viewModel.saveOrUpdateDatastore("user_twitter_handle", "")
-                        viewModel.saveOrUpdateDatastore("user_id", "")
+                        viewModel.saveOrUpdateDatastore("user_firebase_id", "")
                         Log.d("TAG", "onCreate: user is signed out oh")
                     }
                     is LoginEventListener.Failure -> {
@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
 
                         userTwitterId = viewModel.readDatastore("user_twitter_id")
                         userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
-                        userId = viewModel.readDatastore("user_id")
+                        userId = viewModel.readDatastore("user_firebase_id")
                         startActivity(goToProfileActivity(this@LoginActivity, curr, userTwitterId, userTwitterHandle))
                         finish()
                         loadingDialog.dismiss()
@@ -170,7 +170,7 @@ class LoginActivity : AppCompatActivity() {
             .putExtra("userTwitterId", userTwitterId)
             .putExtra("userTwitterHandle", userTwitterHandle)
             .putExtra("username", currUser?.displayName)
-            .putExtra("userId", currUser?.uid)
+            .putExtra("userFirebaseId", currUser?.uid)
     }
 
 }

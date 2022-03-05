@@ -45,7 +45,7 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
 
         val loadAction = intent.extras?.get("loadAction") as LoadAction
         val userTwitterId = intent.extras?.get("user_twitter_id").toString()
-        userId = intent.extras?.get("user_id").toString()
+        userId = intent.extras?.get("user_firebase_id").toString()
 
         userAdapter = UserAdapter(this, this)
         binding.usersRecyclerView.apply {
