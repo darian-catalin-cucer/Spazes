@@ -268,11 +268,4 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
     override fun onAddRemoveItemClick(user: User, position: Int) {
         viewModel.removeFaveHost(userId!!, FaveHost(user.id))
     }
-
-    override fun onResume() {
-        super.onResume()
-        if (ids != null) {
-            getUsersByIds(ids = ids!!)
-        }
-    }
 }
