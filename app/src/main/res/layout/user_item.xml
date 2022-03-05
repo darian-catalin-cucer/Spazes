@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:padding="10dp"
-        android:background="@drawable/bg_users">
+        android:background="@drawable/bg_users_add">
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/user_avi"
             android:layout_width="50dp"

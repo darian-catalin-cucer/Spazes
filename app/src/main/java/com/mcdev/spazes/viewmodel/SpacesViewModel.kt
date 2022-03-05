@@ -1,6 +1,7 @@
 package com.mcdev.spazes.viewmodel
 
 import android.util.Log
+import android.widget.Toast
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -38,6 +39,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class SpacesViewModel @Inject constructor(
@@ -431,6 +433,13 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
+    fun removeFaveHost(documentName: String, data: Any) {
+        viewModelScope.launch {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            removeHost(DBCollections.Users, documentName, data)
+        }
+    }
+
     private fun getSpacesIds(dbCollections: DBCollections) {
         fireStore.collection(dbCollections.toString())
             .get()
@@ -448,7 +457,7 @@ class SpacesViewModel @Inject constructor(
             }
     }
 
-    public fun getFaveHosts(documentName: String) {
+    fun getFaveHosts(documentName: String) {
         viewModelScope.launch {
             mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
             getFaveHostsIds(DBCollections.Users, documentName)
@@ -460,9 +469,9 @@ class SpacesViewModel @Inject constructor(
             .document(document)
             .get()
             .addOnSuccessListener {
-                if (it.exists().not()) {
+                if (it.get("fave_hosts") == null) {
                     mutableFirebaseStateFlow.value =
-                        FirebaseEventListener.Empty(R.string.no_spaces_found)
+                        FirebaseEventListener.Empty(R.string.no_hosts_found)
                 } else {
                     mutableFirebaseStateFlow.value = FirebaseEventListener.DocumentSuccess(it)
                 }
@@ -499,7 +508,8 @@ class SpacesViewModel @Inject constructor(
             .document(documentName)
             .update("fave_hosts", FieldValue.arrayUnion(data))
             .addOnSuccessListener {
-                mutableFirebaseStateFlow.value = FirebaseEventListener.Success()
+                //when a host is added, fetch the remaining hosts
+                getFaveHosts(documentName)
             }
             .addOnFailureListener {
                 mutableFirebaseStateFlow.value =
@@ -507,4 +517,21 @@ class SpacesViewModel @Inject constructor(
             }
     }
 
+    private fun removeHost(
+        dbCollections: DBCollections,
+        documentName: String,
+        data: Any
+    ) {
+        fireStore.collection(dbCollections.toString())
+            .document(documentName)
+            .update("fave_hosts", FieldValue.arrayRemove(data))
+            .addOnSuccessListener {
+                //when a host is deleted pr removed, fetch the remaining hosts
+                getFaveHosts(documentName)
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An Error occurred adding user")
+            }
+    }
 }

@@ -7,28 +7,23 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.firestore.QuerySnapshot
-import com.mcdev.spazes.R
+import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.UserAdapter
-import com.mcdev.spazes.changeStatusBarColor
 import com.mcdev.spazes.databinding.ActivityUsersBinding
 import com.mcdev.spazes.databinding.BottomsheetLayoutBinding
 import com.mcdev.spazes.enums.LoadAction
 import com.mcdev.spazes.events.UserListEventListener
 import com.mcdev.spazes.events.UserSingleEventListener
-import com.mcdev.spazes.getOriginalTwitterAvi
 import com.mcdev.spazes.model.FaveHost
 import com.mcdev.spazes.repository.FirebaseEventListener
-import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -59,8 +54,12 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
             this.adapter = userAdapter
         }
 
-        getFaveHosts(userId!!
-        )
+        getFaveHosts(userId!!)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getFaveHosts(userId!!)
+        }
+
         binding.userBackBtn.setOnClickListener {
             finish()
         }
@@ -73,18 +72,20 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
             viewModel.findUserByUsername.collect {
                 when (it) {
                     is UserSingleEventListener.Success -> {
-                        Log.d(
-                            "TAG",
-                            "onCreate: UserSingle Event listener is success : ${it.data.toString()}"
-                        )
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
                     }
                     is UserSingleEventListener.Failure -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+                        Toast.makeText(this@UsersActivity, "Failed.", Toast.LENGTH_SHORT).show()
                         Log.d("TAG", "onCreate: UserSingle Event listener is failed")
                     }
                     is UserSingleEventListener.Empty -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+                        showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView, R.string.no_hosts_found)
                         Log.d("TAG", "onCreate: UserSingle Event listener is empty")
                     }
                     is UserSingleEventListener.Loading -> {
+                        startLoading(binding.swipeRefresh, binding.recyclerMessage)
                         Log.d("TAG", "onCreate: UserSingle Event listener is loading")
                     }
                 }
@@ -96,48 +97,52 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                 when (it) {
                     is UserListEventListener.Success -> {
                         it.data?.let { it1 -> userAdapter!!.submitResponse(it1) }
-                        Log.d(
-                            "TAG",
-                            "onCreate: UserSingle Event listener is success : ${it.data.toString()}"
-                        )
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
                     }
                     is UserListEventListener.Failure -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+                        Toast.makeText(this@UsersActivity, "Failed.", Toast.LENGTH_SHORT).show()
                         Log.d("TAG", "onCreate: UserList Event listener is failed")
                     }
                     is UserListEventListener.Empty -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+                        showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView, R.string.no_hosts_found)
                         Log.d("TAG", "onCreate: UserList Event listener is empty")
                     }
                     is UserListEventListener.Loading -> {
+                        startLoading(binding.swipeRefresh, binding.recyclerMessage)
                         Log.d("TAG", "onCreate: UserList Event listener is loading")
                     }
                 }
             }
         }
 
-        lifecycleScope.launchWhenResumed {
+        lifecycleScope.launchWhenStarted {
             viewModel.fireStoreListener.collect{
                 when (it) {
                     is FirebaseEventListener.DocumentSuccess -> {
-                        var hostIds: ArrayList<HashMap<String, String>> = it.data?.get("fave_hosts") as ArrayList<HashMap<String, String>>
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+
+                        val hostIds: ArrayList<HashMap<String, String>> = it.data?.get("fave_hosts") as ArrayList<HashMap<String, String>>
                         ids = getTheIDs(hostIds)
                         //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
-                        getUsersByIds(ids!!)
-                        if (hostIds.isEmpty()) {
-//                            showEmpty(R.string.no_featured_spaces)
+
+                        if (ids.isNullOrBlank()) {
+                            showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView, R.string.no_hosts_found)
                         } else {
-//                            querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
+                            getUsersByIds(ids!!)
                         }
                     }
                     is FirebaseEventListener.Failure -> {
-//                        stopLoading()
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
                         Toast.makeText(this@UsersActivity, "Failed.", Toast.LENGTH_SHORT).show()
                     }
                     is FirebaseEventListener.Empty -> {
-//                        stopLoading()
-//                        showEmpty(it.message!!)
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
+                        showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView, it.message!!)
                     }
                     is FirebaseEventListener.Loading -> {
-//                        startLoading()
+                        startLoading(binding.swipeRefresh, binding.recyclerMessage)
                     }
                 }
             }
@@ -166,6 +171,7 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                                         "TAG",
                                         "onCreate: UserSingle Event listener is success : $user"
                                     )
+                                    bottomSheetBinding.userDetails.itemLay.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_users_add, applicationContext.theme)
                                     bottomSheetBinding.userDetails.addRemoveBtn.setActualImageResource(
                                         R.drawable.plus
                                     )
@@ -257,6 +263,10 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
 
     override fun onUserItemClick(user: User, position: Int) {
 //        TODO("Not yet implemented")
+    }
+
+    override fun onAddRemoveItemClick(user: User, position: Int) {
+        viewModel.removeFaveHost(userId!!, FaveHost(user.id))
     }
 
     override fun onResume() {

@@ -3,6 +3,7 @@ package com.mcdev.spazes.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -28,6 +29,7 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
 
     interface OnUserItemClickListener {
         fun onUserItemClick(user: User, position: Int)
+        fun onAddRemoveItemClick(user: User, position: Int)
     }
 
     inner class UserViewHolder(val binding: UserItemBinding) :
@@ -53,6 +55,7 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
         val userPhotoUrl = user.profileImageUrl?.getOriginalTwitterAvi()
 
         holder.binding.apply {
+            this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)
             this.userAvi.setImageURI(userPhotoUrl)
             this.userName.text = username
             this.userDisplayName.text = displayName
@@ -62,6 +65,10 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
 
         holder.itemView.setOnClickListener {
             listener.onUserItemClick(user, position)
+        }
+
+        holder.binding.addRemoveBtn.setOnClickListener {
+            listener.onAddRemoveItemClick(user, position)
         }
     }
 

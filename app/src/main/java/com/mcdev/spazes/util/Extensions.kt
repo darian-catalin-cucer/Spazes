@@ -1,13 +1,18 @@
 package com.mcdev.spazes
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.core.net.toUri
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.text.SimpleDateFormat
 
 fun String.formatDateAndTime(): String {
@@ -41,4 +46,22 @@ fun Activity.changeStatusBarColor(color: Int) {
 
 fun String.getOriginalTwitterAvi(): String {
     return this.replace("_normal", "")
+}
+
+fun Context.startLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView) {
+    swipeRefreshLayout.isRefreshing = true
+    recyclerMessage.visibility = View.GONE
+}
+
+fun Context.stopLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView, recyclerView: RecyclerView) {
+    swipeRefreshLayout.isRefreshing = false
+    recyclerView.visibility = View.VISIBLE
+    recyclerMessage.visibility = View.GONE
+}
+
+fun Context.showEmpty(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView, recyclerView: RecyclerView, message : Int) {
+    recyclerMessage.text = applicationContext.getString(message)
+    swipeRefreshLayout.isRefreshing = false
+    recyclerView.visibility = View.GONE
+    recyclerMessage.visibility = View.VISIBLE
 }
