@@ -77,4 +77,14 @@ interface TwitterApiService {
         @Query(value = "tweet.fields") tweetFields: String,
         @Query(value = "user.fields") userFields: String
     ): Response<UserListResponse>
+
+    /*Get users by list of ids*/
+    @GET(value = "/2/users")
+    suspend fun getUsersByIds(
+        @Header(value = "Authorization") token: String,
+        @Query(value = "ids") ids: String,
+        @Query(value = "expansions") expansions: String,
+        @Query(value = "tweet.fields") tweetFields: String,
+        @Query(value = "user.fields") userFields: String
+    ):Response<UserListResponse>
 }

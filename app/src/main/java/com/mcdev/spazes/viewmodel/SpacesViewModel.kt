@@ -24,7 +24,10 @@ import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.util.DispatchProvider
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.`object`.Space
+import com.mcdev.twitterapikit.expansion.SpacesExpansion
 import com.mcdev.twitterapikit.expansion.UsersExpansion
+import com.mcdev.twitterapikit.field.SpaceField
+import com.mcdev.twitterapikit.field.TopicField
 import com.mcdev.twitterapikit.field.TweetField
 import com.mcdev.twitterapikit.field.UserField
 import com.mcdev.twitterapikit.response.SpaceListResponse
@@ -198,12 +201,12 @@ class SpacesViewModel @Inject constructor(
 
     /*get spaces by creator ids*/
     fun searchSpacesByCreatorIds(
-        token: String,
+        token: String = "BEARER $BEARER_TOKEN",
         ids: String,
-        spaceFields: String,
-        userFields: String,
-        expansions: String,
-        topicFields: String
+        spaceFields: String = SpaceField.ALL.value,
+        userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
+        expansions: String = "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
+        topicFields: String = "description,id,name"
     ) {
        viewModelScope.launch(dispatchProvider.io) {
            mutableListStateFlow.value = SpacesListEventListener.Loading
@@ -287,6 +290,44 @@ class SpacesViewModel @Inject constructor(
             when (val userListResponse = usersMainRepository.getUsersByUsernames(
                 token,
                 usernames,
+                expansions,
+                tweetFields,
+                userFields
+            )) {
+                is Resource.Success -> {
+                    val users = userListResponse.data
+
+                    if (users?.data != null) {
+                        mutableListUserStateFlow.value = UserListEventListener.Success(users)
+                    } else {
+                        mutableListUserStateFlow.value = UserListEventListener.Empty(R.string.no_hosts_found)
+                    }
+                }
+                is Resource.Error -> {
+                    mutableListUserStateFlow.value =
+                        UserListEventListener.Failure(userListResponse.data?.detail)
+                }
+                else -> {
+                    mutableListUserStateFlow.value =
+                        UserListEventListener.Failure(userListResponse.error)
+                }
+            }
+        }
+    }
+
+
+    fun getUsersByIds(
+        token: String = "BEARER $BEARER_TOKEN",
+        ids: String,
+        expansions: String = UsersExpansion.PINNED_TWEET_ID.value,
+        tweetFields: String = TweetField.ALL_DEFAULT.value,
+        userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
+    ) {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableListUserStateFlow.value = UserListEventListener.Loading
+            when (val userListResponse = usersMainRepository.getUsersByIds(
+                token,
+                ids,
                 expansions,
                 tweetFields,
                 userFields
@@ -399,6 +440,31 @@ class SpacesViewModel @Inject constructor(
                         FirebaseEventListener.Empty(R.string.no_spaces_found)
                 } else {
                     mutableFirebaseStateFlow.value = FirebaseEventListener.Success(it)
+                }
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An error occurred getting featured spaces")
+            }
+    }
+
+    public fun getFaveHosts(documentName: String) {
+        viewModelScope.launch {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            getFaveHostsIds(DBCollections.Users, documentName)
+        }
+    }
+
+    private fun getFaveHostsIds(dbCollections: DBCollections = DBCollections.Users, document: String) {
+        fireStore.collection(dbCollections.toString())
+            .document(document)
+            .get()
+            .addOnSuccessListener {
+                if (it.exists().not()) {
+                    mutableFirebaseStateFlow.value =
+                        FirebaseEventListener.Empty(R.string.no_spaces_found)
+                } else {
+                    mutableFirebaseStateFlow.value = FirebaseEventListener.DocumentSuccess(it)
                 }
             }
             .addOnFailureListener {

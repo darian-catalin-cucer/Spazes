@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.firestore.QuerySnapshot
 import com.mcdev.spazes.R
 import com.mcdev.spazes.adapter.UserAdapter
 import com.mcdev.spazes.changeStatusBarColor
@@ -19,6 +22,7 @@ import com.mcdev.spazes.events.UserListEventListener
 import com.mcdev.spazes.events.UserSingleEventListener
 import com.mcdev.spazes.getOriginalTwitterAvi
 import com.mcdev.spazes.model.FaveHost
+import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.User
@@ -34,6 +38,7 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
     private val viewModel: SpacesViewModel by viewModels()
     private var userAdapter: UserAdapter? = null
     private var userId: String? = null
+    private var ids : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +59,8 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
             this.adapter = userAdapter
         }
 
+        getFaveHosts(userId!!
+        )
         binding.userBackBtn.setOnClickListener {
             finish()
         }
@@ -106,6 +113,35 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                 }
             }
         }
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.fireStoreListener.collect{
+                when (it) {
+                    is FirebaseEventListener.DocumentSuccess -> {
+                        var hostIds: ArrayList<HashMap<String, String>> = it.data?.get("fave_hosts") as ArrayList<HashMap<String, String>>
+                        ids = getTheIDs(hostIds)
+                        //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
+                        getUsersByIds(ids!!)
+                        if (hostIds.isEmpty()) {
+//                            showEmpty(R.string.no_featured_spaces)
+                        } else {
+//                            querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
+                        }
+                    }
+                    is FirebaseEventListener.Failure -> {
+//                        stopLoading()
+                        Toast.makeText(this@UsersActivity, "Failed.", Toast.LENGTH_SHORT).show()
+                    }
+                    is FirebaseEventListener.Empty -> {
+//                        stopLoading()
+//                        showEmpty(it.message!!)
+                    }
+                    is FirebaseEventListener.Loading -> {
+//                        startLoading()
+                    }
+                }
+            }
+        }
     }
 
     private fun showBottomSheet() {
@@ -119,7 +155,7 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
             SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query.isNullOrBlank().not()) {
-                    getUserByUsername(query!!)
+                    getUserByUsername(query!!.trim())
 
                     lifecycleScope.launchWhenStarted {
                         viewModel.findUserByUsername.collect {
@@ -201,7 +237,32 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
     private fun addFaveHost(userId: String, data: Any) {
         viewModel.addUsers(userId, data)
     }
+
+    private fun getFaveHosts(userId: String) {
+        viewModel.getFaveHosts(userId)
+    }
+
+    private fun getUsersByIds(ids: String) {
+        viewModel.getUsersByIds(ids = ids)
+    }
+
+    private fun getTheIDs(result: ArrayList<HashMap<String, String>>): String{
+        val theIDs = mutableListOf<String>()
+        for (document in result) {
+            theIDs.add(document["hostId"]!!)
+        }
+        //joinToString method will put them in a string and separator will separate without whitespaces
+        return  theIDs.joinToString(separator = ",")
+    }
+
     override fun onUserItemClick(user: User, position: Int) {
 //        TODO("Not yet implemented")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (ids != null) {
+            getUsersByIds(ids = ids!!)
+        }
     }
 }
