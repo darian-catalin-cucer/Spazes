@@ -31,6 +31,7 @@ class ProfileActivity : AppCompatActivity() {
 
         changeStatusBarColor(R.color.white)
 
+        val userId = intent.extras?.get("userId")
         val profileUrl = intent.extras?.get("profile_url")
         val displayName = intent.extras?.get("username")
         val userTwitterId = intent.extras?.get("userTwitterId")
@@ -58,7 +59,10 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.favouriteHostsBtn.setOnClickListener {
-            startActivity(Intent(this, UsersActivity::class.java))
+            startActivity(Intent(this, UsersActivity::class.java)
+                .putExtra("loadAction", LoadAction.FAVE_HOSTS)
+                .putExtra("user_twitter_id", userTwitterId.toString())
+                .putExtra("user_id", userId.toString()))
         }
 
         binding.mySpacesBtn.setOnClickListener {

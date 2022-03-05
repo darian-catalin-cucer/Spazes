@@ -7,12 +7,15 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.mcdev.spazes.R
 import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.events.SpacesSingleEventListener
 import com.mcdev.spazes.events.UserListEventListener
 import com.mcdev.spazes.events.UserSingleEventListener
+import com.mcdev.spazes.model.FaveHost
 import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.repository.MainRepository
 import com.mcdev.spazes.repository.UsersMainRepository
@@ -373,7 +376,14 @@ class SpacesViewModel @Inject constructor(
         }
     }
 
-    fun addUser(documentName: String, data: HashMap<String, String?>) {
+    fun addUser(documentName: String, data: HashMap<String, *>) {
+        viewModelScope.launch {
+            mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
+            addData(DBCollections.Users, documentName, data)
+        }
+    }
+
+    fun addUsers(documentName: String, data: Any) {
         viewModelScope.launch {
             mutableFirebaseStateFlow.value = FirebaseEventListener.Loading
             addData(DBCollections.Users, documentName, data)
@@ -400,11 +410,28 @@ class SpacesViewModel @Inject constructor(
     private fun addData(
         dbCollections: DBCollections,
         documentName: String,
-        data: HashMap<String, String?>
+        data: HashMap<String, *>
     ) {
         fireStore.collection(dbCollections.toString())
             .document(documentName)
-            .set(data)
+            .set(data, SetOptions.merge())
+            .addOnSuccessListener {
+                mutableFirebaseStateFlow.value = FirebaseEventListener.Success()
+            }
+            .addOnFailureListener {
+                mutableFirebaseStateFlow.value =
+                    FirebaseEventListener.Failure("An Error occurred adding user")
+            }
+    }
+
+    private fun addData(
+        dbCollections: DBCollections,
+        documentName: String,
+        data: Any
+    ) {
+        fireStore.collection(dbCollections.toString())
+            .document(documentName)
+            .update("fave_hosts", FieldValue.arrayUnion(data))
             .addOnSuccessListener {
                 mutableFirebaseStateFlow.value = FirebaseEventListener.Success()
             }

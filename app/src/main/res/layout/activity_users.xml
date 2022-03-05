@@ -61,4 +61,17 @@
             android:layout_marginTop="50dp"/>
     </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_fave_host_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_person_add_24"
+        app:backgroundTint="#BE63F9"
+        app:tint="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="20dp"
+        app:elevation="5dp"
+        android:contentDescription="@string/add_favourite_host"/>
 </RelativeLayout>
