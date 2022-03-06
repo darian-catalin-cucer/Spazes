@@ -133,6 +133,9 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                             getUsersByIds(ids!!)
                         }
                     }
+                    is FirebaseEventListener.UserAddedSuccess -> {
+                        Toast.makeText(this@UsersActivity, "Added", Toast.LENGTH_SHORT).show()
+                    }
                     is FirebaseEventListener.Failure -> {
                         stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.usersRecyclerView)
                         Toast.makeText(this@UsersActivity, "Failed.", Toast.LENGTH_SHORT).show()
@@ -198,6 +201,9 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                                         val faveHost = FaveHost(user.id)
                                         val hashMap = hashMapOf("fave_hosts" to arrayListOf(faveHost))
                                         addFaveHost(userId!!, faveHost)
+
+                                        //dismiss
+                                        addHostBottomSheet.dismiss()
                                     }
                                 }
 

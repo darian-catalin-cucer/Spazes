@@ -508,6 +508,7 @@ class SpacesViewModel @Inject constructor(
             .document(documentName)
             .update("fave_hosts", FieldValue.arrayUnion(data))
             .addOnSuccessListener {
+                mutableFirebaseStateFlow.value = FirebaseEventListener.UserAddedSuccess
                 //when a host is added, fetch the remaining hosts
                 getFaveHosts(documentName)
             }
