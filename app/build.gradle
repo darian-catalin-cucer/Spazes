@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'//dagger hilt
     id 'com.google.gms.google-services'//google services
+    id 'com.google.firebase.crashlytics'//crashlytics
 }
 
 android {
@@ -149,6 +150,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-common-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Datastore Preferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
