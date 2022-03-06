@@ -2,6 +2,7 @@ package com.mcdev.spazes.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -53,6 +54,15 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
         val username = "@${user.username}"
         val displayName = user.name
         val userPhotoUrl = user.profileImageUrl?.getOriginalTwitterAvi()
+
+        when (user?.verified) {
+            true -> {
+                holder.binding.userVerifiedBadge.visibility = View.VISIBLE
+            }
+            else -> {
+                holder.binding.userVerifiedBadge.visibility = View.GONE
+            }
+        }
 
         holder.binding.apply {
             this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)

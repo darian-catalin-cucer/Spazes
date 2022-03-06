@@ -75,27 +75,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/favourite_hosts_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/favourite_hosts" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Favorite Hosts"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/favourite_hosts_spaces_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,6 +92,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Favorite Hosts' Spaces"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/favourite_hosts_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/favourite_hosts" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorite Hosts"
                 android:textSize="20sp" />
         </LinearLayout>
 
