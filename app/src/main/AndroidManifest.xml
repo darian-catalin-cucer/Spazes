@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.mcdev.spazes">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".HiltApplication"
-        android:allowBackup="true"
+        tools:replace="android:allowBackup"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_spazes"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_spazes"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Spazes">
-        <activity
-            android:name=".ui.HostsSpacesActivity"
-            android:exported="false" />
+        android:theme="@style/Theme.Spazes"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".ui.UsersActivity"
             android:exported="false" />
