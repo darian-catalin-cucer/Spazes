@@ -1,13 +1,13 @@
 package com.mcdev.spazes.repository
 
-import com.mcdev.spazes.service.SpacesApiService
+import com.mcdev.spazes.service.TwitterApiService
 import com.mcdev.spazes.util.Resource
 import com.mcdev.twitterapikit.response.SpaceListResponse
 import com.mcdev.twitterapikit.response.SpaceSingleResponse
 import java.lang.Exception
 import javax.inject.Inject
 
-class SpacesRepository @Inject constructor(private val spacesApiService: SpacesApiService) : MainRepository {
+class SpacesRepository @Inject constructor(private val twitterApiService: TwitterApiService) : MainRepository {
     /*search spaces by title*/
     override suspend fun getSpacesByTitle(
         token: String,
@@ -19,7 +19,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
     ): Resource<SpaceListResponse> {
 
         return try {
-            val response = spacesApiService.getSpacesByTitle(token, query, spaceFields, userFields ,expansions, topicFields)
+            val response = twitterApiService.getSpacesByTitle(token, query, spaceFields, userFields ,expansions, topicFields)
             val body = response.body()
             if (response.isSuccessful && body != null) {
                 Resource.Success(body)
@@ -44,7 +44,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
     ): Resource<SpaceListResponse> {
 
         return try {
-            val response = spacesApiService.getSpacesByIds(token, ids, spaceFields, userFields ,expansions, topicFields)
+            val response = twitterApiService.getSpacesByIds(token, ids, spaceFields, userFields ,expansions, topicFields)
             val body = response.body()
             if (response.isSuccessful && body != null) {
                 Resource.Success(body)
@@ -68,7 +68,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
         topicFields: String
     ): Resource<SpaceSingleResponse> {
         return try {
-            val response = spacesApiService.getSpacesById(
+            val response = twitterApiService.getSpacesById(
                 token,
                 id,
                 spaceFields,
@@ -99,7 +99,7 @@ class SpacesRepository @Inject constructor(private val spacesApiService: SpacesA
         topicFields: String
     ): Resource<SpaceListResponse> {
         return try {
-            val response =  spacesApiService.getSpacesByCreatorIds(token, userIds, spaceFields, userFields, expansions, topicFields)
+            val response =  twitterApiService.getSpacesByCreatorIds(token, userIds, spaceFields, userFields, expansions, topicFields)
             val body = response.body()
             if (response.isSuccessful && body != null) {
                 Resource.Success(body)

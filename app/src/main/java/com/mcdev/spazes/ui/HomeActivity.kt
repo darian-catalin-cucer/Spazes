@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
+class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
     var sQuery: String = "space"
@@ -229,7 +229,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
         return  spacesIds.joinToString(separator = ",")
     }
 
-    override fun onItemClick(spaces: Space, position: Int) {
+    override fun onSpacesItemClick(spaces: Space, position: Int) {
         val link = SPACES_URL + spaces.id
         Log.d("TAG", "onBindViewHolder: link is : $link")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

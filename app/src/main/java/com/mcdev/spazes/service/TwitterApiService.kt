@@ -2,13 +2,15 @@ package com.mcdev.spazes.service
 
 import com.mcdev.twitterapikit.response.SpaceListResponse
 import com.mcdev.twitterapikit.response.SpaceSingleResponse
+import com.mcdev.twitterapikit.response.UserListResponse
+import com.mcdev.twitterapikit.response.UserSingleResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface SpacesApiService {
+interface TwitterApiService {
 
     /*Get spaces by title*/
     @GET("/2/spaces/search")
@@ -53,4 +55,36 @@ interface SpacesApiService {
         @Query(value = "expansions") expansions: String,
         @Query(value = "topic.fields") topicFields: String
     ): Response<SpaceListResponse>
+
+
+    /*Get users by username*/
+    @GET("/2/users/by/username/{username}")
+    suspend fun getUsersByUsername(
+        @Header(value = "Authorization") token: String,
+        @Path(value = "username") username: String,
+        @Query(value = "expansions") expansions: String,
+        @Query(value = "tweet.fields") tweetFields: String,
+        @Query(value = "user.fields") userFields: String
+    ): Response<UserSingleResponse>
+
+
+    /*Get users by list of usernames*/
+    @GET(value = "/2/users/by")
+    suspend fun getUsersByUsernames(
+        @Header(value = "Authorization") token: String,
+        @Query(value = "usernames") usernames: String,
+        @Query(value = "expansions") expansions: String,
+        @Query(value = "tweet.fields") tweetFields: String,
+        @Query(value = "user.fields") userFields: String
+    ): Response<UserListResponse>
+
+    /*Get users by list of ids*/
+    @GET(value = "/2/users")
+    suspend fun getUsersByIds(
+        @Header(value = "Authorization") token: String,
+        @Query(value = "ids") ids: String,
+        @Query(value = "expansions") expansions: String,
+        @Query(value = "tweet.fields") tweetFields: String,
+        @Query(value = "user.fields") userFields: String
+    ):Response<UserListResponse>
 }

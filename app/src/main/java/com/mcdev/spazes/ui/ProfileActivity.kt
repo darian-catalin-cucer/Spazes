@@ -31,6 +31,7 @@ class ProfileActivity : AppCompatActivity() {
 
         changeStatusBarColor(R.color.white)
 
+        val userId = intent.extras?.get("userFirebaseId")
         val profileUrl = intent.extras?.get("profile_url")
         val displayName = intent.extras?.get("username")
         val userTwitterId = intent.extras?.get("userTwitterId")
@@ -58,13 +59,24 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         binding.favouriteHostsBtn.setOnClickListener {
-            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, UsersActivity::class.java)
+                .putExtra("loadAction", LoadAction.FAVE_HOSTS)
+                .putExtra("user_twitter_id", userTwitterId.toString())
+                .putExtra("user_firebase_id", userId.toString()))
         }
 
         binding.mySpacesBtn.setOnClickListener {
             startActivity(Intent(this, UserSpacesActivity::class.java)
                 .putExtra("loadAction", LoadAction.MY_SPACES)
-                .putExtra("user_twitter_id", userTwitterId.toString()))
+                .putExtra("user_twitter_id", userTwitterId.toString())
+                .putExtra("user_firebase_id", userId.toString()))
+        }
+
+        binding.favouriteHostsSpacesBtn.setOnClickListener {
+            startActivity(Intent(this, UserSpacesActivity::class.java)
+                .putExtra("loadAction", LoadAction.FAVE_HOSTS_SPACES)
+                .putExtra("user_twitter_id", userTwitterId.toString())
+                .putExtra("user_firebase_id", userId.toString()))
         }
     }
 

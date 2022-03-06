@@ -14,6 +14,7 @@ import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityUserSpacesBinding
 import com.mcdev.spazes.enums.LoadAction
 import com.mcdev.spazes.events.SpacesListEventListener
+import com.mcdev.spazes.repository.FirebaseEventListener
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
@@ -21,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListener {
+class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private lateinit var binding: ActivityUserSpacesBinding
     private val viewModel: SpacesViewModel by viewModels()
 
@@ -34,7 +35,8 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         changeStatusBarColor(R.color.white)
 
         val loadAction = intent.extras?.get("loadAction") as LoadAction
-        val userid = intent.extras?.get("user_twitter_id").toString()
+        val userTwitterId = intent.extras?.get("user_twitter_id").toString()
+        val userFirebaseId = intent.extras?.get("user_firebase_id").toString()
 
         val adapter = SpacesAdapter(this, this)
         binding.userSpacesRecyclerView.apply {
@@ -46,12 +48,19 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         when (loadAction) {
             LoadAction.MY_SPACES ->{
                 binding.titleText.text = getString(R.string.my_spaces)
-                loadMySpaces(userid)
+                loadMySpaces(userTwitterId)
             }
+            LoadAction.FAVE_HOSTS_SPACES -> {
+                binding.titleText.text = getString(R.string.favorite_hosts_spaces)
+                loadFaveHostSpaces(userTwitterId, userFirebaseId)
+            }
+            else -> {}
         }
         binding.swipeRefresh.setOnRefreshListener {
             when (loadAction) {
-                LoadAction.MY_SPACES -> loadMySpaces(userid)
+                LoadAction.MY_SPACES -> loadMySpaces(userTwitterId)
+                LoadAction.FAVE_HOSTS_SPACES -> loadFaveHostSpaces(userTwitterId, userFirebaseId)
+                else -> {}
             }
         }
 
@@ -82,17 +91,63 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
                 }
             }
         }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.fireStoreListener.collect{
+                when (it) {
+                    is FirebaseEventListener.DocumentSuccess -> {
+//                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.userSpacesRecyclerView)
+
+                        val hostIds: ArrayList<HashMap<String, String>> = it.data?.get("fave_hosts") as ArrayList<HashMap<String, String>>
+                        val ids = getTheIDs(hostIds)
+                        //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
+
+                        if (ids.isBlank()) {
+                            showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.userSpacesRecyclerView, R.string.no_spaces_found)
+                        } else {
+                            getFaveHostSpaces(ids)
+                        }
+                    }
+                    is FirebaseEventListener.Failure -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.userSpacesRecyclerView)
+                        Toast.makeText(this@UserSpacesActivity, "Failed.", Toast.LENGTH_SHORT).show()
+                    }
+                    is FirebaseEventListener.Empty -> {
+                        stopLoading(binding.swipeRefresh, binding.recyclerMessage, binding.userSpacesRecyclerView)
+                        showEmpty(binding.swipeRefresh, binding.recyclerMessage, binding.userSpacesRecyclerView, R.string.no_spaces_found)
+                    }
+                    is FirebaseEventListener.Loading -> {
+                        startLoading(binding.swipeRefresh, binding.recyclerMessage)
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     private fun loadMySpaces(id: String) {
-        viewModel.searchSpacesByCreatorIds(
-            "BEARER $BEARER_TOKEN",
-             id,
-            "created_at,creator_id,ended_at,host_ids,id,invited_user_ids,is_ticketed,lang,participant_count,scheduled_start,speaker_ids,started_at,state,title,topic_ids,updated_at",
-            "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld",
-            "invited_user_ids,speaker_ids,creator_id,host_ids",
-            "description,id,name"
-        )
+        viewModel.searchSpacesByCreatorIds(ids = id)
+    }
+
+    private fun loadFaveHostSpaces(userTwitterId: String, userFirebaseId: String) {
+        getFaveHosts(userFirebaseId)
+    }
+
+    private fun getFaveHosts(userId: String) {
+        viewModel.getFaveHosts(userId)
+    }
+
+    private fun getFaveHostSpaces(ids: String) {
+        viewModel.searchSpacesByCreatorIds(ids = ids)
+    }
+
+    private fun getTheIDs(result: ArrayList<HashMap<String, String>>): String{
+        val theIDs = mutableListOf<String>()
+        for (document in result) {
+            theIDs.add(document["hostId"]!!)
+        }
+        //joinToString method will put them in a string and separator will separate without whitespaces
+        return  theIDs.joinToString(separator = ",")
     }
 
     private fun startLoading() {
@@ -129,7 +184,7 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnItemClickListene
         binding.recyclerMessage.visibility = View.VISIBLE
     }
 
-    override fun onItemClick(spaces: Space, position: Int) {
+    override fun onSpacesItemClick(spaces: Space, position: Int) {
         val link = SPACES_URL + spaces.id
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
         startActivity(intent)
