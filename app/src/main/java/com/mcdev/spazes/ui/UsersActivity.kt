@@ -158,9 +158,13 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
 
         bottomSheetBinding.bottomSheetSearch.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
+            override fun onQueryTextSubmit(searchQuery: String?): Boolean {
+                var query = searchQuery
                 if (query.isNullOrBlank().not()) {
-                    getUserByUsername(query!!.trim())
+                    if (query!!.startsWith("@"))
+                        query = query.removePrefix("@")
+
+                    getUserByUsername(query.trim())
 
                     lifecycleScope.launchWhenStarted {
                         viewModel.findUserByUsername.collect {
