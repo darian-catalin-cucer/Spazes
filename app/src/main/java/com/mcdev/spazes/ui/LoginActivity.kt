@@ -101,6 +101,7 @@ class LoginActivity : AppCompatActivity() {
                     is LoginEventListener.Failure -> {
                         loadingDialog.dismiss()
                         Log.d("TAG", "onCreate: it failed oh")
+                        Toast.makeText(this@LoginActivity, "Failed", Toast.LENGTH_SHORT).show()
                     }
                     is LoginEventListener.PreLoad -> {
                         Log.d("TAG", "onCreate: preload oh")
@@ -158,10 +159,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?, userTwitterId: String?, userTwitterHandle: String?): Intent {
