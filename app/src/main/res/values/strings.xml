@@ -11,8 +11,6 @@
     <string name="login">Login</string>
     <string name="profile">profile</string>
     <string name="settings">settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_with_twitter">Login with Twitter</string>
     <string name="my_spaces">My Spaces</string>
     <string name="logout">LOGOUT</string>
@@ -26,4 +24,6 @@
     <string name="favorite_hosts_spaces">Favorite Hosts\' Spaces</string>
     <string name="add_favourite_host">Add favourite host</string>
     <string name="username">\@username</string>
+    <string name="sign_in_features_details">✔️ Track live and scheduled spaces you host.\n\n✔️ Follow your favorite Twitter space hosts.\n\n✔️ Find live and scheduled spaces of all your fave hosts in one place.</string>
+    <string name="sign_in_features_title">Sign in Features</string>
 </resources>
