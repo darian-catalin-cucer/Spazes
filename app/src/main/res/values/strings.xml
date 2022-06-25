@@ -20,6 +20,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="no_hosts_found">No hosts found</string>
+    <string name="user_not_found">User not found</string>
     <string name="favorite_hosts">Favorite Hosts</string>
     <string name="favorite_hosts_spaces">Favorite Hosts\' Spaces</string>
     <string name="add_favourite_host">Add favourite host</string>

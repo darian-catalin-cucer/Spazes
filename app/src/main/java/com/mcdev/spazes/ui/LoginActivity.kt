@@ -29,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
     private var userTwitterId: String? = null
     private var userTwitterHandle: String? = null
     private var userId: String? = null
+    private var userDisplayName: String? = null
+    private var userDisplayPhoto: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +44,8 @@ class LoginActivity : AppCompatActivity() {
             userTwitterId = viewModel.readDatastore("user_twitter_id")
             userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
             userId = viewModel.readDatastore("user_firebase_id")
+            userDisplayName = viewModel.readDatastore("user_display_name")
+            userDisplayPhoto = viewModel.readDatastore("user_display_photo")
         }
 
 
@@ -70,6 +74,8 @@ class LoginActivity : AppCompatActivity() {
                         val userFirebaseId = it.data.user!!.uid
                         val id = it.data.additionalUserInfo?.profile?.get("id").toString()
                         val handle = it.data.additionalUserInfo?.username.toString()
+                        val displayname = it.data.user!!.displayName
+                        val displayPhoto = it.data.user!!.photoUrl
 
                         val userHashMap = hashMapOf(
                             "user_id" to it.data.user?.uid,
@@ -85,6 +91,8 @@ class LoginActivity : AppCompatActivity() {
                         viewModel.saveOrUpdateDatastore("user_twitter_id", id)
                         viewModel.saveOrUpdateDatastore("user_twitter_handle", handle)
                         viewModel.saveOrUpdateDatastore("user_firebase_id", userFirebaseId)
+                        viewModel.saveOrUpdateDatastore("user_display_name", displayname!!)
+                        viewModel.saveOrUpdateDatastore("user_display_photo", displayPhoto!!.toString())
 
 
                         //save user to firebase fireStore
@@ -96,6 +104,8 @@ class LoginActivity : AppCompatActivity() {
                         viewModel.saveOrUpdateDatastore("user_twitter_id", "")
                         viewModel.saveOrUpdateDatastore("user_twitter_handle", "")
                         viewModel.saveOrUpdateDatastore("user_firebase_id", "")
+                        viewModel.saveOrUpdateDatastore("user_display_name", "")
+                        viewModel.saveOrUpdateDatastore("user_display_photo", "")
                         Log.d("TAG", "onCreate: user is signed out oh")
                     }
                     is LoginEventListener.Failure -> {
@@ -124,6 +134,8 @@ class LoginActivity : AppCompatActivity() {
                         userTwitterId = viewModel.readDatastore("user_twitter_id")
                         userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
                         userId = viewModel.readDatastore("user_firebase_id")
+                        userDisplayName = viewModel.readDatastore("user_display_name")
+                        userDisplayPhoto = viewModel.readDatastore("user_display_photo")
                         startActivity(goToProfileActivity(this@LoginActivity, curr, userTwitterId, userTwitterHandle))
                         finish()
                         loadingDialog.dismiss()
@@ -163,10 +175,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?, userTwitterId: String?, userTwitterHandle: String?): Intent {
         return Intent(applicationContext, ProfileActivity::class.java)
-            .putExtra("profile_url", currUser?.photoUrl)
+            .putExtra("userDisplayPhoto", userDisplayPhoto)
             .putExtra("userTwitterId", userTwitterId)
             .putExtra("userTwitterHandle", userTwitterHandle)
-            .putExtra("username", currUser?.displayName)
+            .putExtra("username", userDisplayName)
             .putExtra("userFirebaseId", currUser?.uid)
     }
 

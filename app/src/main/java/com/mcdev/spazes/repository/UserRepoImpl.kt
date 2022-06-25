@@ -74,4 +74,26 @@ class UserRepoImpl @Inject constructor(private val twitterApiService: TwitterApi
             Resource.Error(e.message ?: "An error occurred")
         }
     }
+
+    override suspend fun getUserById(
+        token: String,
+        id: String,
+        expansions: String,
+        tweetFields: String,
+        userFields: String
+    ): Resource<UserSingleResponse> {
+        return try {
+            val response = twitterApiService.getUserById(token, id, expansions, tweetFields, userFields)
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                Resource.Success(body)
+            } else if (response.isSuccessful && body?.meta?.resultCount == 0) {
+                Resource.Empty(body)
+            } else {
+                Resource.Error(response.body()?.detail!!)
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An error occurred")
+        }
+    }
 }

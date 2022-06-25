@@ -65,6 +65,7 @@ class SpacesViewModel @Inject constructor(
     val search: StateFlow<SpacesListEventListener> = mutableListStateFlow
     val fireStoreListener: StateFlow<FirebaseEventListener> = mutableFirebaseStateFlow
     val findUserByUsername : StateFlow<UserSingleEventListener> = mutableSingleUserStateFlow
+    val findUserById : StateFlow<UserSingleEventListener> = mutableSingleUserStateFlow
     val findUsersByUserNames: StateFlow<UserListEventListener> = mutableListUserStateFlow
 
     /*search spaces by query*/
@@ -350,6 +351,43 @@ class SpacesViewModel @Inject constructor(
                 else -> {
                     mutableListUserStateFlow.value =
                         UserListEventListener.Failure(userListResponse.error)
+                }
+            }
+        }
+    }
+
+    fun getUserById(
+        token: String = "BEARER $BEARER_TOKEN",
+        id: String,
+        expansions: String = UsersExpansion.PINNED_TWEET_ID.value,
+        tweetFields: String = TweetField.ALL_DEFAULT.value,
+        userFields: String = "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
+    ) {
+        viewModelScope.launch(dispatchProvider.io) {
+            mutableSingleUserStateFlow.value = UserSingleEventListener.Loading
+            when (val userSingleResponse = usersMainRepository.getUserById(
+                token,
+                id,
+                expansions,
+                tweetFields,
+                userFields
+            )) {
+                is Resource.Success -> {
+                    val user = userSingleResponse.data
+
+                    if (user?.data != null) {
+                        mutableSingleUserStateFlow.value = UserSingleEventListener.Success(user)
+                    } else {
+                        mutableSingleUserStateFlow.value = UserSingleEventListener.Empty(R.string.user_not_found)
+                    }
+                }
+                is Resource.Error -> {
+                    mutableSingleUserStateFlow.value =
+                        UserSingleEventListener.Failure(userSingleResponse.data?.detail)
+                }
+                else -> {
+                    mutableSingleUserStateFlow.value =
+                        UserSingleEventListener.Failure(userSingleResponse.error)
                 }
             }
         }

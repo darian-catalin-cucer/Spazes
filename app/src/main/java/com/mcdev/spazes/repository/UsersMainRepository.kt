@@ -31,4 +31,12 @@ interface UsersMainRepository {
         tweetFields: String,
         userFields: String
     ): Resource<UserListResponse>
+
+    suspend fun getUserById(
+        token: String,
+        id: String,
+        expansions: String,
+        tweetFields: String,
+        userFields: String
+    ): Resource<UserSingleResponse>
 }
