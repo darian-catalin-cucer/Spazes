@@ -27,6 +27,7 @@
     <string name="username">\@username</string>
     <string name="sign_in_features_details">✔️ Track live and scheduled spaces you host.\n\n✔️ Follow your favorite Twitter space hosts.\n\n✔️ Find live and scheduled spaces of all your fave hosts in one place.</string>
     <string name="sign_in_features_title">Sign in Features</string>
+    <string name="customactivityoncrash_error_activity_error_occurred_explanation">Spazes experienced an unexpected error.\nSorry for the inconvenience.</string>
     <string name="get_started">Get Started</string>
     <string name="search_and_find">Search and Find</string>
     <string name="search_and_find_details">Search and find Twitter spaces and join in.</string>
