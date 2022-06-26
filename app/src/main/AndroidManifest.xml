@@ -15,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spazes"
         android:dataExtractionRules="@xml/data_extraction_rules">
+        <activity android:name=".ui.AppIntro"
+            android:label="Spazes AppIntro" />
         <activity
             android:name=".ui.UsersActivity"
             android:exported="false" />
