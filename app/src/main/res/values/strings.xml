@@ -28,4 +28,13 @@
     <string name="sign_in_features_details">✔️ Track live and scheduled spaces you host.\n\n✔️ Follow your favorite Twitter space hosts.\n\n✔️ Find live and scheduled spaces of all your fave hosts in one place.</string>
     <string name="sign_in_features_title">Sign in Features</string>
     <string name="customactivityoncrash_error_activity_error_occurred_explanation">Spazes experienced an unexpected error.\nSorry for the inconvenience.</string>
+    <string name="get_started">Get Started</string>
+    <string name="search_and_find">Search and Find</string>
+    <string name="search_and_find_details">Search and find Twitter spaces and join in.</string>
+    <string name="live_spaces_title">Live Twitter Spaces</string>
+    <string name="live_spaces_details">Join in on live spaces.</string>
+    <string name="follow_hosts_title">Follow Hosts</string>
+    <string name="follow_hosts_details">Follow your favorite Twitter Spaces hosts.</string>
+    <string name="all_in_one_placea_title">All in one place</string>
+    <string name="all_in_one_place_details">Find all live and scheduled Twitter spaces of your favorite hosts all in one place.</string>
 </resources>

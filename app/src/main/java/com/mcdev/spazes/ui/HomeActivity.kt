@@ -26,6 +26,7 @@ import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
@@ -33,6 +34,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
     private val binding get() = _binding!!
     var sQuery: String = "space"
     private val viewModel: SpacesViewModel by viewModels()
+    private var showAppIntro: Boolean? = false
 
     private var refreshType: RefreshType = RefreshType.featured_refresh
 
@@ -43,6 +45,13 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
         val view = binding.root
         setContentView(view)
 
+        runBlocking {
+            showAppIntro = viewModel.readAppIntroDatastore("show_app_intro")
+        }
+
+        if (showAppIntro == null || showAppIntro == true) {
+            startActivity(Intent(this, AppIntro::class.java))
+        }
         binding.lineChartLottie.frame = 130
 
         val adapter = SpacesAdapter(this, this)
