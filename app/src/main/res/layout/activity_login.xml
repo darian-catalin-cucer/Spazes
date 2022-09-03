@@ -73,7 +73,7 @@
         android:text="@string/login_with_twitter"
         android:layout_margin="20dp"
         android:textSize="20sp"
-        android:textColor="@color/white"
+        android:textColor="#439BE8"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="15dp"
