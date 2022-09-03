@@ -27,6 +27,7 @@ class AppIntro: AppIntro() {
         isSkipButtonEnabled = false // disable skip button
         setNextArrowColor(getColor(R.color.purple_200)) // set color for the next arrow button
         setDoneText(getString(R.string.get_started))
+        setStatusBarColorRes(android.R.color.transparent)
 
         // Change Indicator Color
         setIndicatorColor(
