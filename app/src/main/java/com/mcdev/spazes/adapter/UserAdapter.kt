@@ -52,32 +52,24 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
         val users = usersDiffer.currentList
         val user = usersDiffer.currentList[position]
 
-        val username = "@${user.username}"
         val displayName = user.name
         val userPhotoUrl = user.profileImageUrl?.getOriginalTwitterAvi()
-        //val isVerified = user.verified
+        val isVerified = user.verified
 
-//        when (user?.verified) {
-//            true -> {
-//                holder.binding.userVerifiedBadge.visibility = View.VISIBLE
-//            }
-//            else -> {
-//                holder.binding.userVerifiedBadge.visibility = View.GONE
-//            }
-//        }
 
         holder.binding.apply {
             this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)
             this.userAvi.setImageURI(userPhotoUrl)
             this.addRemoveBtn.setActualImageResource(R.drawable.minus)
-            this.userName.text = username
-//            this.userDisplayName.text = displayName
+            this.userName.apply {
+                username = user.username
+            }
             this.userDisplayName.apply {
                 customizeDisplayName.apply {
                     textSize = 17f
                     setTypeface(this.typeface, Typeface.BOLD)
                 }
-                setDisplayName(displayName!!, user.verified)
+                setDisplayName(displayName!!, isVerified)
             }
         }
 

@@ -184,8 +184,9 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                                         R.drawable.plus
                                     )
                                     bottomSheetBinding.userDetails.userAvi.setImageURI(user.profileImageUrl?.getOriginalTwitterAvi())
-                                    bottomSheetBinding.userDetails.userName.text = user.username
-//                                    bottomSheetBinding.userDetails.userDisplayName.text = user.name
+                                    bottomSheetBinding.userDetails.userName.apply {
+                                        username = user.username
+                                    }
                                     bottomSheetBinding.userDetails.userDisplayName.apply {
                                         customizeDisplayName.apply {
                                             textSize = 17f
@@ -193,13 +194,6 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                                         }
                                         setDisplayName(user.name!!, user.verified)
                                     }
-//                                    if (user.verified) {
-//                                        bottomSheetBinding.userDetails.userVerifiedBadge.visibility =
-//                                            View.VISIBLE
-//                                    } else {
-//                                        bottomSheetBinding.userDetails.userVerifiedBadge.visibility =
-//                                            View.GONE
-//                                    }
 
                                     bottomSheetBinding.progressAnimationView.visibility = View.GONE
                                     bottomSheetBinding.userDetails.root.visibility = View.VISIBLE
