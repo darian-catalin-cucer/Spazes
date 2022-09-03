@@ -17,6 +17,7 @@ import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.formatDateAndTime
 import com.mcdev.spazes.getOriginalTwitterAvi
+import com.mcdev.tweeze.util.VerifiedBadge
 import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
 import com.mcdev.twitterapikit.model.SpaceState
@@ -82,7 +83,7 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
 
 
         holder.binding.twitterDisplayNameView.customizeDisplayName.setTextColor(Color.WHITE)
-        holder.binding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified)//creator's name with verification status
+        holder.binding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified,VerifiedBadge.WHITE)//creator's name with verification status
 
         holder.binding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
         holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
