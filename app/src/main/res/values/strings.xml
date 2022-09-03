@@ -37,4 +37,5 @@
     <string name="follow_hosts_details">Follow your favorite Twitter Spaces hosts.</string>
     <string name="all_in_one_placea_title">All in one place</string>
     <string name="all_in_one_place_details">Find all live and scheduled Twitter spaces of your favorite hosts all in one place.</string>
+    <string name="splash_screen_logo_text">splash screen logo</string>
 </resources>
