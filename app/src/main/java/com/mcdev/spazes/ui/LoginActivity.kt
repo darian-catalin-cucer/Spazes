@@ -151,6 +151,9 @@ class LoginActivity : AppCompatActivity() {
                     is FirebaseEventListener.Loading -> {
 //                        loadingDialog.show(supportFragmentManager, "")
                     }
+                    else -> {
+                        Log.d("TAG", "onCreate: else branch called")
+                    }
                 }
             }
         }

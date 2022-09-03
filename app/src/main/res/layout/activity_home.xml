@@ -140,44 +140,12 @@
                 android:gravity="center"
                 android:descendantFocusability="blocksDescendants">
 
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/empty_lottie_lay"
+                <com.mcdev.spazes.components.NoSpaceComponent
+                    android:id="@+id/no_space_component_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentTop="true">
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/empty_lottie"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:paddingTop="1dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        android:visibility="gone"
-                        app:lottie_rawRes="@raw/astronaut"/>
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/empty_feature_lottie"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="1dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        android:visibility="gone"
-                        app:lottie_rawRes="@raw/not_found"
-                        android:layout_marginBottom="80dp"/>
-                </androidx.appcompat.widget.LinearLayoutCompat>
-                <TextView
-                    android:id="@+id/recycler_message"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:paddingTop="10dp"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_below="@id/empty_lottie_lay"/>
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"

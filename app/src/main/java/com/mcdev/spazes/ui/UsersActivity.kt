@@ -148,6 +148,9 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                     is FirebaseEventListener.Loading -> {
                         startLoading(binding.swipeRefresh, binding.recyclerMessage)
                     }
+                    else -> {
+                        Log.d("TAG", "onCreate: else branch called")
+                    }
                 }
             }
         }

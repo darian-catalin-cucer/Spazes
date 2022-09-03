@@ -500,7 +500,7 @@ class SpacesViewModel @Inject constructor(
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     mutableFirebaseStateFlow.value =
-                        FirebaseEventListener.Empty(R.string.no_spaces_found)
+                        FirebaseEventListener.Empty(R.string.no_trending_space)
                 } else {
                     mutableFirebaseStateFlow.value = FirebaseEventListener.Success(it)
                 }

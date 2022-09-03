@@ -128,7 +128,11 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
                         val theIDS = getTheIDs(it.data!!)
                         //if the id list is empty or null, just display the empty message, otherwise you will be making query to the API with no ID at all which will throw an error
                         if (theIDS.isEmpty()) {
-                            showEmpty(R.string.no_featured_spaces)
+                            when (refreshType) {
+                                RefreshType.featured_refresh -> showEmpty(R.string.no_featured_spaces)
+                                RefreshType.trending_refresh -> showEmpty(R.string.no_trending_space)
+                                RefreshType.search_refresh -> showEmpty(R.string.no_spaces_found)
+                            }
                         } else {
                             querySpacesByListOfIds(theIDS, DBCollections.Featured.toString())
                         }
@@ -143,6 +147,9 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
                     }
                     is FirebaseEventListener.Loading -> {
                         startLoading()
+                    }
+                    else -> {
+                        Log.d("TAG", "onCreate: else branch called")
                     }
                 }
             }
@@ -172,37 +179,24 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
 
     private fun startLoading() {
         binding.swipeRefresh.isRefreshing = true
-        binding.emptyLottie.visibility = View.GONE
-        binding.emptyFeatureLottie.visibility = View.GONE
-        binding.recyclerMessage.visibility = View.GONE
-        //binding.recyclerView.visibility = View.GONE
-        //binding.recyclerMessage.visibility = View.GONE
+        binding.noSpaceComponentView.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
     }
 
     private fun stopLoading() {
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.VISIBLE
-        binding.emptyLottie.visibility = View.GONE
-        binding.emptyFeatureLottie.visibility = View.GONE
-        binding.recyclerMessage.visibility = View.GONE
+        binding.noSpaceComponentView.visibility = View.GONE
     }
 
 
     private fun showEmpty(message: Int) {
-        when (message) {
-            R.string.no_spaces_found -> {
-                binding.emptyFeatureLottie.visibility = View.GONE
-                binding.emptyLottie.visibility = View.VISIBLE
-            }
-            else -> {
-                binding.emptyLottie.visibility = View.GONE
-                binding.emptyFeatureLottie.visibility = View.GONE
-            }
+        binding.noSpaceComponentView.apply {
+            this.lottieMessage = resources.getString(message)
+            visibility = View.VISIBLE
         }
-        binding.recyclerMessage.text = applicationContext.getString(message)
         binding.swipeRefresh.isRefreshing = false
         binding.recyclerView.visibility = View.GONE
-        binding.recyclerMessage.visibility = View.VISIBLE
     }
 
     private fun makeQuery(query: String) {
