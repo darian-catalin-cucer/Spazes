@@ -19,8 +19,8 @@
             <KeyAttribute
                 app:motionTarget="@+id/ss_lay"
                 app:framePosition="20"
-                android:scaleX="1.1"
-                android:scaleY="1.1"/>
+                android:scaleX="0.8"
+                android:scaleY="0.8"/>
         </KeyFrameSet>
     </Transition>
 </MotionScene>
