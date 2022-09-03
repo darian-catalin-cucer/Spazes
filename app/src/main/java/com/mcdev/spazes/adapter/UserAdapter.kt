@@ -1,6 +1,7 @@
 package com.mcdev.spazes.adapter
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,22 +55,30 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
         val username = "@${user.username}"
         val displayName = user.name
         val userPhotoUrl = user.profileImageUrl?.getOriginalTwitterAvi()
+        //val isVerified = user.verified
 
-        when (user?.verified) {
-            true -> {
-                holder.binding.userVerifiedBadge.visibility = View.VISIBLE
-            }
-            else -> {
-                holder.binding.userVerifiedBadge.visibility = View.GONE
-            }
-        }
+//        when (user?.verified) {
+//            true -> {
+//                holder.binding.userVerifiedBadge.visibility = View.VISIBLE
+//            }
+//            else -> {
+//                holder.binding.userVerifiedBadge.visibility = View.GONE
+//            }
+//        }
 
         holder.binding.apply {
             this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)
             this.userAvi.setImageURI(userPhotoUrl)
-            this.userName.text = username
-            this.userDisplayName.text = displayName
             this.addRemoveBtn.setActualImageResource(R.drawable.minus)
+            this.userName.text = username
+//            this.userDisplayName.text = displayName
+            this.userDisplayName.apply {
+                customizeDisplayName.apply {
+                    textSize = 17f
+                    setTypeface(this.typeface, Typeface.BOLD)
+                }
+                setDisplayName(displayName!!, user.verified)
+            }
         }
 
 
