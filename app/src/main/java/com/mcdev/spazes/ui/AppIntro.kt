@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
+import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.AppIntroPageTransformerType
 import com.mcdev.spazes.R
@@ -12,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class AppIntro: AppIntro() {
+class AppIntro: AppIntro2() {
     private val viewModel: SpacesViewModel by viewModels()
 
 
@@ -26,7 +27,7 @@ class AppIntro: AppIntro() {
         isSystemBackButtonLocked = true // lock back button
         isSkipButtonEnabled = false // disable skip button
         setNextArrowColor(getColor(R.color.purple_200)) // set color for the next arrow button
-        setDoneText(getString(R.string.get_started))
+        //setDoneText(getString(R.string.get_started))
         setStatusBarColorRes(android.R.color.transparent)
 
         // Change Indicator Color
