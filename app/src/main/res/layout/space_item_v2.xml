@@ -72,33 +72,39 @@
             android:ellipsize="end"
             android:textColor="@android:color/white"/>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <com.mcdev.tweeze.TwitterDisplayNameView
+            android:id="@+id/twitter_display_name_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_above="@+id/speaker_avi"
-            android:layout_marginBottom="5dp">
-            <TextView
-                android:id="@+id/participants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@color/white"
-                android:layout_gravity="center"/>
+            android:layout_above="@id/speaker_avi"
+            android:layout_marginBottom="5dp" />
+<!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_above="@+id/speaker_avi"-->
+<!--            android:layout_marginBottom="5dp">-->
+<!--            <TextView-->
+<!--                android:id="@+id/participants"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:maxLines="1"-->
+<!--                android:ellipsize="end"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:layout_gravity="center"/>-->
 
-            <ImageView
-                android:id="@+id/host_verified_badge"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_twitter_verified_badge_white"
-                android:layout_toEndOf="@id/participants"
-                android:layout_alignEnd="@id/participants"
-                android:layout_margin="5dp"
-                android:layout_gravity="bottom"
-                android:visibility="gone"
-                android:contentDescription="verified badge" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
+<!--            <ImageView-->
+<!--                android:id="@+id/host_verified_badge"-->
+<!--                android:layout_width="15dp"-->
+<!--                android:layout_height="15dp"-->
+<!--                android:src="@drawable/ic_twitter_verified_badge_white"-->
+<!--                android:layout_toEndOf="@id/participants"-->
+<!--                android:layout_alignEnd="@id/participants"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:visibility="gone"-->
+<!--                android:contentDescription="verified badge" />-->
+<!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
 
 
     <com.facebook.drawee.view.SimpleDraweeView

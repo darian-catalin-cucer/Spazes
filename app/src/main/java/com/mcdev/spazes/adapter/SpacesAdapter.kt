@@ -1,6 +1,7 @@
 package com.mcdev.spazes.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.icu.number.Notation
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
@@ -80,23 +81,12 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
         }
 
 
-        holder.binding.participants.text = creator?.name //creator's name
-        when (creator?.verified) {
-            true -> {
-                holder.binding.hostVerifiedBadge.visibility = View.VISIBLE
-            }
-            else -> {
-                holder.binding.hostVerifiedBadge.visibility = View.GONE
-            }
-        }
+        holder.binding.twitterDisplayNameView.customizeDisplayName.setTextColor(Color.WHITE)
+        holder.binding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified)//creator's name with verification status
+
         holder.binding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
         holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
         holder.binding.title.text = title ?: "${creator?.name}'s Space"
-//        if (title.isNullOrBlank().not()) {
-//            holder.binding.title.text = title
-//        } else {
-//            holder.binding.title.text = "${creator?.name}'s Space"
-//        }
 
         when (space.state) {
             SpaceState.LIVE.value -> {

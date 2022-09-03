@@ -162,4 +162,7 @@ dependencies {
 
     // App intro
     implementation 'com.github.AppIntro:AppIntro:6.2.0'
+
+    // Tweeze
+    implementation 'com.github.kojofosu:Tweeze:1.1.0'
 }
