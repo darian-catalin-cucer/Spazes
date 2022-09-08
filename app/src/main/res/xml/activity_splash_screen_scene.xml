@@ -14,13 +14,22 @@
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
         app:autoTransition="animateToEnd"
-        app:duration="1500">
+        app:duration="1800">
         <KeyFrameSet >
             <KeyAttribute
                 app:motionTarget="@+id/ss_lay"
-                app:framePosition="20"
-                android:scaleX="0.8"
-                android:scaleY="0.8"/>
+                app:framePosition="5"
+                android:scaleX="1.09"
+                android:scaleY="1.09"/>
         </KeyFrameSet>
+
+        <KeyFrameSet >
+            <KeyAttribute
+                app:motionTarget="@+id/ss_lay"
+                app:framePosition="50"
+                android:scaleX="0.98"
+                android:scaleY="0.98"/>
+        </KeyFrameSet>
+
     </Transition>
 </MotionScene>
