@@ -4,21 +4,22 @@
     android:layout_height="200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minHeight="200dp"
-    android:layout_margin="@dimen/search_margin_dimen"
     app:cardCornerRadius="@dimen/card_radius_dimen"
-    app:cardElevation="@dimen/card_elevation_dimen">
+    app:cardElevation="0dp"
+    android:elevation="0dp">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/bg_speaker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:foreground="@drawable/transparent_gradient"
-        android:scaleType="fitStart"/>
+        android:scaleType="fitStart"
+        app:roundedCornerRadius="20dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp">
+        android:layout_margin="20dp">
 
 
         <TextView
@@ -44,7 +45,6 @@
                 android:id="@+id/state_live_view"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                app:lottie_rawRes="@raw/bluewaveform"
                 app:lottie_autoPlay="true"
                 app:lottie_speed="0.5"
                 app:lottie_loop="true"

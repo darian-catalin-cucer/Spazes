@@ -37,7 +37,6 @@
                 android:id="@+id/state_live_view"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                app:lottie_rawRes="@raw/bluewaveform"
                 app:lottie_autoPlay="true"
                 app:lottie_speed="0.5"
                 app:lottie_loop="true"

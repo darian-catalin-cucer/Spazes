@@ -165,4 +165,7 @@ dependencies {
 
     // Tweeze
     implementation 'com.github.kojofosu:tweeze:1.1.1'
+
+    // Theme manager
+    implementation "com.dolatkia:animated-theme-manager:1.1.4"
 }

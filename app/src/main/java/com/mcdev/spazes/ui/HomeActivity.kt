@@ -172,7 +172,7 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
         }
 
         binding.settingsBtn.setOnClickListener {
-            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
         }
 
     }
