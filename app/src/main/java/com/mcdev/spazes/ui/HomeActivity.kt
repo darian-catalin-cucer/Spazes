@@ -90,7 +90,7 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
         if (showAppIntro == null || showAppIntro == true) {
             startActivity(Intent(this, AppIntro::class.java))
         }
-        binding.lineChartLottie.frame = 130
+        //binding.lineChartLottie.frame = 130
 
         spacesAdapter = SpacesAdapter(this, this, themeMode)
         binding.recyclerView.apply {
@@ -197,17 +197,17 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
             }
         }
 
-        binding.featuredLay.setOnClickListener {
-            binding.fireLottie.playAnimation()
-            viewModel.getFeaturedSpaces()
-            refreshType = RefreshType.featured_refresh
-        }
+//        binding.featuredLay.setOnClickListener {
+//            binding.fireLottie.playAnimation()
+//            viewModel.getFeaturedSpaces()
+//            refreshType = RefreshType.featured_refresh
+//        }
 
-        binding.trendingLay.setOnClickListener {
-            binding.lineChartLottie.playAnimation()
-            viewModel.getTrendingSpaces()
-            refreshType = RefreshType.trending_refresh
-        }
+//        binding.trendingLay.setOnClickListener {
+//            binding.lineChartLottie.playAnimation()
+//            viewModel.getTrendingSpaces()
+//            refreshType = RefreshType.trending_refresh
+//        }
 
         binding.profileBtn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))

@@ -76,52 +76,52 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/featured_lay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/fire_lottie"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    app:lottie_rawRes="@raw/trend_fire_purple"
-                    android:scaleType="centerCrop"
-                    android:layout_marginStart="10dp"/>
-                <TextView
-                    android:id="@+id/featured_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/featured_text"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
+<!--            <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--                android:id="@+id/featured_lay"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/fire_lottie"-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    app:lottie_rawRes="@raw/trend_fire_purple"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:layout_marginStart="10dp"/>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/featured_btn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/featured_text"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:gravity="start"/>-->
+<!--            </androidx.appcompat.widget.LinearLayoutCompat>-->
 
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/trending_lay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/line_chart_lottie"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    app:lottie_rawRes="@raw/line_chart"
-                    android:scaleType="centerCrop"
-                    android:layout_marginStart="40dp"/>
-                <TextView
-                    android:id="@+id/trending_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/trending_text"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
+<!--            <androidx.appcompat.widget.LinearLayoutCompat-->
+<!--                android:id="@+id/trending_lay"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+<!--                <com.airbnb.lottie.LottieAnimationView-->
+<!--                    android:id="@+id/line_chart_lottie"-->
+<!--                    android:layout_width="40dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    app:lottie_rawRes="@raw/line_chart"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:layout_marginStart="40dp"/>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/trending_btn"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/trending_text"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:gravity="start"/>-->
+<!--            </androidx.appcompat.widget.LinearLayoutCompat>-->
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

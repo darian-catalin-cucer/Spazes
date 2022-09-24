@@ -9,5 +9,8 @@
         android:id="@+id/space_component_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="22dp"/>
+        android:background="@android:color/transparent"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

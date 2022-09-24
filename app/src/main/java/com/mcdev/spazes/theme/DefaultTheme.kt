@@ -12,7 +12,7 @@ class DefaultTheme: BaseTheme {
     override fun textColor(): Int = R.color.white
 
     override fun cardBg(): Int = android.R.color.transparent
-    override fun activityBgColor(context: Context): Int = ContextCompat.getColor(context, R.color.white)
+    override fun activityBgColor(context: Context): Int = ContextCompat.getColor(context, R.color.light_activity_bg_color)
     override fun statusBarColor(): Int = R.color.app_purple
 
     override fun lottieColor(): Int = R.color.purple_500
