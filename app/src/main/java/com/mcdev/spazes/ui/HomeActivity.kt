@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.firebase.firestore.QuerySnapshot
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
@@ -20,6 +22,10 @@ import com.mcdev.spazes.databinding.ActivityHomeBinding
 import com.mcdev.spazes.enums.RefreshType
 import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DarkTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.viewmodel.SpacesViewModel
@@ -29,14 +35,34 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
+class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private var _binding: ActivityHomeBinding? = null
     private val binding get() = _binding!!
     var sQuery: String = "space"
     private val viewModel: SpacesViewModel by viewModels()
     private var showAppIntro: Boolean? = false
+    private var themeMode : AppTheme = DefaultTheme()
+    private lateinit var spacesAdapter : SpacesAdapter
 
     private var refreshType: RefreshType = RefreshType.featured_refresh
+    override fun getStartTheme(): AppTheme {
+        var getTheme : String? = null
+        runBlocking {
+            getTheme = viewModel.readDatastore("themeMode")
+        }
+
+
+        themeMode =  when (getTheme) {
+            "0" -> DefaultTheme()
+            "1" -> LightTheme()
+            "2" -> DarkTheme()
+            else -> {
+                DefaultTheme()
+            }
+        }
+
+        return themeMode
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +71,20 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
         val view = binding.root
         setContentView(view)
 
+        var getTheme: String? = null
         runBlocking {
             showAppIntro = viewModel.readAppIntroDatastore("show_app_intro")
+            getTheme = viewModel.readDatastore("themeMode")
+        }
+
+
+        themeMode =  when (getTheme) {
+            "0" -> DefaultTheme()
+            "1" -> LightTheme()
+            "2" -> DarkTheme()
+            else -> {
+                DefaultTheme()
+            }
         }
 
         if (showAppIntro == null || showAppIntro == true) {
@@ -54,12 +92,15 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
         }
         binding.lineChartLottie.frame = 130
 
-        val adapter = SpacesAdapter(this, this)
+        spacesAdapter = SpacesAdapter(this, this, themeMode)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@HomeActivity)
             itemAnimator = null
-            this.adapter = adapter
+            this.adapter = spacesAdapter
         }
+
+
+
 
         changeStatusBarColor(R.color.white)
         /*get featured spaces*/
@@ -105,10 +146,11 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
                 when (it) {
                     is SpacesListEventListener.Success -> {
                         stopLoading()
-                        it.data?.let { it1 -> adapter.submitResponse(it1) }
+                        it.data?.let { it1 -> spacesAdapter.submitResponse(it1) }
                     }
                     is SpacesListEventListener.Failure -> {
                         stopLoading()
+                        Toast.makeText(this@HomeActivity, "Failed, Try again!", Toast.LENGTH_SHORT).show()
                     }
                     is SpacesListEventListener.Loading -> {
                         startLoading()
@@ -252,4 +294,26 @@ class HomeActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListene
         _binding = null
         super.onDestroy()
     }
+
+    override fun syncTheme(appTheme: AppTheme) {
+        themeMode = appTheme
+        val theme = appTheme as BaseTheme
+        binding.root.setBackgroundColor(theme.activityBgColor(this))
+        spacesAdapter = SpacesAdapter(this, this, appTheme)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@HomeActivity)
+            itemAnimator = null
+            this.adapter = spacesAdapter
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        when (this.refreshType) {
+            RefreshType.featured_refresh -> viewModel.getFeaturedSpaces()
+            RefreshType.trending_refresh -> viewModel.getTrendingSpaces()
+            RefreshType.search_refresh -> makeQuery(sQuery)
+        }
+    }
+
 }

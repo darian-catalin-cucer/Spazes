@@ -13,11 +13,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dolatkia.animatedThemeManager.AppTheme
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.SpaceItemRecyclerBinding
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.formatDateAndTime
 import com.mcdev.spazes.getOriginalTwitterAvi
+import com.mcdev.spazes.theme.DarkTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.tweeze.util.VerifiedBadge
 import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
@@ -25,7 +29,7 @@ import com.mcdev.twitterapikit.model.SpaceState
 import com.mcdev.twitterapikit.response.SpaceListResponse
 import java.util.*
 
-class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
+class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListener, val themeMode: AppTheme): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
     inner class SpacesViewHolder(val binding: SpaceItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
     }
@@ -87,16 +91,16 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
 
 
 //        holderBinding.twitterDisplayNameView.customizeDisplayName.setTextColor(Color.WHITE)
-        holderBinding.setDisplayNameColor(Color.WHITE)
+//        holderBinding.setDisplayNameColor(R.color.white)
 //        holderBinding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified,VerifiedBadge.WHITE)//creator's name with verification status
-        holderBinding.setDisplayName(creator!!.name!!, creator.verified, VerifiedBadge.WHITE)
+        holderBinding.setDisplayName(creator?.name, creator?.verified)
 
 //        holderBinding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
-        holderBinding.setCardBgImageUri(creator.profileImageUrl?.getOriginalTwitterAvi())
+        holderBinding.setCardBgImageUri(creator?.profileImageUrl?.getOriginalTwitterAvi())
 //        holderBinding.speakerAvi.setImageURI(creator?.profileImageUrl)
 
 //        holderBinding.title.text = title ?: "${creator?.name}'s Space"
-        holderBinding.title = title ?: "${creator.name}'s Space"
+        holderBinding.title = title ?: "${creator?.name}'s Space"
 
         when (space.state) {
             SpaceState.LIVE.value -> {
@@ -105,7 +109,7 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
 //                    liveViews.visibility = View.VISIBLE
 //                    stateScheduledView.visibility = View.GONE
                     /*truncate participant count*/
-                    val compactCount = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val compactCount : String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         NumberFormatter.with()
                             .notation(Notation.compactShort())
                             .precision(Precision.maxFraction(1))
@@ -150,6 +154,12 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
         holder.itemView.setOnClickListener {
             listener.onSpacesItemClick(space, position)
         }
+
+        when (themeMode.id()) {
+            0 -> holderBinding.theme = DefaultTheme()
+            1 -> holderBinding.theme = LightTheme()
+            2 -> holderBinding.theme = DarkTheme()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -193,5 +203,9 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
     interface OnSpacesItemClickListener {
         fun onSpacesItemClick(spaces: Space, position: Int)
         fun onGoToClick(spaces: Space, position: Int)
+    }
+
+    interface ThemeModeListener {
+        fun onThemeChanged()
     }
 }

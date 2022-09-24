@@ -11,7 +11,9 @@ import com.airbnb.lottie.LottieDrawable
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.mcdev.spazes.R
 import com.mcdev.spazes.SpazesThemeMode
+import com.mcdev.spazes.changeLayersColor
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
+import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.spazes.theme.DarkTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.theme.LightTheme
@@ -28,50 +30,61 @@ class SpaceCardComponent @JvmOverloads constructor(
         this, true
     )
 
-    var theme : AppTheme = DefaultTheme()
+    private var _displayName : String? = null
+    private var _isVerified : Boolean = false
+    private var _speakerImgUri : String? = null
+    private var _speakerImgDrawable : Int? = null
+
+    var theme : BaseTheme = DefaultTheme()
         set(value) {
-            when (value) {
-                is DefaultTheme -> {
+            titleTextColor = value.textColor() // set the title color
+            setDisplayNameColor(value.textColor()) // set display name text color
+            binding.stateLiveView.changeLayersColor(value.lottieColor()) // changing lottie wave form color
+            scheduledTextColor = value.textColor() // set scheduled date text color
+
+
+            when (value.id()) {
+                DefaultTheme().id() -> {
                     binding.liveViews.background = ContextCompat.getDrawable(context, R.drawable.rounded_bg)
-                    binding.stateLiveView.apply {
-                        repeatCount = LottieDrawable.INFINITE
-                        setAnimation(R.raw.bluewaveform)
-                        playAnimation()
+                    this.setDisplayName(_displayName!!, _isVerified, VerifiedBadge.WHITE)
+                    if (_speakerImgUri != null && _speakerImgDrawable == null) {
+                        this.setCardBgImageUri(_speakerImgUri)
+                    } else if (_speakerImgDrawable != null && _speakerImgUri == null) {
+                        this.setCardBgImageDrawable(R.drawable.spacessampleavi)
                     }
                 }
-
-                is LightTheme -> {
+                LightTheme().id() -> {
                     binding.liveViews.background = ContextCompat.getDrawable(context, R.drawable.rounded_bg)
-                    binding.stateLiveView.apply {
-                        repeatCount = LottieDrawable.INFINITE
-                        setAnimation(R.raw.bluewaveform)
-                        playAnimation()
-                    }
-                }
 
-                is DarkTheme -> {
+                    this.setDisplayName(_displayName!!, _isVerified, VerifiedBadge.DEFAULT)
+                    this.setCardBgColor(value.cardBg())
+                }
+                DarkTheme().id() -> {
                     binding.liveViews.background = ContextCompat.getDrawable(context, R.drawable.live_view_bg_dark)
                     binding.participantCount.setTextColor(context.resources.getColor(R.color.gray_600, context.theme))
-                    binding.stateLiveView.apply {
-                        repeatCount = LottieDrawable.INFINITE
-                        setAnimation(R.raw.waveform_white)
-                        playAnimation()
-                    }
+                    this.setDisplayName(_displayName!!, _isVerified, VerifiedBadge.WHITE)
+                    this.setCardBgColor(value.cardBg())
                 }
+
             }
+
             field = value
         }
 
-    var title : String? = null
+    var title : String = "Anime & Chill #GoodVibes #AnimeSpaces"
+        get() { // this will set the title in the text view even if no title is set
+            binding.title.text = field
+            return field
+        }
         set(value) {
             binding.title.text = value
-            field = value
         }
 
-    var titleTextColor : Int = R.color.white
-        set(value) {
-            binding.title.setTextColor(value)
-        }
+    var titleTextColor : Int = (theme as BaseTheme).textColor()
+        set(value) = binding.title.setTextColor(resources.getColor(value, context.theme))
+
+    var scheduledTextColor : Int = (theme as BaseTheme).textColor()
+        set(value) = binding.stateScheduledView.setTextColor(resources.getColor(value, context.theme))
 
     var isLive : Boolean = false
         set(value) {
@@ -96,21 +109,30 @@ class SpaceCardComponent @JvmOverloads constructor(
             binding.stateScheduledView.text = value
             field = value
         }
-//    private fun init(attrs: AttributeSet?, defStyle: Int) {
-//        // Load attributes
-//        val a = context.obtainStyledAttributes(
-//            attrs, R.styleable.NoSpaceComponent, defStyle, 0
-//        )
-//
-//        a.recycle()
-//    }
 
-    fun setDisplayName(displayName: String, verified: Boolean, verifiedBadge: VerifiedBadge = VerifiedBadge.DEFAULT) {
-        binding.twitterDisplayNameView.setDisplayName(displayName, verified, verifiedBadge)
+    init {
+        // Load attributes
+        val a = context.obtainStyledAttributes(
+            attrs, R.styleable.NoSpaceComponent, defStyle, 0
+        )
+
+        title // this is necessary to set the default text view for the title in case it is omitted
+        a.recycle()
+    }
+
+
+    fun setDisplayName(displayName: String?, verified: Boolean?, verifiedBadge: VerifiedBadge = VerifiedBadge.DEFAULT) {
+        _displayName = displayName ?: " "
+        _isVerified = verified ?: false
+        binding.twitterDisplayNameView.setDisplayName(_displayName!!, _isVerified, verifiedBadge)
+    }
+
+    fun getDisplayName(): String {
+        return _displayName!!
     }
 
     fun setDisplayNameColor(color: Int) {
-        binding.twitterDisplayNameView.customizeDisplayName.setTextColor(color)
+        binding.twitterDisplayNameView.customizeDisplayName.setTextColor(resources.getColor(color, context.theme))
     }
 
     fun setSpeakerImageUri(uriString:  MutableList<String>) {
@@ -132,10 +154,12 @@ class SpaceCardComponent @JvmOverloads constructor(
     }
 
     fun setSpeakerImageDrawable(resourceDrawable: Int) {
+        _speakerImgDrawable = resourceDrawable
         binding.speakerAvi.setActualImageResource(resourceDrawable)
     }
 
     fun setCardBgImageUri(uriString: String?) {
+        _speakerImgUri = uriString
         binding.bgSpeaker.setImageURI(uriString)
         binding.bgSpeaker.visibility = View.VISIBLE
     }

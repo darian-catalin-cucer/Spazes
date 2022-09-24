@@ -4,7 +4,7 @@ import android.content.Context
 import com.dolatkia.animatedThemeManager.AppTheme
 
 interface BaseTheme : AppTheme {
-    fun textColor(context: Context): Int
+    fun textColor(): Int
 
     //cards
     fun cardBg(): Int
@@ -12,4 +12,6 @@ interface BaseTheme : AppTheme {
     fun activityBgColor(context: Context): Int
 
     fun statusBarColor(): Int
+
+    fun lottieColor(): Int
 }
