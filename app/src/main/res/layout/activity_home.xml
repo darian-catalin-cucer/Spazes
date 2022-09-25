@@ -17,7 +17,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/settings_btn"
@@ -50,7 +50,8 @@
         app:layout_constraintTop_toBottomOf="@id/tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
@@ -58,21 +59,24 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:animateLayoutChanges="true">
 
             <RelativeLayout
                 android:id="@+id/content_lay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:descendantFocusability="blocksDescendants">
+                android:descendantFocusability="blocksDescendants"
+                android:animateLayoutChanges="true">
 
                 <com.mcdev.spazes.components.NoSpaceComponent
                     android:id="@+id/no_space_component_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:animateLayoutChanges="true"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -99,7 +103,8 @@
             app:clearIconColor="@color/black"
             app:selectedTabColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:animateLayoutChanges="true"/>
     </RelativeLayout>
 
 

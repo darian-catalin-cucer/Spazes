@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dolatkia.animatedThemeManager.AppTheme
@@ -318,6 +319,7 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
         themeMode = appTheme
         val theme = appTheme as BaseTheme
         binding.root.setBackgroundColor(theme.activityBgColor(this))
+        binding.tv.setTextColor(resources.getColor(appTheme.textColor(), this.theme))
 
         binding.searchView.apply {
             setSearchTextColor(theme.searchTextColor(this@HomeActivity))
@@ -326,6 +328,16 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
             setClearIconColor(theme.searchClearIconColor(this@HomeActivity))
             setSearchIconColor(theme.searchIconColor(this@HomeActivity))
         }
+
+        if (appTheme.id() == SpazesThemeMode.DEFAULT_MODE.value) {
+            binding.searchView.background = ResourcesCompat.getDrawable(resources, R.drawable.light_mode_search_bg, this@HomeActivity.theme)
+        } else if (appTheme.id() == SpazesThemeMode.LIGHT_MODE.value) {
+            binding.searchView.background = ResourcesCompat.getDrawable(resources, R.drawable.light_mode_search_bg, this@HomeActivity.theme)
+        } else if (appTheme.id() == SpazesThemeMode.DARK_MODE.value) {
+            binding.searchView.background = ResourcesCompat.getDrawable(resources, R.drawable.dark_mode_search_bg, this@HomeActivity.theme)
+        }
+
+        binding.noSpaceComponentView.theme = appTheme
     }
 
 }

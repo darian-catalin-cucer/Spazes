@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.NoSpaceComponentBinding
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DefaultTheme
 
 /**
  * TODO: document your custom view class.
@@ -21,6 +23,12 @@ class NoSpaceComponent @JvmOverloads constructor(
             context
         ), this, true
     )
+
+    var theme : BaseTheme = DefaultTheme()
+        set(value) {
+            binding.lottieMessageTextView.setTextColor(resources.getColor(value.textColor(), context.theme))
+            field = value
+        }
 
     var lottieRawResource = R.raw.astronaut
         set(value)  {

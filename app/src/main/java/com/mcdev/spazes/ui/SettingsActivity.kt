@@ -39,19 +39,6 @@ class SettingsActivity : ThemeActivity() {
     }
 
     override fun getStartTheme(): AppTheme {
-//        var getTheme : String? = null
-//        runBlocking {
-//            getTheme = dataStoreViewModel.readDatastore("themeMode")
-//        }
-//
-//        themeMode =  when (getTheme) {
-//            "0" -> DefaultTheme()
-//            "1" -> LightTheme()
-//            "2" -> DarkTheme()
-//            else -> {
-//                DefaultTheme()
-//            }
-//        }
         return themeMode
     }
 
