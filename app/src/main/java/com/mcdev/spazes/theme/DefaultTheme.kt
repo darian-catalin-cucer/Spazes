@@ -17,4 +17,10 @@ class DefaultTheme: BaseTheme {
 
     override fun lottieColor(): Int = R.color.purple_500
 
+    //multi search
+    override fun searchTextColor(context: Context): Int = context.resources.getColor(R.color.black, context.theme)
+    override fun searchHintColor(context: Context): Int = context.resources.getColor(R.color.search_hint_text_color, context.theme)
+    override fun searchClearIconColor(context: Context): Int = context.resources.getColor(R.color.black, context.theme)
+    override fun searchIconColor(context: Context): Int = context.resources.getColor(R.color.black, context.theme)
+    override fun searchSelectedTabColor(context: Context): Int = context.resources.getColor(R.color.custom_purple, context.theme)
 }

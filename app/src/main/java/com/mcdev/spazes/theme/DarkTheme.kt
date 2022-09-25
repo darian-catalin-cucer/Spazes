@@ -16,4 +16,10 @@ class DarkTheme: BaseTheme {
 
     override fun lottieColor(): Int = R.color.gray_400
 
+    //multi search
+    override fun searchTextColor(context: Context): Int = context.resources.getColor(R.color.white, context.theme)
+    override fun searchHintColor(context: Context): Int = context.resources.getColor(R.color.gray_400, context.theme)
+    override fun searchClearIconColor(context: Context): Int = context.resources.getColor(R.color.white, context.theme)
+    override fun searchIconColor(context: Context): Int = context.resources.getColor(R.color.white, context.theme)
+    override fun searchSelectedTabColor(context: Context): Int = context.resources.getColor(R.color.gray_600, context.theme)
 }

@@ -314,8 +314,11 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
         binding.root.setBackgroundColor(theme.activityBgColor(this))
 
         binding.searchView.apply {
-            setSearchTextColor(theme.textColor())
-            setSelectedTabColor(theme.textColor())
+            setSearchTextColor(theme.searchTextColor(this@HomeActivity))
+            setSelectedTabColor(theme.searchSelectedTabColor(this@HomeActivity))
+            setHintTextColor(theme.searchHintColor(this@HomeActivity))
+            setClearIconColor(theme.searchClearIconColor(this@HomeActivity))
+            setSearchIconColor(theme.searchIconColor(this@HomeActivity))
         }
     }
 
