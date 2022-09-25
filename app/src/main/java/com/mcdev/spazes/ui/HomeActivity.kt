@@ -2,7 +2,6 @@ package com.mcdev.spazes.ui
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
+import com.dolatkia.animatedThemeManager.ThemeManager
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.firebase.firestore.QuerySnapshot
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
@@ -31,7 +31,6 @@ import com.mcdev.spazes.util.DBCollections
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
@@ -100,7 +99,22 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
         }
 
 
+        ThemeManager.instance.getCurrentLiveTheme().observe(this) {
+            Toast.makeText(this, "on Theme changed to ${it.id()}", Toast.LENGTH_SHORT).show()
+            spacesAdapter = SpacesAdapter(this, this, it)
+            binding.recyclerView.apply {
+                layoutManager = LinearLayoutManager(this@HomeActivity)
+                itemAnimator = null
+                this.adapter = spacesAdapter
+            }
 
+            when (this.refreshType) {
+                RefreshType.featured_refresh -> viewModel.getFeaturedSpaces()
+                RefreshType.trending_refresh -> viewModel.getTrendingSpaces()
+                RefreshType.search_refresh -> makeQuery(sQuery)
+            }
+
+        }
 
         changeStatusBarColor(R.color.white)
         /*get featured spaces*/
@@ -299,20 +313,10 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
         themeMode = appTheme
         val theme = appTheme as BaseTheme
         binding.root.setBackgroundColor(theme.activityBgColor(this))
-        spacesAdapter = SpacesAdapter(this, this, appTheme)
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
-            itemAnimator = null
-            this.adapter = spacesAdapter
-        }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        when (this.refreshType) {
-            RefreshType.featured_refresh -> viewModel.getFeaturedSpaces()
-            RefreshType.trending_refresh -> viewModel.getTrendingSpaces()
-            RefreshType.search_refresh -> makeQuery(sQuery)
+        binding.searchView.apply {
+            setSearchTextColor(theme.textColor())
+            setSelectedTabColor(theme.textColor())
         }
     }
 
