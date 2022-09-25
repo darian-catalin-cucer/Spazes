@@ -18,6 +18,7 @@ import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.spazes.theme.DarkTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.theme.LightTheme
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.tweeze.util.VerifiedBadge
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,13 +29,13 @@ import kotlin.coroutines.coroutineContext
 @AndroidEntryPoint
 class SettingsThemeActivity : ThemeActivity() {
     lateinit var binding : ActivitySettingsThemeBinding
-    private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
 
 
     override fun getStartTheme(): AppTheme {
         var getTheme : String? = null
         runBlocking {
-            getTheme = viewModel.readDatastore("themeMode")
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
         }
 
         return when (getTheme) {
@@ -107,7 +108,7 @@ class SettingsThemeActivity : ThemeActivity() {
 
     override fun syncTheme(appTheme: AppTheme) {
         runBlocking {
-            viewModel.saveOrUpdateDatastore("themeMode", appTheme.id().toString())
+            dataStoreViewModel.saveOrUpdateDatastore("themeMode", appTheme.id().toString())
         }
         val theme = appTheme as BaseTheme
         binding.root.setBackgroundColor(appTheme.activityBgColor(this@SettingsThemeActivity))

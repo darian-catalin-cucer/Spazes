@@ -15,6 +15,7 @@ import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.dolatkia.animatedThemeManager.ThemeManager
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.remote.Datastore
 import com.iammert.library.ui.multisearchviewlib.MultiSearchView
 import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.SpacesAdapter
@@ -28,6 +29,7 @@ import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.spazes.util.BEARER_TOKEN
 import com.mcdev.spazes.util.DBCollections
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +41,7 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private val binding get() = _binding!!
     var sQuery: String = "space"
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
     private var showAppIntro: Boolean? = false
     private var themeMode : AppTheme = DefaultTheme()
     private lateinit var spacesAdapter : SpacesAdapter
@@ -47,7 +50,7 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
     override fun getStartTheme(): AppTheme {
         var getTheme : String? = null
         runBlocking {
-            getTheme = viewModel.readDatastore("themeMode")
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
         }
 
 
@@ -72,8 +75,8 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
 
         var getTheme: String? = null
         runBlocking {
-            showAppIntro = viewModel.readAppIntroDatastore("show_app_intro")
-            getTheme = viewModel.readDatastore("themeMode")
+            showAppIntro = dataStoreViewModel.readAppIntroDatastore("show_app_intro")
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
         }
 
 
@@ -113,12 +116,15 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
                 RefreshType.search_refresh -> makeQuery(sQuery)
             }
 
+            val tt = it as BaseTheme
+            changeStatusBarColor(tt.statusBarColor())
+
         }
 
-        changeStatusBarColor(R.color.white)
         /*get featured spaces*/
         viewModel.getFeaturedSpaces()
 
+        binding.swipeRefresh.setProgressViewOffset(true, 200, 300)
         binding.swipeRefresh.setOnRefreshListener {
             when (this.refreshType) {
                 RefreshType.featured_refresh -> viewModel.getFeaturedSpaces()

@@ -22,6 +22,7 @@ import com.mcdev.spazes.theme.DarkTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.spazes.util.BEARER_TOKEN
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,13 +33,14 @@ import kotlinx.coroutines.runBlocking
 class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private lateinit var binding: ActivityUserSpacesBinding
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
     private var themeMode : AppTheme = DefaultTheme()
 
 
     override fun getStartTheme(): AppTheme {
         var getTheme : String? = null
         runBlocking {
-            getTheme = viewModel.readDatastore("themeMode")
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
         }
 
         themeMode =  when (getTheme) {

@@ -13,7 +13,7 @@ class DefaultTheme: BaseTheme {
 
     override fun cardBg(): Int = android.R.color.transparent
     override fun activityBgColor(context: Context): Int = ContextCompat.getColor(context, R.color.light_activity_bg_color)
-    override fun statusBarColor(): Int = R.color.app_purple
+    override fun statusBarColor(): Int = R.color.light_activity_bg_color
 
     override fun lottieColor(): Int = R.color.purple_500
 

@@ -8,13 +8,14 @@ import com.github.appintro.AppIntro2
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.AppIntroPageTransformerType
 import com.mcdev.spazes.R
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class AppIntro: AppIntro2() {
-    private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +91,7 @@ class AppIntro: AppIntro2() {
         // Decide what to do when the user clicks on "Done"
 
         runBlocking {
-            viewModel.updateAppIntroDatastore("show_app_intro", false)
+            dataStoreViewModel.updateAppIntroDatastore("show_app_intro", false)
         }
 
         finish()

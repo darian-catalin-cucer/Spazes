@@ -52,16 +52,18 @@ class SpaceCardComponent @JvmOverloads constructor(
                     } else if (_speakerImgDrawable != null && _speakerImgUri == null) {
                         this.setCardBgImageDrawable(R.drawable.spacessampleavi)
                     }
+                    binding.participantCount.setTextColor(context.resources.getColor(R.color.gray_600, context.theme))
                 }
                 LightTheme().id() -> {
                     binding.liveViews.background = ContextCompat.getDrawable(context, R.drawable.rounded_bg)
 
                     this.setDisplayName(_displayName!!, _isVerified, VerifiedBadge.DEFAULT)
                     this.setCardBgColor(value.cardBg())
+                    binding.participantCount.setTextColor(context.resources.getColor(R.color.gray_600, context.theme))
                 }
                 DarkTheme().id() -> {
                     binding.liveViews.background = ContextCompat.getDrawable(context, R.drawable.live_view_bg_dark)
-                    binding.participantCount.setTextColor(context.resources.getColor(R.color.gray_600, context.theme))
+                    binding.participantCount.setTextColor(context.resources.getColor(R.color.dark_mode_text_color, context.theme))
                     this.setDisplayName(_displayName!!, _isVerified, VerifiedBadge.WHITE)
                     this.setCardBgColor(value.cardBg())
                 }

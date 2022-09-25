@@ -12,6 +12,7 @@ import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityProfileBinding
 import com.mcdev.spazes.enums.LoadAction
 import com.mcdev.spazes.events.UserSingleEventListener
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.LoginViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,6 +24,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
     private val TAG = "ProfileActivity"
 
 
@@ -93,10 +95,10 @@ class ProfileActivity : AppCompatActivity() {
                         displayName = it.data?.data?.name
                         profileUrl = it.data?.data?.profileImageUrl.toString().getOriginalTwitterAvi()
                         if ((displayName.toString() == "null").not()) {// set or update display name
-                            viewModel.saveOrUpdateDatastore("user_display_name", displayName.toString())
+                            dataStoreViewModel.saveOrUpdateDatastore("user_display_name", displayName.toString())
                         }
                         if ((profileUrl.toString() == "null").not()) {// set or update display photo
-                            viewModel.saveOrUpdateDatastore("user_display_photo", profileUrl.toString())
+                            dataStoreViewModel.saveOrUpdateDatastore("user_display_photo", profileUrl.toString())
                         }
                     }
                     is UserSingleEventListener.Empty -> {

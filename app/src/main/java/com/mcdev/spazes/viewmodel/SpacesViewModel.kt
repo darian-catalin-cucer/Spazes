@@ -2,11 +2,6 @@ package com.mcdev.spazes.viewmodel
 
 import android.util.Log
 import android.widget.Toast
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FieldValue
@@ -47,7 +42,6 @@ class SpacesViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val usersMainRepository: UsersMainRepository,
     private val dispatchProvider: DispatchProvider,
-    private val datastore: DataStore<Preferences>,
     private val fireStore: FirebaseFirestore
 ) : ViewModel() {
 
@@ -425,39 +419,6 @@ class SpacesViewModel @Inject constructor(
     }
 
 
-    suspend fun saveOrUpdateDatastore(key: String, value: String) {
-//        viewModelScope.launch {
-        val dataStoreKey = stringPreferencesKey(key)
-        datastore.edit {
-            it[dataStoreKey] = value
-        }
-//        }
-    }
-
-    suspend fun updateAppIntroDatastore(key: String, value: Boolean) {
-            val dataStoreKey = booleanPreferencesKey(key)
-            datastore.edit {
-                it[dataStoreKey] = value
-            }
-    }
-
-     suspend fun readAppIntroDatastore(key: String): Boolean? {
-        var value: Boolean? = null
-        val dataStoreKey = booleanPreferencesKey(key)
-        value = datastore.data.first()[dataStoreKey]
-        val s = value
-        return value
-    }
-
-    suspend fun readDatastore(key: String): String? {
-        var value: String? = null
-//        viewModelScope.launch(dispatchProvider.main) {
-        val dataStoreKey = stringPreferencesKey(key)
-        value = datastore.data.first()[dataStoreKey]
-//        }
-        val s = value
-        return value
-    }
 
     fun getFeaturedSpaces() {
         viewModelScope.launch(dispatchProvider.io) {
