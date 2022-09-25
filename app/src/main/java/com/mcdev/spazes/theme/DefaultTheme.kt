@@ -9,11 +9,16 @@ class DefaultTheme: BaseTheme {
 
     override fun id(): Int = SpazesThemeMode.DEFAULT_MODE.value
 
-    override fun textColor(): Int = R.color.white
-
+    //card
+    override fun cardTextColor(): Int = R.color.white
     override fun cardBg(): Int = android.R.color.transparent
+
+    //activity
     override fun activityBgColor(context: Context): Int = ContextCompat.getColor(context, R.color.light_activity_bg_color)
     override fun statusBarColor(): Int = R.color.light_activity_bg_color
+    override fun textColor(): Int = R.color.light_mode_text_color
+
+
 
     override fun lottieColor(): Int = R.color.purple_500
 

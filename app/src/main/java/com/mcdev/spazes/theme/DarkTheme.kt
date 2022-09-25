@@ -9,10 +9,14 @@ class DarkTheme: BaseTheme {
 
     override fun id(): Int = SpazesThemeMode.DARK_MODE.value
 
-    override fun textColor(): Int = R.color.dark_mode_text_color
+    //card
+    override fun cardTextColor(): Int = R.color.dark_mode_text_color
     override fun cardBg(): Int = R.color.light_dark
+
+    //activity
     override fun activityBgColor(context: Context): Int = ContextCompat.getColor(context, R.color.black)
     override fun statusBarColor(): Int = R.color.black
+    override fun textColor(): Int = R.color.dark_mode_text_color
 
     override fun lottieColor(): Int = R.color.gray_400
 

@@ -4,13 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import com.airbnb.lottie.LottieDrawable
-import com.dolatkia.animatedThemeManager.AppTheme
 import com.mcdev.spazes.R
-import com.mcdev.spazes.SpazesThemeMode
 import com.mcdev.spazes.changeLayersColor
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.theme.BaseTheme
@@ -37,10 +33,10 @@ class SpaceCardComponent @JvmOverloads constructor(
 
     var theme : BaseTheme = DefaultTheme()
         set(value) {
-            titleTextColor = value.textColor() // set the title color
-            setDisplayNameColor(value.textColor()) // set display name text color
+            titleTextColor = value.cardTextColor() // set the title color
+            setDisplayNameColor(value.cardTextColor()) // set display name text color
             binding.stateLiveView.changeLayersColor(value.lottieColor()) // changing lottie wave form color
-            scheduledTextColor = value.textColor() // set scheduled date text color
+            scheduledTextColor = value.cardTextColor() // set scheduled date text color
 
 
             when (value.id()) {
@@ -82,10 +78,10 @@ class SpaceCardComponent @JvmOverloads constructor(
             binding.title.text = value
         }
 
-    var titleTextColor : Int = (theme as BaseTheme).textColor()
+    var titleTextColor : Int = (theme as BaseTheme).cardTextColor()
         set(value) = binding.title.setTextColor(resources.getColor(value, context.theme))
 
-    var scheduledTextColor : Int = (theme as BaseTheme).textColor()
+    var scheduledTextColor : Int = (theme as BaseTheme).cardTextColor()
         set(value) = binding.stateScheduledView.setTextColor(resources.getColor(value, context.theme))
 
     var isLive : Boolean = false
