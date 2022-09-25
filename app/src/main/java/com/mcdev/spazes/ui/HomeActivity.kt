@@ -100,7 +100,6 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
 
 
         ThemeManager.instance.getCurrentLiveTheme().observe(this) {
-            Toast.makeText(this, "on Theme changed to ${it.id()}", Toast.LENGTH_SHORT).show()
             spacesAdapter = SpacesAdapter(this, this, it)
             binding.recyclerView.apply {
                 layoutManager = LinearLayoutManager(this@HomeActivity)
