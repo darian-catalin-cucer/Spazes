@@ -45,6 +45,6 @@ class SettingsActivity : ThemeActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         startActivity(Intent(this, HomeActivity::class.java))
-        finish()
+        finish() // todo implement this in a better way
     }
 }

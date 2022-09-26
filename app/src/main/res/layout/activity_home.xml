@@ -8,27 +8,34 @@
     android:id="@+id/rootlayout"
     app:layoutDescription="@xml/activity_search_xml_constraintlayout_scene">
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/profile_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_margin="20dp"
         android:contentDescription="@string/profile"
         android:scaleType="centerCrop"
-        android:src="@drawable/profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp"/>
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/settings_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:src="@drawable/settings"
-        android:scaleType="centerCrop"
         android:contentDescription="@string/settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp"/>
 
     <TextView
         android:id="@+id/tv"

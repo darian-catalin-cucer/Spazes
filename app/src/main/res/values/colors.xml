@@ -19,4 +19,7 @@
     <color name="dark_mode_text_color">#ACACAC</color>
     <color name="light_mode_text_color">#353535</color>
     <color name="search_hint_text_color">#BDBDBD</color>
+
+    <!--tritone-->
+    <color name="tritone_purple_bg">#35D696FF</color>
 </resources>
