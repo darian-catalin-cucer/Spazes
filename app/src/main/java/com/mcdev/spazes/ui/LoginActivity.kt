@@ -8,11 +8,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.google.firebase.auth.FirebaseUser
 import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityLoginBinding
 import com.mcdev.spazes.events.LoginEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.LoginViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
@@ -22,7 +26,7 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : ThemeActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: SpacesViewModel by viewModels()
@@ -165,12 +169,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun syncTheme(appTheme: AppTheme) {
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.loginFeaturesTitleTv.setTextColor(resources.getColor(tt.textColor(), theme))
+        binding.loginFeatureContentTv.setTextColor(resources.getColor(tt.textColor(), theme))
+    }
+
     private fun doLogin() {
         loginViewModel.login(this)
     }
 
     private fun isUserLoggedIn(): Boolean {
         return loginViewModel.isUserSignedIn()
+    }
+
+    override fun getStartTheme(): AppTheme {
+        //TODO("Not yet implemented")
+        return DefaultTheme()
     }
 
     override fun onBackPressed() {
