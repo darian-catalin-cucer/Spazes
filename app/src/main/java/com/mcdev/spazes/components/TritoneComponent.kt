@@ -41,7 +41,7 @@ class TritoneComponent @JvmOverloads constructor(
             attrs, R.styleable.TritoneComponent, defStyle, 0
         )
 
-        val getIcon = a.getResourceId(R.styleable.TritoneComponent_icon, R.drawable.settings)
+        val getIcon = a.getResourceId(R.styleable.TritoneComponent_icon, R.drawable.settings_gear)
         val getBgColor = a.getResourceId(R.styleable.TritoneComponent_bgColor, R.color.tritone_purple_bg)
 
         this.icon = getIcon
