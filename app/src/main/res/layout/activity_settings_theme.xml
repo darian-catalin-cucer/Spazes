@@ -5,7 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SettingsThemeActivity"
-    android:padding="10dp">
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp">
+
+    <TextView
+        android:id="@+id/preview_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/preview"
+        android:textColor="#5A5A5A"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.mcdev.spazes.components.SpaceCardComponent
         android:id="@+id/theme_sample_card_view"
@@ -14,7 +29,7 @@
         android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preview_tv"
         android:background="@android:color/transparent"
         app:cardCornerRadius="20dp"
         app:cardBackgroundColor="@android:color/transparent"

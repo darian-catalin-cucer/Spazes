@@ -15,7 +15,7 @@
         android:layout_height="43dp"
         android:src="@drawable/back"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/settings"
+        android:contentDescription="@string/app_intro_back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="20dp"

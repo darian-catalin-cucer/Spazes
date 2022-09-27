@@ -14,6 +14,7 @@
         android:layout_height="25dp"
         android:scaleType="centerInside"
         android:src="@drawable/settings_gear"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:contentDescription="@string/tritone_icon" />
 
 </androidx.cardview.widget.CardView>

@@ -156,7 +156,6 @@ dependencies {
     // Datastore Preferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
-
     // Custom crash activity
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
 

@@ -27,7 +27,7 @@
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_margin="20dp"
-        android:contentDescription="@string/settings"
+        android:contentDescription="@string/app_intro_back_button"
         android:elevation="20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/back"

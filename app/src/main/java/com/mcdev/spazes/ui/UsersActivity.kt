@@ -283,4 +283,9 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
     override fun onAddRemoveItemClick(user: User, position: Int) {
         viewModel.removeFaveHost(userId!!, FaveHost(user.id))
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 }

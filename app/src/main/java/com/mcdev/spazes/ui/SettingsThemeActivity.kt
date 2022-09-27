@@ -114,5 +114,10 @@ class SettingsThemeActivity : ThemeActivity() {
         binding.root.setBackgroundColor(appTheme.activityBgColor(this@SettingsThemeActivity))
         setupThemeSampleCardView(this@SettingsThemeActivity, appTheme, appTheme.id())
         binding.themeSampleCardView.theme = theme
+        binding.previewTv.setTextColor(resources.getColor(theme.textColor(), this.theme))
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }

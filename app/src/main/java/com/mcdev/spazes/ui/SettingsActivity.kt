@@ -8,6 +8,7 @@ import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.mcdev.spazes.changeStatusBarColor
 import com.mcdev.spazes.databinding.ActivitySettingsBinding
+import com.mcdev.spazes.makeStatusBarTransparent
 import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.viewmodel.DatastoreViewModel
@@ -24,16 +25,18 @@ class SettingsActivity : ThemeActivity() {
         binding = ActivitySettingsBinding.inflate(LayoutInflater.from(this@SettingsActivity))
         setContentView(binding.root)
 
+        makeStatusBarTransparent()
 
-        binding.settingsThemeBtn.setOnClickListener { startActivity(Intent(this@SettingsActivity, SettingsThemeActivity::class.java)) }
+        binding.settingsThemeBtn.setOnClickListener {
+            startActivity(Intent(this@SettingsActivity, SettingsThemeActivity::class.java))
+        }
     }
 
     override fun syncTheme(appTheme: AppTheme) {
 
         val tt = appTheme as BaseTheme
-        changeStatusBarColor(appTheme.statusBarColor())
         binding.root.setBackgroundColor(tt.activityBgColor(this))
-        binding.setttingsTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
+        binding.settingsTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
         binding.settingsThemeTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
 
     }
