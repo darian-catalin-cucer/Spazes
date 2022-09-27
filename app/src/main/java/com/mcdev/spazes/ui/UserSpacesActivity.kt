@@ -38,20 +38,7 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
 
 
     override fun getStartTheme(): AppTheme {
-        var getTheme : String? = null
-        runBlocking {
-            getTheme = dataStoreViewModel.readDatastore("themeMode")
-        }
-
-        themeMode =  when (getTheme) {
-            "0" -> DefaultTheme()
-            "1" -> LightTheme()
-            "2" -> DarkTheme()
-            else -> {
-                DefaultTheme()
-            }
-        }
-        return themeMode
+        return DefaultTheme()
     }
 
 
@@ -207,7 +194,7 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
 //                binding.emptyFeatureLottie.visibility = View.GONE
 //            }
 //        }
-        binding.recyclerMessage.text = applicationContext.getString(message)
+        binding.recyclerMessage.lottieMessage = applicationContext.getString(message)
         binding.swipeRefresh.isRefreshing = false
         binding.userSpacesRecyclerView.visibility = View.GONE
         binding.recyclerMessage.visibility = View.VISIBLE
@@ -231,7 +218,10 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
     }
 
     override fun syncTheme(appTheme: AppTheme) {
-        val theme = appTheme as BaseTheme
-        binding.root.setBackgroundColor(appTheme.activityBgColor(this))
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.recyclerMessage.theme = appTheme
+        binding.titleText.setTextColor(resources.getColor(tt.textColor(), theme))
     }
 }

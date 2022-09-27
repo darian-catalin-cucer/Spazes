@@ -21,6 +21,7 @@ import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.SimpleColorFilter
 import com.airbnb.lottie.model.KeyPath
 import com.airbnb.lottie.value.LottieValueCallback
+import com.mcdev.spazes.components.NoSpaceComponent
 import java.text.SimpleDateFormat
 
 fun String.formatDateAndTime(): String {
@@ -69,19 +70,19 @@ fun String.getOriginalTwitterAvi(): String {
     return this.replace("_normal", "")
 }
 
-fun Context.startLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView) {
+fun Context.startLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: NoSpaceComponent) {
     swipeRefreshLayout.isRefreshing = true
     recyclerMessage.visibility = View.GONE
 }
 
-fun Context.stopLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView, recyclerView: RecyclerView) {
+fun Context.stopLoading(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: NoSpaceComponent, recyclerView: RecyclerView) {
     swipeRefreshLayout.isRefreshing = false
     recyclerView.visibility = View.VISIBLE
     recyclerMessage.visibility = View.GONE
 }
 
-fun Context.showEmpty(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: TextView, recyclerView: RecyclerView, message : Int) {
-    recyclerMessage.text = applicationContext.getString(message)
+fun Context.showEmpty(swipeRefreshLayout: SwipeRefreshLayout, recyclerMessage: NoSpaceComponent, recyclerView: RecyclerView, message : Int) {
+    recyclerMessage.lottieMessage = applicationContext.getString(message)
     swipeRefreshLayout.isRefreshing = false
     recyclerView.visibility = View.GONE
     recyclerMessage.visibility = View.VISIBLE
