@@ -228,18 +228,14 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
 //            refreshType = RefreshType.trending_refresh
 //        }
 
-        binding.profileBtn.apply {
-            icon = R.drawable.profile
-            bgColor = R.color.tritone_purple_bg
-        }
+//        binding.profileBtn.apply {
+//            icon = R.drawable.profile
+//            bgColor = R.color.tritone_purple_bg
+//        }
         binding.profileBtn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        binding.settingsBtn.apply {
-            icon = R.drawable.settings_gear
-            bgColor = R.color.tritone_purple_bg
-        }
         binding.settingsBtn.setOnClickListener {
             startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
             finish() //todo implement this in a better way

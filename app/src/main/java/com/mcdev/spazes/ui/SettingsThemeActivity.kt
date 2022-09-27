@@ -58,6 +58,10 @@ class SettingsThemeActivity : ThemeActivity() {
         binding.changeThemeDefaultBtn.setOnClickListener { ThemeManager.instance.changeTheme(DefaultTheme(), it) }
         binding.changeThemeLightBtn.setOnClickListener { ThemeManager.instance.changeTheme(LightTheme(), it) }
         binding.changeThemeDarkBtn.setOnClickListener { ThemeManager.instance.changeTheme(DarkTheme(), it) }
+
+        binding.settingsThemeBackBtn.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupThemeSampleCardView(context: Context, appTheme: AppTheme, id: Int) {

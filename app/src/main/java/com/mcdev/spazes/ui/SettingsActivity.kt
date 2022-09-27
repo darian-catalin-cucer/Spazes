@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import androidx.activity.viewModels
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
+import com.mcdev.spazes.R
 import com.mcdev.spazes.changeStatusBarColor
 import com.mcdev.spazes.databinding.ActivitySettingsBinding
 import com.mcdev.spazes.makeStatusBarTransparent
@@ -26,6 +27,11 @@ class SettingsActivity : ThemeActivity() {
         setContentView(binding.root)
 
         makeStatusBarTransparent()
+
+        binding.settingsBackBtn.setOnClickListener{
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish() // todo implement this in a better way
+        }
 
         binding.settingsThemeBtn.setOnClickListener {
             startActivity(Intent(this@SettingsActivity, SettingsThemeActivity::class.java))

@@ -22,4 +22,5 @@
 
     <!--tritone-->
     <color name="tritone_purple_bg">#35D696FF</color>
+    <color name="tritone_blue_bg">#2526C6DA</color>
 </resources>
