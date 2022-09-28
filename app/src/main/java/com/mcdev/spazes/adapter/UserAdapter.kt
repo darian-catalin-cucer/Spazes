@@ -63,6 +63,7 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener, 
         holder.binding.apply {
             val tt = themeMode as BaseTheme
             this.userDisplayName.customizeDisplayName.setTextColor(context.resources.getColor(tt.textColor(), context.theme))
+            this.userName.customizeTextView.setTextColor(context.resources.getColor(tt.textColor(), context.theme))
             this.itemLay.setBackgroundColor(context.resources.getColor(tt.cardBg(), context.theme))
         }
 
