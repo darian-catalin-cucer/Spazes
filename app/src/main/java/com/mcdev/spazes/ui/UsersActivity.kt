@@ -53,6 +53,7 @@ class UsersActivity : ThemeActivity(), UserAdapter.OnUserItemClickListener {
         setContentView(root)
 
         changeStatusBarColor(R.color.white)
+        binding.recyclerMessage.lottieRawResource = R.raw.hosts // setting lottie file for empty state
 
         val loadAction = intent.extras?.get("loadAction") as LoadAction
         val userTwitterId = intent.extras?.get("user_twitter_id").toString()
@@ -171,6 +172,7 @@ class UsersActivity : ThemeActivity(), UserAdapter.OnUserItemClickListener {
         changeStatusBarColor(tt.statusBarColor())
         binding.root.setBackgroundColor(tt.activityBgColor(this))
         binding.titleText.setTextColor(resources.getColor(tt.textColor(), this.theme))
+        binding.recyclerMessage.theme = tt
     }
 
     private fun showBottomSheet() {
