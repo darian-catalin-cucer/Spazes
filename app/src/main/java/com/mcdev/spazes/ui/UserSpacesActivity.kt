@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.os.IResultReceiver.Default
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -38,7 +39,22 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
 
 
     override fun getStartTheme(): AppTheme {
-        return DefaultTheme()
+        var getTheme : String? = null
+        runBlocking {
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
+        }
+
+
+        themeMode =  when (getTheme) {
+            "0" -> DefaultTheme()
+            "1" -> LightTheme()
+            "2" -> DarkTheme()
+            else -> {
+                DefaultTheme()
+            }
+        }
+
+        return themeMode
     }
 
 
@@ -48,7 +64,6 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
         val root = binding.root
         setContentView(root)
 
-        changeStatusBarColor(R.color.white)
 
         val loadAction = intent.extras?.get("loadAction") as LoadAction
         val userTwitterId = intent.extras?.get("user_twitter_id").toString()
@@ -218,10 +233,19 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
     }
 
     override fun syncTheme(appTheme: AppTheme) {
+        themeMode = appTheme
         val tt = appTheme as BaseTheme
         changeStatusBarColor(tt.statusBarColor())
         binding.root.setBackgroundColor(tt.activityBgColor(this))
         binding.recyclerMessage.theme = appTheme
         binding.titleText.setTextColor(resources.getColor(tt.textColor(), theme))
+
+
+//        val adapter = SpacesAdapter(this, this, themeMode)
+//        binding.userSpacesRecyclerView.apply {
+//            layoutManager = LinearLayoutManager(this@UserSpacesActivity)
+//            itemAnimator = null
+//            this.adapter = adapter
+//        }
     }
 }
