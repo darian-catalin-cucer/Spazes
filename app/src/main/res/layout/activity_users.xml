@@ -8,17 +8,21 @@
     android:animateLayoutChanges="true">
 
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/user_back_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:src="@drawable/back"
-        android:scaleType="centerCrop"
+        app:icon="@drawable/back"
+        app:bgColor="@color/tritone_purple_bg"
         android:contentDescription="@string/app_intro_back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="20dp"
-        android:elevation="20dp"/>
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp" />
 
     <TextView
         android:id="@+id/title_text"
@@ -64,7 +68,8 @@
             android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="50dp"/>
+            android:paddingVertical="50dp"
+            android:clipToPadding="false"/>
     </LinearLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

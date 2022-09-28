@@ -11,6 +11,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.UserAdapter
@@ -21,17 +23,25 @@ import com.mcdev.spazes.events.UserListEventListener
 import com.mcdev.spazes.events.UserSingleEventListener
 import com.mcdev.spazes.model.FaveHost
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DarkTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.theme.LightTheme
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 @AndroidEntryPoint
-class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
+class UsersActivity : ThemeActivity(), UserAdapter.OnUserItemClickListener {
     private lateinit var binding: ActivityUsersBinding
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
+    private var themeMode : AppTheme = DefaultTheme()
     private var userAdapter: UserAdapter? = null
     private var userId: String? = null
     private var ids : String? = null
@@ -48,7 +58,7 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
         val userTwitterId = intent.extras?.get("user_twitter_id").toString()
         userId = intent.extras?.get("user_firebase_id").toString()
 
-        userAdapter = UserAdapter(this, this)
+        userAdapter = UserAdapter(this, this, themeMode)
         binding.usersRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@UsersActivity)
 //            itemAnimator = null//todo uncomment when it is causing crash
@@ -154,6 +164,13 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
                 }
             }
         }
+    }
+
+    override fun syncTheme(appTheme: AppTheme) {
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.titleText.setTextColor(resources.getColor(tt.textColor(), this.theme))
     }
 
     private fun showBottomSheet() {
@@ -282,6 +299,25 @@ class UsersActivity : AppCompatActivity(), UserAdapter.OnUserItemClickListener {
 
     override fun onAddRemoveItemClick(user: User, position: Int) {
         viewModel.removeFaveHost(userId!!, FaveHost(user.id))
+    }
+
+    override fun getStartTheme(): AppTheme {
+        var getTheme : String? = null
+        runBlocking {
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
+        }
+
+
+        themeMode =  when (getTheme) {
+            "0" -> DefaultTheme()
+            "1" -> LightTheme()
+            "2" -> DarkTheme()
+            else -> {
+                DefaultTheme()
+            }
+        }
+
+        return themeMode
     }
 
     override fun onBackPressed() {
