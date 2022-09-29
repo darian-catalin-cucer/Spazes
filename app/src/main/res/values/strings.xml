@@ -10,7 +10,7 @@
     <string name="coming_soon">coming soon…</string>
     <string name="login">Login</string>
     <string name="profile">profile</string>
-    <string name="settings">settings</string>
+    <string name="preferences">Preferences</string>
     <string name="login_with_twitter">Login with Twitter</string>
     <string name="my_spaces">My Spaces</string>
     <string name="logout">LOGOUT</string>
@@ -38,4 +38,7 @@
     <string name="all_in_one_placea_title">All in one place</string>
     <string name="all_in_one_place_details">Find all live and scheduled Twitter spaces of your favorite hosts all in one place.</string>
     <string name="splash_screen_logo_text">splash screen logo</string>
+    <string name="preview">Preview</string>
+    <string name="search_spaces">Search Spaces</string>
+    <string name="tritone_icon">tritone icon</string>
 </resources>

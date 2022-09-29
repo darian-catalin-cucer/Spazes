@@ -13,10 +13,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dolatkia.animatedThemeManager.AppTheme
 import com.mcdev.spazes.R
+import com.mcdev.spazes.databinding.SpaceItemRecyclerBinding
 import com.mcdev.spazes.databinding.SpaceItemV2Binding
 import com.mcdev.spazes.formatDateAndTime
 import com.mcdev.spazes.getOriginalTwitterAvi
+import com.mcdev.spazes.theme.DarkTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.tweeze.util.VerifiedBadge
 import com.mcdev.twitterapikit.`object`.Space
 import com.mcdev.twitterapikit.`object`.User
@@ -24,21 +29,22 @@ import com.mcdev.twitterapikit.model.SpaceState
 import com.mcdev.twitterapikit.response.SpaceListResponse
 import java.util.*
 
-class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListener): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
+class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListener, val themeMode: AppTheme): RecyclerView.Adapter<SpacesAdapter.SpacesViewHolder>() {
 
-    inner class SpacesViewHolder(val binding: SpaceItemV2Binding): RecyclerView.ViewHolder(binding.root) {
+    inner class SpacesViewHolder(val binding: SpaceItemRecyclerBinding): RecyclerView.ViewHolder(binding.root) {
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): SpacesAdapter.SpacesViewHolder {
-        val binding = SpaceItemV2Binding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item_v2, parent, false))
+        val binding = SpaceItemRecyclerBinding.bind(LayoutInflater.from(parent.context).inflate(R.layout.space_item_recycler, parent, false))
 
         return SpacesViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SpacesAdapter.SpacesViewHolder, position: Int) {
+        val holderBinding = holder.binding.spaceComponentRecycler
         val users = usersDiffer.currentList
         val space = spacesDiffer.currentList[position]
 
@@ -62,40 +68,48 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
         }
 
         if (hostList.isEmpty().not()) {
-            when {
-                hostList.size == 2 -> {
-                    val hostNum1 = hostList[1]
-                    holder.binding.speakerOneAvi.setImageURI(hostNum1)
-                }
-                hostList.size >= 2 -> {
-                    val hostNum1 = hostList[1]
-                    val hostNum2 = hostList[2]
-                    holder.binding.speakerOneAvi.setImageURI(hostNum1)
-                    holder.binding.speakerTwoAvi.setImageURI(hostNum2)
-                }
-                else -> {
-                    //set these null values to prevent duplicates
-                    holder.binding.speakerOneAvi.setImageURI("null")
-                    holder.binding.speakerTwoAvi.setImageURI("null")
-                }
-            }
+            holderBinding.setSpeakerImageUri(hostList)
+//            when {
+//                hostList.size == 2 -> {
+//                    val hostNum1 = hostList[1]
+////                    holderBinding.speakerOneAvi.setImageURI(hostNum1)
+//                    holderBinding.setSpeakerImageUri(hostNum1)
+//                }
+//                hostList.size >= 2 -> {
+//                    val hostNum1 = hostList[1]
+//                    val hostNum2 = hostList[2]
+////                    holderBinding.speakerOneAvi.setImageURI(hostNum1)
+////                    holderBinding.speakerTwoAvi.setImageURI(hostNum2)
+//                }
+//                else -> {
+//                    //set these null values to prevent duplicates
+////                    holderBinding.speakerOneAvi.setImageURI("null")
+////                    holderBinding.speakerTwoAvi.setImageURI("null")
+//                }
+//            }
         }
 
 
-        holder.binding.twitterDisplayNameView.customizeDisplayName.setTextColor(Color.WHITE)
-        holder.binding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified,VerifiedBadge.WHITE)//creator's name with verification status
+//        holderBinding.twitterDisplayNameView.customizeDisplayName.setTextColor(Color.WHITE)
+//        holderBinding.setDisplayNameColor(R.color.white)
+//        holderBinding.twitterDisplayNameView.setDisplayName(creator!!.name!!, creator.verified,VerifiedBadge.WHITE)//creator's name with verification status
+        holderBinding.setDisplayName(creator?.name, creator?.verified)
 
-        holder.binding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
-        holder.binding.speakerAvi.setImageURI(creator?.profileImageUrl)
-        holder.binding.title.text = title ?: "${creator?.name}'s Space"
+//        holderBinding.bgSpeaker.setImageURI(creator?.profileImageUrl?.getOriginalTwitterAvi())
+        holderBinding.setCardBgImageUri(creator?.profileImageUrl?.getOriginalTwitterAvi())
+//        holderBinding.speakerAvi.setImageURI(creator?.profileImageUrl)
+
+//        holderBinding.title.text = title ?: "${creator?.name}'s Space"
+        holderBinding.title = title ?: "${creator?.name}'s Space"
 
         when (space.state) {
             SpaceState.LIVE.value -> {
-                holder.binding.apply {
-                    liveViews.visibility = View.VISIBLE
-                    stateScheduledView.visibility = View.GONE
+                holderBinding.apply {
+                    isLive = true
+//                    liveViews.visibility = View.VISIBLE
+//                    stateScheduledView.visibility = View.GONE
                     /*truncate participant count*/
-                    val compactCount = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val compactCount : String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                         NumberFormatter.with()
                             .notation(Notation.compactShort())
                             .precision(Precision.maxFraction(1))
@@ -116,28 +130,35 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
                             space.participantCount.toString()
                         }
                     }
-                    participantCount.text = compactCount
+                    participantCount = compactCount
 //                    lotTv.text = context.resources.getString(R.string.listen_on_twitter)
                 }
             }
             SpaceState.SCHEDULED.value -> {
-                holder.binding.apply {
-                    stateScheduledView.visibility = View.VISIBLE
-                    liveViews.visibility = View.GONE
+                holderBinding.apply {
+                    isLive = false
+//                    stateScheduledView.visibility = View.VISIBLE
+//                    liveViews.visibility = View.GONE
 //                    lotTv.text = context.resources.getString(R.string.set_reminder)
-                    stateScheduledView.text = space.scheduledStart?.formatDateAndTime()
+                    scheduledDate = space.scheduledStart?.formatDateAndTime()
                 }
             }
         }
 
 
 
-//        holder.binding.lotLay.setOnClickListener {
+//        holderBinding.lotLay.setOnClickListener {
 //            listener.onGoToClick(space, position)
 //        }
 //
         holder.itemView.setOnClickListener {
             listener.onSpacesItemClick(space, position)
+        }
+
+        when (themeMode.id()) {
+            0 -> holderBinding.theme = DefaultTheme()
+            1 -> holderBinding.theme = LightTheme()
+            2 -> holderBinding.theme = DarkTheme()
         }
     }
 
@@ -182,5 +203,9 @@ class  SpacesAdapter(val context: Context, val listener: OnSpacesItemClickListen
     interface OnSpacesItemClickListener {
         fun onSpacesItemClick(spaces: Space, position: Int)
         fun onGoToClick(spaces: Space, position: Int)
+    }
+
+    interface ThemeModeListener {
+        fun onThemeChanged()
     }
 }

@@ -8,27 +8,38 @@
     android:id="@+id/rootlayout"
     app:layoutDescription="@xml/activity_search_xml_constraintlayout_scene">
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/profile_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_margin="20dp"
+        app:icon="@drawable/profile"
+        app:bgColor="@color/tritone_purple_bg"
         android:contentDescription="@string/profile"
         android:scaleType="centerCrop"
-        android:src="@drawable/profile"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp"/>
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/settings_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
-        android:src="@drawable/settings"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/settings"
+        app:icon="@drawable/settings_gear"
+        app:bgColor="@color/tritone_purple_bg"
+        android:contentDescription="@string/preferences"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="20dp"/>
+        android:layout_margin="20dp"
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp"/>
 
     <TextView
         android:id="@+id/tv"
@@ -36,93 +47,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
-        android:text="Search Spaces"
+        android:text="@string/search_spaces"
         android:textColor="#5A5A5A"
         android:textSize="32sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/after_effect_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="vertical">
-        <com.iammert.library.ui.multisearchviewlib.MultiSearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/rounded_bg_2"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            app:selectedTabStyle="line"
-            app:hintColor="#BDBDBD"
-            app:searchIconColor="@android:color/darker_gray"
-            app:searchTextColor="@color/black"
-            app:clearIconColor="@color/black"
-            app:selectedTabColor="@color/black"
-            android:paddingStart="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/swipe_refresh"/>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/featured_lay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/fire_lottie"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    app:lottie_rawRes="@raw/trend_fire_purple"
-                    android:scaleType="centerCrop"
-                    android:layout_marginStart="10dp"/>
-                <TextView
-                    android:id="@+id/featured_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/featured_text"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/trending_lay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/line_chart_lottie"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
-                    app:lottie_rawRes="@raw/line_chart"
-                    android:scaleType="centerCrop"
-                    android:layout_marginStart="40dp"/>
-                <TextView
-                    android:id="@+id/trending_btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/trending_text"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:background="@android:color/transparent"
-                    android:gravity="start"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        android:orientation="vertical"
+        android:animateLayoutChanges="true">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
@@ -130,31 +70,53 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_view"
-            android:layout_gravity="top">
+            android:layout_gravity="top"
+            android:animateLayoutChanges="true">
 
             <RelativeLayout
                 android:id="@+id/content_lay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:descendantFocusability="blocksDescendants">
+                android:descendantFocusability="blocksDescendants"
+                android:animateLayoutChanges="true">
 
                 <com.mcdev.spazes.components.NoSpaceComponent
                     android:id="@+id/no_space_component_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:animateLayoutChanges="true"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:paddingTop="70dp"
+                    android:paddingBottom="30dp"
+                    android:clipToPadding="false"/>
 
             </RelativeLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </LinearLayout>
+        <com.iammert.library.ui.multisearchviewlib.MultiSearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="20dp"
+            app:selectedTabStyle="line"
+            android:background="@drawable/light_mode_search_bg"
+            app:hintColor="@color/search_hint_text_color"
+            app:searchIconColor="@color/gray_600"
+            app:searchTextColor="@color/white"
+            app:clearIconColor="@color/black"
+            app:selectedTabColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:animateLayoutChanges="true"/>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

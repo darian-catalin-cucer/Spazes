@@ -9,13 +9,15 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.dolatkia.animatedThemeManager.AppTheme
 import com.mcdev.spazes.R
 import com.mcdev.spazes.databinding.UserItemBinding
 import com.mcdev.spazes.getOriginalTwitterAvi
+import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.twitterapikit.`object`.User
 import com.mcdev.twitterapikit.response.UserListResponse
 
-class UserAdapter (val context: Context, val listener: OnUserItemClickListener): RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
+class UserAdapter (val context: Context, val listener: OnUserItemClickListener, val themeMode: AppTheme): RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
     private val usersDifferCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
@@ -57,10 +59,18 @@ class UserAdapter (val context: Context, val listener: OnUserItemClickListener):
         val isVerified = user.verified
 
 
+        // set theme
         holder.binding.apply {
-            this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)
+            val tt = themeMode as BaseTheme
+            this.userDisplayName.customizeDisplayName.setTextColor(context.resources.getColor(tt.textColor(), context.theme))
+            this.userName.customizeTextView.setTextColor(context.resources.getColor(tt.textColor(), context.theme))
+            this.itemLay.setBackgroundColor(context.resources.getColor(tt.cardBg(), context.theme))
+        }
+
+        holder.binding.apply {
+            //this.itemLay.background = ResourcesCompat.getDrawable(context.resources, R.drawable.bg_users_remove, context.theme)
             this.userAvi.setImageURI(userPhotoUrl)
-            this.addRemoveBtn.setActualImageResource(R.drawable.minus)
+            this.addRemoveBtn.setActualImageResource(R.drawable.remove)
             this.userName.apply {
                 username = user.username
             }

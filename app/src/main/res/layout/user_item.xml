@@ -52,15 +52,16 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/add_remove_btn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:roundAsCircle="true"
-            android:scaleType="centerCrop"
-            app:placeholderImage="@drawable/minus"
-            app:placeholderImageScaleType="centerCrop"/>
+            android:scaleType="centerInside"
+            app:placeholderImage="@drawable/remove"
+            app:placeholderImageScaleType="centerCrop"
+            android:padding="10dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -8,11 +8,16 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.google.firebase.auth.FirebaseUser
 import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityLoginBinding
 import com.mcdev.spazes.events.LoginEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.LoginViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,10 +26,11 @@ import kotlinx.coroutines.runBlocking
 import java.util.*
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : ThemeActivity() {
     private lateinit var binding: ActivityLoginBinding
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
     private val loadingDialog = LottieLoadingDialogFragment()
     private var userTwitterId: String? = null
     private var userTwitterHandle: String? = null
@@ -41,11 +47,11 @@ class LoginActivity : AppCompatActivity() {
         changeStatusBarColor(R.color.white)
 
         runBlocking {
-            userTwitterId = viewModel.readDatastore("user_twitter_id")
-            userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
-            userId = viewModel.readDatastore("user_firebase_id")
-            userDisplayName = viewModel.readDatastore("user_display_name")
-            userDisplayPhoto = viewModel.readDatastore("user_display_photo")
+            userTwitterId = dataStoreViewModel.readDatastore("user_twitter_id")
+            userTwitterHandle = dataStoreViewModel.readDatastore("user_twitter_handle")
+            userId = dataStoreViewModel.readDatastore("user_firebase_id")
+            userDisplayName = dataStoreViewModel.readDatastore("user_display_name")
+            userDisplayPhoto = dataStoreViewModel.readDatastore("user_display_photo")
         }
 
 
@@ -88,11 +94,11 @@ class LoginActivity : AppCompatActivity() {
 
                         //save to datastore to store the user's twitter id coz it cannot be
                         // accessed when user is already signed in..unless a request is made to firebase which i do not want to do
-                        viewModel.saveOrUpdateDatastore("user_twitter_id", id)
-                        viewModel.saveOrUpdateDatastore("user_twitter_handle", handle)
-                        viewModel.saveOrUpdateDatastore("user_firebase_id", userFirebaseId)
-                        viewModel.saveOrUpdateDatastore("user_display_name", displayname!!)
-                        viewModel.saveOrUpdateDatastore("user_display_photo", displayPhoto!!.toString())
+                        dataStoreViewModel.saveOrUpdateDatastore("user_twitter_id", id)
+                        dataStoreViewModel.saveOrUpdateDatastore("user_twitter_handle", handle)
+                        dataStoreViewModel.saveOrUpdateDatastore("user_firebase_id", userFirebaseId)
+                        dataStoreViewModel.saveOrUpdateDatastore("user_display_name", displayname!!)
+                        dataStoreViewModel.saveOrUpdateDatastore("user_display_photo", displayPhoto!!.toString())
 
 
                         //save user to firebase fireStore
@@ -101,11 +107,11 @@ class LoginActivity : AppCompatActivity() {
                     is LoginEventListener.SignedOut -> {
                         loadingDialog.dismiss()
                         //update datastore to remove signed in user twitter id
-                        viewModel.saveOrUpdateDatastore("user_twitter_id", "")
-                        viewModel.saveOrUpdateDatastore("user_twitter_handle", "")
-                        viewModel.saveOrUpdateDatastore("user_firebase_id", "")
-                        viewModel.saveOrUpdateDatastore("user_display_name", "")
-                        viewModel.saveOrUpdateDatastore("user_display_photo", "")
+                        dataStoreViewModel.saveOrUpdateDatastore("user_twitter_id", "")
+                        dataStoreViewModel.saveOrUpdateDatastore("user_twitter_handle", "")
+                        dataStoreViewModel.saveOrUpdateDatastore("user_firebase_id", "")
+                        dataStoreViewModel.saveOrUpdateDatastore("user_display_name", "")
+                        dataStoreViewModel.saveOrUpdateDatastore("user_display_photo", "")
                         Log.d("TAG", "onCreate: user is signed out oh")
                     }
                     is LoginEventListener.Failure -> {
@@ -131,11 +137,11 @@ class LoginActivity : AppCompatActivity() {
                     is FirebaseEventListener.Success -> {
                         val curr = loginViewModel.getCurrentUser()
 
-                        userTwitterId = viewModel.readDatastore("user_twitter_id")
-                        userTwitterHandle = viewModel.readDatastore("user_twitter_handle")
-                        userId = viewModel.readDatastore("user_firebase_id")
-                        userDisplayName = viewModel.readDatastore("user_display_name")
-                        userDisplayPhoto = viewModel.readDatastore("user_display_photo")
+                        userTwitterId = dataStoreViewModel.readDatastore("user_twitter_id")
+                        userTwitterHandle = dataStoreViewModel.readDatastore("user_twitter_handle")
+                        userId = dataStoreViewModel.readDatastore("user_firebase_id")
+                        userDisplayName = dataStoreViewModel.readDatastore("user_display_name")
+                        userDisplayPhoto = dataStoreViewModel.readDatastore("user_display_photo")
                         startActivity(goToProfileActivity(this@LoginActivity, curr, userTwitterId, userTwitterHandle))
                         finish()
                         loadingDialog.dismiss()
@@ -163,12 +169,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun syncTheme(appTheme: AppTheme) {
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.loginFeaturesTitleTv.setTextColor(resources.getColor(tt.textColor(), theme))
+        binding.loginFeatureContentTv.setTextColor(resources.getColor(tt.textColor(), theme))
+    }
+
     private fun doLogin() {
         loginViewModel.login(this)
     }
 
     private fun isUserLoggedIn(): Boolean {
         return loginViewModel.isUserSignedIn()
+    }
+
+    override fun getStartTheme(): AppTheme {
+        //TODO("Not yet implemented")
+        return DefaultTheme()
     }
 
     override fun onBackPressed() {

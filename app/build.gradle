@@ -156,7 +156,6 @@ dependencies {
     // Datastore Preferences
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
-
     // Custom crash activity
     implementation 'cat.ereza:customactivityoncrash:2.4.0'
 
@@ -165,4 +164,7 @@ dependencies {
 
     // Tweeze
     implementation 'com.github.kojofosu:tweeze:1.1.1'
+
+    // Theme manager
+    implementation "com.dolatkia:animated-theme-manager:1.1.4"
 }

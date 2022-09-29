@@ -4,27 +4,59 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.os.IResultReceiver.Default
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.mcdev.spazes.*
 import com.mcdev.spazes.adapter.SpacesAdapter
 import com.mcdev.spazes.databinding.ActivityUserSpacesBinding
 import com.mcdev.spazes.enums.LoadAction
 import com.mcdev.spazes.events.SpacesListEventListener
 import com.mcdev.spazes.repository.FirebaseEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DarkTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.theme.LightTheme
 import com.mcdev.spazes.util.BEARER_TOKEN
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickListener {
+class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
     private lateinit var binding: ActivityUserSpacesBinding
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
+    private var themeMode : AppTheme = DefaultTheme()
+
+
+    override fun getStartTheme(): AppTheme {
+        var getTheme : String? = null
+        runBlocking {
+            getTheme = dataStoreViewModel.readDatastore("themeMode")
+        }
+
+
+        themeMode =  when (getTheme) {
+            "0" -> DefaultTheme()
+            "1" -> LightTheme()
+            "2" -> DarkTheme()
+            else -> {
+                DefaultTheme()
+            }
+        }
+
+        return themeMode
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +64,12 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickL
         val root = binding.root
         setContentView(root)
 
-        changeStatusBarColor(R.color.white)
 
         val loadAction = intent.extras?.get("loadAction") as LoadAction
         val userTwitterId = intent.extras?.get("user_twitter_id").toString()
         val userFirebaseId = intent.extras?.get("user_firebase_id").toString()
 
-        val adapter = SpacesAdapter(this, this)
+        val adapter = SpacesAdapter(this, this, themeMode)
         binding.userSpacesRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@UserSpacesActivity)
             itemAnimator = null
@@ -178,7 +209,7 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickL
 //                binding.emptyFeatureLottie.visibility = View.GONE
 //            }
 //        }
-        binding.recyclerMessage.text = applicationContext.getString(message)
+        binding.recyclerMessage.lottieMessage = applicationContext.getString(message)
         binding.swipeRefresh.isRefreshing = false
         binding.userSpacesRecyclerView.visibility = View.GONE
         binding.recyclerMessage.visibility = View.VISIBLE
@@ -199,5 +230,22 @@ class UserSpacesActivity : AppCompatActivity(), SpacesAdapter.OnSpacesItemClickL
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+    }
+
+    override fun syncTheme(appTheme: AppTheme) {
+        themeMode = appTheme
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.recyclerMessage.theme = appTheme
+        binding.titleText.setTextColor(resources.getColor(tt.textColor(), theme))
+
+
+//        val adapter = SpacesAdapter(this, this, themeMode)
+//        binding.userSpacesRecyclerView.apply {
+//            layoutManager = LinearLayoutManager(this@UserSpacesActivity)
+//            itemAnimator = null
+//            this.adapter = adapter
+//        }
     }
 }

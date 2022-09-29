@@ -22,17 +22,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:roundedCornerRadius="10dp" />
 
-    <ImageView
+    <com.mcdev.spazes.components.TritoneComponent
         android:id="@+id/profile_back_btn"
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_margin="20dp"
-        android:contentDescription="@string/settings"
-        android:elevation="20dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/back"
+        android:contentDescription="@string/app_intro_back_button"
+        app:icon="@drawable/back"
+        app:bgColor="@color/tritone_purple_bg"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="10dp"
+        android:background="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:elevation="0dp"
+        app:cardElevation="0dp" />
 
     <TextView
         android:id="@+id/display_name"
@@ -61,13 +65,20 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <com.mcdev.spazes.components.TritoneComponent
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/my_space" />
+                app:icon="@drawable/my_space_two"
+                app:bgColor="@color/tritone_purple_bg"
+                app:cardCornerRadius="10dp"
+                android:background="@android:color/transparent"
+                app:cardBackgroundColor="@android:color/transparent"
+                android:elevation="0dp"
+                app:cardElevation="0dp"/>
 
             <TextView
+                android:id="@+id/profile_my_upcoming_space_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My Upcoming Spaces"
@@ -82,13 +93,20 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+            <com.mcdev.spazes.components.TritoneComponent
+                android:layout_width="43dp"
+                android:layout_height="43dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/fave_host_spaces" />
+                app:icon="@drawable/fave_host_spaces_two"
+                app:bgColor="@color/tritone_purple_bg"
+                app:cardCornerRadius="10dp"
+                android:background="@android:color/transparent"
+                app:cardBackgroundColor="@android:color/transparent"
+                android:elevation="0dp"
+                app:cardElevation="0dp"/>
 
             <TextView
+                android:id="@+id/profile_fave_host_space_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Favorite Hosts' Spaces"
@@ -103,13 +121,20 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.mcdev.spazes.components.TritoneComponent
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/favourite_hosts" />
+                app:icon="@drawable/favourite_hosts_two"
+                app:bgColor="@color/tritone_purple_bg"
+                app:cardCornerRadius="10dp"
+                android:background="@android:color/transparent"
+                app:cardBackgroundColor="@android:color/transparent"
+                android:elevation="0dp"
+                app:cardElevation="0dp"/>
 
             <TextView
+                android:id="@+id/profile_fave_host_btn_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Favorite Hosts"
@@ -131,6 +156,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="20dp"
+                android:padding="5dp"
                 android:src="@drawable/logout" />
 
             <TextView
@@ -138,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:paddingEnd="10dp"
                 android:text="@string/logout"
+                android:textStyle="bold"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="15sp" />
         </LinearLayout>

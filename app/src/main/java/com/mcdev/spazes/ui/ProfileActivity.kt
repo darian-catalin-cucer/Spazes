@@ -8,10 +8,15 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
+import com.dolatkia.animatedThemeManager.AppTheme
+import com.dolatkia.animatedThemeManager.ThemeActivity
 import com.mcdev.spazes.*
 import com.mcdev.spazes.databinding.ActivityProfileBinding
 import com.mcdev.spazes.enums.LoadAction
 import com.mcdev.spazes.events.UserSingleEventListener
+import com.mcdev.spazes.theme.BaseTheme
+import com.mcdev.spazes.theme.DefaultTheme
+import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import com.mcdev.spazes.viewmodel.LoginViewModel
 import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,10 +24,11 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : ThemeActivity() {
     private lateinit var binding: ActivityProfileBinding
     private val loginViewModel: LoginViewModel by viewModels()
     private val viewModel: SpacesViewModel by viewModels()
+    private val dataStoreViewModel: DatastoreViewModel by viewModels()
     private val TAG = "ProfileActivity"
 
 
@@ -93,10 +99,10 @@ class ProfileActivity : AppCompatActivity() {
                         displayName = it.data?.data?.name
                         profileUrl = it.data?.data?.profileImageUrl.toString().getOriginalTwitterAvi()
                         if ((displayName.toString() == "null").not()) {// set or update display name
-                            viewModel.saveOrUpdateDatastore("user_display_name", displayName.toString())
+                            dataStoreViewModel.saveOrUpdateDatastore("user_display_name", displayName.toString())
                         }
                         if ((profileUrl.toString() == "null").not()) {// set or update display photo
-                            viewModel.saveOrUpdateDatastore("user_display_photo", profileUrl.toString())
+                            dataStoreViewModel.saveOrUpdateDatastore("user_display_photo", profileUrl.toString())
                         }
                     }
                     is UserSingleEventListener.Empty -> {
@@ -130,6 +136,10 @@ class ProfileActivity : AppCompatActivity() {
         viewModel.getUserById(id = id)
     }
 
+    override fun getStartTheme(): AppTheme {
+        return DefaultTheme()
+    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -138,6 +148,16 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun syncTheme(appTheme: AppTheme) {
+        val tt = appTheme as BaseTheme
+        changeStatusBarColor(tt.statusBarColor())
+        binding.root.setBackgroundColor(tt.activityBgColor(this))
+        binding.displayName.setTextColor(resources.getColor(tt.textColor(), theme))
+        binding.profileMyUpcomingSpaceBtnTv.setTextColor(resources.getColor(tt.textColor(), theme))
+        binding.profileFaveHostSpaceBtnTv.setTextColor(resources.getColor(tt.textColor(), theme))
+        binding.profileFaveHostBtnTv.setTextColor(resources.getColor(tt.textColor(), theme))
     }
 
 
