@@ -35,6 +35,7 @@ import com.mcdev.spazes.viewmodel.SpacesViewModel
 import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+import spencerstudios.com.bungeelib.Bungee
 
 @AndroidEntryPoint
 class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
@@ -92,6 +93,7 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
 
         if (showAppIntro == null || showAppIntro == true) {
             startActivity(Intent(this, AppIntro::class.java))
+            Bungee.zoomIn(this)
         }
 
         spacesAdapter = SpacesAdapter(this, this, themeMode)
@@ -232,13 +234,16 @@ class HomeActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
 //            icon = R.drawable.profile
 //            bgColor = R.color.tritone_purple_bg
 //        }
+
         binding.profileBtn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
+            Bungee.zoomIn(this)
         }
 
         binding.settingsBtn.setOnClickListener {
             startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
             finish() //todo implement this in a better way
+            Bungee.zoomIn(this)
         }
 
     }

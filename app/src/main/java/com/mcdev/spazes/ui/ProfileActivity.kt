@@ -22,6 +22,7 @@ import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import spencerstudios.com.bungeelib.Bungee
 
 @AndroidEntryPoint
 class ProfileActivity : ThemeActivity() {
@@ -54,6 +55,7 @@ class ProfileActivity : ThemeActivity() {
 
         binding.profileBackBtn.setOnClickListener {
             finish()
+            Bungee.zoomOut(this)
         }
 
         getUserById(userTwitterId.toString())
@@ -74,6 +76,7 @@ class ProfileActivity : ThemeActivity() {
                 .putExtra("loadAction", LoadAction.FAVE_HOSTS)
                 .putExtra("user_twitter_id", userTwitterId.toString())
                 .putExtra("user_firebase_id", userId.toString()))
+            Bungee.slideLeft(this)
         }
 
         binding.mySpacesBtn.setOnClickListener {
@@ -81,6 +84,7 @@ class ProfileActivity : ThemeActivity() {
                 .putExtra("loadAction", LoadAction.MY_SPACES)
                 .putExtra("user_twitter_id", userTwitterId.toString())
                 .putExtra("user_firebase_id", userId.toString()))
+            Bungee.slideLeft(this)
         }
 
         binding.favouriteHostsSpacesBtn.setOnClickListener {
@@ -88,6 +92,7 @@ class ProfileActivity : ThemeActivity() {
                 .putExtra("loadAction", LoadAction.FAVE_HOSTS_SPACES)
                 .putExtra("user_twitter_id", userTwitterId.toString())
                 .putExtra("user_firebase_id", userId.toString()))
+            Bungee.slideLeft(this)
         }
 
 
@@ -130,6 +135,7 @@ class ProfileActivity : ThemeActivity() {
         delay(3000)
         loginViewModel.logout()
         finish()
+        Bungee.zoomOut(this)
     }
 
     private fun getUserById(id: String) {
@@ -144,6 +150,7 @@ class ProfileActivity : ThemeActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+        Bungee.zoomOut(this)
     }
 
     override fun onDestroy() {

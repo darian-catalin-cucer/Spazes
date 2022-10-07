@@ -18,6 +18,7 @@ import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.viewmodel.DatastoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import spencerstudios.com.bungeelib.Bungee
 
 @AndroidEntryPoint
 class SettingsActivity : ThemeActivity() {
@@ -35,10 +36,12 @@ class SettingsActivity : ThemeActivity() {
         binding.settingsBackBtn.setOnClickListener{
             startActivity(Intent(this, HomeActivity::class.java))
             finish() // todo implement this in a better way
+            Bungee.zoomOut(this)
         }
 
         binding.settingsThemeBtn.setOnClickListener {
             startActivity(Intent(this@SettingsActivity, SettingsThemeActivity::class.java))
+            Bungee.slideLeft(this)
         }
 
         binding.settingsRateBtn.setOnClickListener{
@@ -64,6 +67,7 @@ class SettingsActivity : ThemeActivity() {
         super.onBackPressed()
         startActivity(Intent(this, HomeActivity::class.java))
         finish() // todo implement this in a better way
+        Bungee.zoomOut(this)
     }
 
 
