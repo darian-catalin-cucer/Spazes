@@ -24,6 +24,7 @@ import com.mcdev.tweeze.util.VerifiedBadge
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import spencerstudios.com.bungeelib.Bungee
 import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
@@ -61,6 +62,7 @@ class SettingsThemeActivity : ThemeActivity() {
 
         binding.settingsThemeBackBtn.setOnClickListener {
             finish()
+            Bungee.slideRight(this)
         }
     }
 

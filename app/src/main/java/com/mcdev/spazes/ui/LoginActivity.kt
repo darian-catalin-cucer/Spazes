@@ -23,6 +23,7 @@ import com.mcdev.spazes.viewmodel.SpacesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
+import spencerstudios.com.bungeelib.Bungee
 import java.util.*
 
 @AndroidEntryPoint
@@ -60,6 +61,7 @@ class LoginActivity : ThemeActivity() {
             val currUser = loginViewModel.getCurrentUser()
             startActivity(goToProfileActivity(this, currUser, userTwitterId, userTwitterHandle))
             finish()
+            Bungee.zoomIn(this)
         }
 
         binding.loginWithTwitterTV.setOnClickListener {
@@ -144,6 +146,7 @@ class LoginActivity : ThemeActivity() {
                         userDisplayPhoto = dataStoreViewModel.readDatastore("user_display_photo")
                         startActivity(goToProfileActivity(this@LoginActivity, curr, userTwitterId, userTwitterHandle))
                         finish()
+                        Bungee.zoomIn(this@LoginActivity)
                         loadingDialog.dismiss()
                     }
                     is FirebaseEventListener.Failure -> {
@@ -166,6 +169,7 @@ class LoginActivity : ThemeActivity() {
 
         binding.loginBackBtn.setOnClickListener {
             finish()
+            Bungee.zoomOut(this)
         }
     }
 
@@ -193,6 +197,7 @@ class LoginActivity : ThemeActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+        Bungee.zoomOut(this)
     }
 
     private fun goToProfileActivity(activity: Activity, currUser: FirebaseUser?, userTwitterId: String?, userTwitterHandle: String?): Intent {

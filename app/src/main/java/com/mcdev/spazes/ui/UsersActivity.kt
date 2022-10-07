@@ -33,6 +33,7 @@ import com.mcdev.twitterapikit.`object`.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
+import spencerstudios.com.bungeelib.Bungee
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
@@ -74,6 +75,7 @@ class UsersActivity : ThemeActivity(), UserAdapter.OnUserItemClickListener {
 
         binding.userBackBtn.setOnClickListener {
             finish()
+            Bungee.slideRight(this)
         }
 
         binding.addFaveHostFab.setOnClickListener {
@@ -325,5 +327,6 @@ class UsersActivity : ThemeActivity(), UserAdapter.OnUserItemClickListener {
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+        Bungee.slideRight(this)
     }
 }

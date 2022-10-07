@@ -167,4 +167,7 @@ dependencies {
 
     // Theme manager
     implementation "com.dolatkia:animated-theme-manager:1.1.4"
+
+    // Bungee (activity animations)
+    implementation 'com.github.kojofosu:Bungee:2.3'
 }

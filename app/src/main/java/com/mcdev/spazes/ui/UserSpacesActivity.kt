@@ -29,6 +29,7 @@ import com.mcdev.twitterapikit.`object`.Space
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
+import spencerstudios.com.bungeelib.Bungee
 
 @AndroidEntryPoint
 class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListener {
@@ -97,6 +98,7 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
 
         binding.userSpacesBackBtn.setOnClickListener {
             finish()
+            Bungee.slideRight(this)
         }
 
 
@@ -230,6 +232,7 @@ class UserSpacesActivity : ThemeActivity(), SpacesAdapter.OnSpacesItemClickListe
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
+        Bungee.slideRight(this)
     }
 
     override fun syncTheme(appTheme: AppTheme) {
