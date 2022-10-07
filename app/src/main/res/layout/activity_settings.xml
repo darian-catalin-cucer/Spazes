@@ -51,7 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
         <com.mcdev.spazes.components.TritoneComponent
             android:layout_width="43dp"
@@ -70,6 +71,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Theme"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_rate_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.mcdev.spazes.components.TritoneComponent
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="20dp"
+            app:icon="@drawable/star"
+            app:bgColor="@color/tritone_yellow_bg"
+            app:cardCornerRadius="10dp"
+            android:background="@android:color/transparent"
+            app:cardBackgroundColor="@android:color/transparent"
+            android:elevation="0dp"
+            app:cardElevation="0dp"/>
+
+        <TextView
+            android:id="@+id/settings_rate_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rate App"
             android:textSize="20sp" />
     </LinearLayout>
 

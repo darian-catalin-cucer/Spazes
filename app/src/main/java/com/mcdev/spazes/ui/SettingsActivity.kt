@@ -1,11 +1,15 @@
 package com.mcdev.spazes.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import com.dolatkia.animatedThemeManager.AppTheme
 import com.dolatkia.animatedThemeManager.ThemeActivity
+import com.mcdev.spazes.BuildConfig
 import com.mcdev.spazes.R
 import com.mcdev.spazes.changeStatusBarColor
 import com.mcdev.spazes.databinding.ActivitySettingsBinding
@@ -36,6 +40,10 @@ class SettingsActivity : ThemeActivity() {
         binding.settingsThemeBtn.setOnClickListener {
             startActivity(Intent(this@SettingsActivity, SettingsThemeActivity::class.java))
         }
+
+        binding.settingsRateBtn.setOnClickListener{
+            launchGooglePlayStore()
+        }
     }
 
     override fun syncTheme(appTheme: AppTheme) {
@@ -44,6 +52,7 @@ class SettingsActivity : ThemeActivity() {
         binding.root.setBackgroundColor(tt.activityBgColor(this))
         binding.settingsTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
         binding.settingsThemeTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
+        binding.settingsRateTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
 
     }
 
@@ -55,5 +64,24 @@ class SettingsActivity : ThemeActivity() {
         super.onBackPressed()
         startActivity(Intent(this, HomeActivity::class.java))
         finish() // todo implement this in a better way
+    }
+
+
+    private fun launchGooglePlayStore() {
+        try {
+           val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
+            )
+            startActivity(intent)
+
+        } catch (e: ActivityNotFoundException) {
+            Log.e("TAG", "launchGooglePlayStore: ", e)
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
+                )
+            startActivity(intent)
+        }
     }
 }
