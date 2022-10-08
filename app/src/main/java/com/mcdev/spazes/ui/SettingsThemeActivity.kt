@@ -125,5 +125,6 @@ class SettingsThemeActivity : ThemeActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        Bungee.slideRight(this)
     }
 }
