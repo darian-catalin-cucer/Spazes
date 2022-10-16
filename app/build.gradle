@@ -15,8 +15,8 @@ android {
         applicationId "com.mcdev.spazes"
         minSdk 23
         targetSdk 33
-        versionCode 11
-        versionName "1.10"
+        versionCode 12
+        versionName "1.10.1"
         archivesBaseName = "Spazes-v${versionName}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -70,6 +70,11 @@ android {
         viewBinding true
         dataBinding true
     }
+}
+
+//remove safety net
+configurations.all {
+    exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
 }
 
 dependencies {
