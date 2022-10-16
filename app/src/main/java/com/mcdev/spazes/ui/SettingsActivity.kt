@@ -17,6 +17,7 @@ import com.mcdev.spazes.makeStatusBarTransparent
 import com.mcdev.spazes.theme.BaseTheme
 import com.mcdev.spazes.theme.DefaultTheme
 import com.mcdev.spazes.viewmodel.DatastoreViewModel
+import com.mikepenz.aboutlibraries.LibsBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import spencerstudios.com.bungeelib.Bungee
 
@@ -44,6 +45,19 @@ class SettingsActivity : ThemeActivity() {
             Bungee.slideLeft(this)
         }
 
+        binding.settingsLicenses.setOnClickListener {
+            LibsBuilder()
+                .withAboutIconShown(true)
+                .withAboutAppName(resources.getString(R.string.app_name))
+                .withAboutVersionShown(true)
+                .withAboutVersionShownName(true)
+                .withAboutVersionString("v${BuildConfig.VERSION_NAME}")
+                .withSearchEnabled(true)
+                .withLicenseDialog(true)
+                .withLicenseShown(true)
+                .start(this@SettingsActivity)
+        }
+
         binding.settingsRateBtn.setOnClickListener{
             launchGooglePlayStore()
         }
@@ -55,6 +69,7 @@ class SettingsActivity : ThemeActivity() {
         binding.root.setBackgroundColor(tt.activityBgColor(this))
         binding.settingsTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
         binding.settingsThemeTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
+        binding.settingsLicensesTv.setTextColor((resources.getColor(tt.textColor(), this.theme)))
         binding.settingsRateTv.setTextColor(resources.getColor(tt.textColor(), this.theme))
 
     }
