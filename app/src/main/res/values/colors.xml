@@ -24,4 +24,5 @@
     <color name="tritone_purple_bg">#35D696FF</color>
     <color name="tritone_blue_bg">#2526C6DA</color>
     <color name="tritone_yellow_bg">#26FFD200</color>
+    <color name="tritone_red_bg">#26E53935</color>
 </resources>

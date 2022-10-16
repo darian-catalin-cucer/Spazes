@@ -45,6 +45,8 @@
 <!--        android:background="@color/gray_400"-->
 <!--        android:layout_gravity="center_horizontal"-->
 <!--        android:layout_marginTop="15dp"/>-->
+
+
     <LinearLayout
         android:id="@+id/settings_theme_btn"
         android:layout_width="match_parent"
@@ -74,13 +76,44 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+
+    <LinearLayout
+        android:id="@+id/settings_licenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <com.mcdev.spazes.components.TritoneComponent
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="20dp"
+            app:icon="@drawable/licenses"
+            app:bgColor="@color/tritone_red_bg"
+            app:cardCornerRadius="10dp"
+            android:background="@android:color/transparent"
+            app:cardBackgroundColor="@android:color/transparent"
+            android:elevation="0dp"
+            app:cardElevation="0dp"/>
+
+        <TextView
+            android:id="@+id/settings_licenses_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Licenses"
+            android:textSize="20sp" />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/settings_rate_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
 
         <com.mcdev.spazes.components.TritoneComponent
             android:layout_width="43dp"
