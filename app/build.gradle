@@ -15,8 +15,8 @@ android {
         applicationId "com.mcdev.spazes"
         minSdk 23
         targetSdk 33
-        versionCode 12
-        versionName "1.10.1"
+        versionCode 13
+        versionName "1.10.2"
         archivesBaseName = "Spazes-v${versionName}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

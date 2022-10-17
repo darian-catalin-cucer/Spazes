@@ -53,7 +53,6 @@ class SettingsActivity : ThemeActivity() {
                 .withAboutVersionShownName(true)
                 .withAboutVersionString("v${BuildConfig.VERSION_NAME}")
                 .withSearchEnabled(true)
-                .withLicenseDialog(true)
                 .withLicenseShown(true)
                 .start(this@SettingsActivity)
         }
